@@ -1,5 +1,5 @@
-import './assets/main.css'
-
+import Vant from 'vant'
+import 'vant/lib/index.css';
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import 'amfe-flexible'
@@ -11,5 +11,5 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
-
+app.use(Vant)
 app.mount('#app')
