@@ -13,7 +13,7 @@ const tabBarOnChange = (curr) => {
   <van-nav-bar safe-area-inset-top />
   <RouterView />
   <footer>
-    <van-tabbar v-model="active" @change="tabBarOnChange">
+    <van-tabbar v-model="active" @change="tabBarOnChange" active-color="#ffa43f">
         <van-tabbar-item icon="home-o">
           <RouterLink to="/">首页</RouterLink>
         </van-tabbar-item>
@@ -31,18 +31,11 @@ const tabBarOnChange = (curr) => {
 
 <style scoped lang="less">
 footer {
-  width: 100%;
-  height: 100px;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 1;
   .van-tabbar {
     .van-tabbar-item--active {
       .van-tabbar-item__text {
         a {
-          color: #1989fa;
+          color: #ffa43f;
         }
       }
     }
