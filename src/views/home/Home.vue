@@ -18,7 +18,7 @@ const listOnLoad = () => {
   // 异步更新数据
   // setTimeout 仅做示例，真实场景中一般为 ajax 请求
   setTimeout(() => {
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 5; i++) {
       const obj = {
         num: "13",
         price: "2.00",
@@ -32,7 +32,7 @@ const listOnLoad = () => {
     // 加载状态结束
     loading.value = false;
     // 数据全部加载完成
-    if (productList.value.length >= 40) {
+    if (productList.value.length >= 12) {
       finished.value = true;
     }
   }, 1000);

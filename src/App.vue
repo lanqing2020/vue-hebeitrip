@@ -14,15 +14,9 @@ const tabBarOnChange = (curr) => {
   <RouterView />
   <footer>
     <van-tabbar v-model="active" @change="tabBarOnChange" active-color="#ffa43f">
-        <van-tabbar-item icon="home-o">
-          <RouterLink to="/">首页</RouterLink>
-        </van-tabbar-item>
-        <van-tabbar-item icon="coupon-o">
-          <RouterLink to="/order">我的订单</RouterLink>
-        </van-tabbar-item>
-        <van-tabbar-item icon="friends-o">
-          <RouterLink to="/user">个人中心</RouterLink>
-        </van-tabbar-item>
+        <van-tabbar-item icon="home-o" to="/">首页</van-tabbar-item>
+        <van-tabbar-item icon="coupon-o" to="/order">我的订单</van-tabbar-item>
+        <van-tabbar-item icon="friends-o" to="/user">个人中心</van-tabbar-item>
     </van-tabbar>
   </footer>
   <!-- 底部安全区 -->
