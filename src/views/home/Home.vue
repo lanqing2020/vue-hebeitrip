@@ -3,7 +3,7 @@ import swiper1 from "@/assets/swiper-1.jpg";
 import swiper2 from "@/assets/swiper-2.jpg";
 import swiper3 from "@/assets/swiper-3.jpg";
 import picList1 from "@/assets/pic-list-1.jpg";
-import {ref} from "vue";
+import { ref } from "vue";
 
 const searchVal = ref("");
 const doSearch = (val) => {
@@ -28,7 +28,6 @@ const listOnLoad = () => {
       }
       productList.value.push(obj);
     }
-
     // 加载状态结束
     loading.value = false;
     // 数据全部加载完成
