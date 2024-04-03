@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import {reactive, ref} from "vue";
 import tx from "@/assets/tx.jpg";
 import { showConfirmDialog, showToast } from 'vant';
 
@@ -28,7 +28,7 @@ const showContactManage = ref(false);
 const isEdit = ref(false);
 const isSaving = ref(false);
 const isDeleting = ref(false);
-// const chosenContactId = ref('1');
+const chosenContactId = ref('1');
 const contactList = ref([
   {
     id: '1',
@@ -42,8 +42,19 @@ const contactList = ref([
     tel: '13100000000',
   },
 ]);
-const editingContact = ref({ tel: '', name: '' });
-const contactManage = (key, contactId) => {
+const editingContact = ref({
+  tel: '',
+  name: ''
+});
+// const editingContact = { tel: '', name: '' };
+const onAdd = () => {
+
+}
+const onEdit = (info) => {
+  console.log("info===>", info)
+
+}
+const contactManage = (key, info) => {
   switch (key) {
     case "add": {
       isEdit.value = false;
@@ -53,11 +64,7 @@ const contactManage = (key, contactId) => {
     case "edit": {
       isEdit.value = true;
       showContactManage.value = true;
-      const currInfo = contactList.value.find((item) => item.id === contactId)
-      editingContact.value.tel = currInfo.tel;
-      editingContact.value.name = currInfo.name;
-
-      console.log("now is", editingContact.value);
+      editingContact.value = info;
       break;
     }
     default: return;
@@ -65,29 +72,19 @@ const contactManage = (key, contactId) => {
 }
 const onContactSave = (val) => {
   const list = contactList.value;
-  // 存在相同记录，不保存
-  for (let i=0; i<list.length; i++) {
-    const item = list[i];
-    if (item.name === val.name && item.tel === val.tel) {
-      console.log("有相同记录，不操作")
-      showToast("已存在相同联系人")
-      return
-    }
-  }
-
   isSaving.value = true;
-  setTimeout(() => {
-    // 模拟接口时间
-    const temp = {
-      id: +list[list.length - 1]["id"] + 1 + "",
-      name: val.name,
-      tel: val.tel
-    }
-    contactList.value.push(temp);
-    isSaving.value = false;
-    showContactManage.value = false;
-    console.log("contactList===>", contactList.value)
-  }, 1000)
+  // 是否已存在相同id
+  const isExist = list.some((item) => item.id === val.id);
+  if (isExist) {
+    // 正常保存
+    const rows = list.findIndex(item => item.id === val.id);
+    contactList.value[rows] = { ...val };
+    setTimeout(() => {
+      showToast("保存成功")
+      showContactManage.value = false;
+      isSaving.value = false;
+    }, 800)
+  }
 }
 const onContactDelete = (val) => {
   const { tel, name } = val;
@@ -102,11 +99,12 @@ const onContactDelete = (val) => {
     // showContactManage.value = false;
   }, 3000)
 }
-const todo = () => {
-  if (isEdit.value) {
-    editingContact.value = { tel: '', name: '' };
-  }
-  console.log("触发", editingContact.value)
+const clearEditing = () => {
+  // if (isEdit.value) {
+  //   console.log("清空编辑中的信息")
+  //   editingContact.value.tel = "空";
+  //   editingContact.value.name = "空";
+  // }
 }
 
 // 分享部分
@@ -158,8 +156,6 @@ const onCouponExchange = (code) => {
   coupons.value.push(coupon);
 };
 
-
-
 </script>
 
 <template>
@@ -183,22 +179,22 @@ const onCouponExchange = (code) => {
     </div>
     <div class="list">
       <van-cell is-link title="联系人" @click="showContactList = true" />
-<!--      <van-action-sheet v-model:show="showContact" :actions="contactActions" @select="onContactSelect">-->
       <van-action-sheet v-model:show="showContactList" title="联系人列表">
         <van-contact-list
+            v-model="chosenContactId"
             :list="contactList"
             default-tag-text="默认"
-            @add="contactManage('add')"
-            @edit="(contact) => contactManage('edit', contact.id)"
+            @add="() => contactManage('add')"
+            @edit="(info) => contactManage('edit', info)"
         />
       </van-action-sheet>
-      <van-action-sheet v-model:show="showContactManage" title="联系人管理" @close="todo">
+      <van-action-sheet v-model:show="showContactManage" title="联系人管理" @close="clearEditing">
         <van-contact-edit
+            :contact-info="editingContact"
             :is-edit="isEdit"
             :is-saving="isSaving"
             :is-deleting="isDeleting"
             show-set-default
-            :contact-info="editingContact"
             set-default-label="设为默认联系人"
             @save="onContactSave"
             @delete="onContactDelete"
@@ -298,7 +294,7 @@ const onCouponExchange = (code) => {
             .van-radio-group {
               .van-cell {
                 .van-radio {
-                  display: none;
+                  //display: none;
                 }
               }
             }
