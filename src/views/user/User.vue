@@ -47,17 +47,12 @@ const editingContact = ref({
   name: ''
 });
 // const editingContact = { tel: '', name: '' };
-const onAdd = () => {
-
-}
-const onEdit = (info) => {
-  console.log("info===>", info)
-
-}
 const contactManage = (key, info) => {
   switch (key) {
     case "add": {
       isEdit.value = false;
+      editingContact.value.tel = "";
+      editingContact.value.name = "";
       showContactManage.value = true;
       break;
     }
@@ -72,15 +67,38 @@ const contactManage = (key, info) => {
 }
 const onContactSave = (val) => {
   const list = contactList.value;
+  console.log("list===>", list)
   isSaving.value = true;
   // 是否已存在相同id
   const isExist = list.some((item) => item.id === val.id);
+  console.log("isExist===>", isExist)
   if (isExist) {
     // 正常保存
     const rows = list.findIndex(item => item.id === val.id);
     contactList.value[rows] = { ...val };
     setTimeout(() => {
       showToast("保存成功")
+      showContactManage.value = false;
+      isSaving.value = false;
+    }, 800)
+  } else {
+    // 否则为新添加联系人
+    setTimeout(() => {
+      const temp = [];
+      for (const item of list) {
+        console.log("item===>", item)
+        temp.push(item.id)
+      }
+      temp.sort((a, b) => {
+        return a - b
+      });
+      console.log(temp)
+      const newId = +temp[temp.length - 1] + 1 + "";
+      console.log("newId===>", newId)
+      contactList.value.push({
+        id: newId,
+        ...val
+      })
       showContactManage.value = false;
       isSaving.value = false;
     }, 800)
@@ -98,13 +116,6 @@ const onContactDelete = (val) => {
     // isSaving.value = false;
     // showContactManage.value = false;
   }, 3000)
-}
-const clearEditing = () => {
-  // if (isEdit.value) {
-  //   console.log("清空编辑中的信息")
-  //   editingContact.value.tel = "空";
-  //   editingContact.value.name = "空";
-  // }
 }
 
 // 分享部分
@@ -188,7 +199,7 @@ const onCouponExchange = (code) => {
             @edit="(info) => contactManage('edit', info)"
         />
       </van-action-sheet>
-      <van-action-sheet v-model:show="showContactManage" title="联系人管理" @close="clearEditing">
+      <van-action-sheet v-model:show="showContactManage" title="联系人管理">
         <van-contact-edit
             :contact-info="editingContact"
             :is-edit="isEdit"
@@ -208,7 +219,7 @@ const onCouponExchange = (code) => {
 
       <van-coupon-cell :coupons="coupons" :chosen-coupon="chosenCoupon" @click="showCouponList = true" />
       <!-- 优惠券列表 -->
-      <van-popup v-model:show="showCouponList" round position="bottom"style="height: 90%; padding-top: 4px;" >
+      <van-popup v-model:show="showCouponList" round position="bottom" style="height: 90%; padding-top: 4px;" >
         <van-coupon-list :coupons="coupons" :chosen-coupon="chosenCoupon" :disabled-coupons="disabledCoupons" @change="onCouponChange" @exchange="onCouponExchange" />
       </van-popup>
     </div>
