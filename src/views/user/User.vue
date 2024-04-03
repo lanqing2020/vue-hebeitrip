@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import tx from "@/assets/tx.jpg";
-import { showConfirmDialog } from 'vant';
+import { showConfirmDialog, showToast } from 'vant';
 
 // 头部信息：姓名和当前游览位置
 const userName = ref("啄木鸟");
@@ -13,30 +13,100 @@ const currPosition = ref("C");
  */
 const getCall = () => {
   return showConfirmDialog({
-    title: '标题',
-    message: '如果解决方法是丑陋的，那就肯定还有更好的解决方法，只是还没有发现而已。',
+    title: '联系官方（official）',
+    message: '遇到麻烦，并且周边人员无法给与帮助，\n现在联系管理人员？',
   }).then(() => {
-    console.log("触发1")
-    // on confirm
+    window.location.href = 'tel://' + 17777858251;
   }).catch(() => {
-    console.log("触发2")
-    // on cancel
+    console.log("点击了 cancel 按钮")
   });
 }
 
 // 联系人管理
-const showContact = ref(false);
-const contactActions = [
-  { name: '选项一' },
-  { name: '选项二' },
-  { name: '选项三' },
-];
-const onContactSelect = (item) => {
-  // 默认情况下点击选项时不会自动收起
-  // 可以通过 close-on-click-action 属性开启自动收起
-  console.log("item===>", item)
-  showContact.value = false;
-  // showToast(item.name);
+const showContactList = ref(false);
+const showContactManage = ref(false);
+const isEdit = ref(false);
+const isSaving = ref(false);
+const isDeleting = ref(false);
+// const chosenContactId = ref('1');
+const contactList = ref([
+  {
+    id: '1',
+    name: '张三',
+    tel: '13000000000',
+    isDefault: true,
+  },
+  {
+    id: '2',
+    name: '李四',
+    tel: '13100000000',
+  },
+]);
+const editingContact = ref({ tel: '', name: '' });
+const contactManage = (key, contactId) => {
+  switch (key) {
+    case "add": {
+      isEdit.value = false;
+      showContactManage.value = true;
+      break;
+    }
+    case "edit": {
+      isEdit.value = true;
+      showContactManage.value = true;
+      const currInfo = contactList.value.find((item) => item.id === contactId)
+      editingContact.value.tel = currInfo.tel;
+      editingContact.value.name = currInfo.name;
+
+      console.log("now is", editingContact.value);
+      break;
+    }
+    default: return;
+  }
+}
+const onContactSave = (val) => {
+  const list = contactList.value;
+  // 存在相同记录，不保存
+  for (let i=0; i<list.length; i++) {
+    const item = list[i];
+    if (item.name === val.name && item.tel === val.tel) {
+      console.log("有相同记录，不操作")
+      showToast("已存在相同联系人")
+      return
+    }
+  }
+
+  isSaving.value = true;
+  setTimeout(() => {
+    // 模拟接口时间
+    const temp = {
+      id: +list[list.length - 1]["id"] + 1 + "",
+      name: val.name,
+      tel: val.tel
+    }
+    contactList.value.push(temp);
+    isSaving.value = false;
+    showContactManage.value = false;
+    console.log("contactList===>", contactList.value)
+  }, 1000)
+}
+const onContactDelete = (val) => {
+  const { tel, name } = val;
+  setTimeout(() => {
+    const list = contactList.value;
+    const rows = list.findIndex((item) => {
+      return item.tel === tel && item.name === name
+    })
+    console.log("rows===>", rows)
+    // console.log("contactList===>", contactList)
+    // isSaving.value = false;
+    // showContactManage.value = false;
+  }, 3000)
+}
+const todo = () => {
+  if (isEdit.value) {
+    editingContact.value = { tel: '', name: '' };
+  }
+  console.log("触发", editingContact.value)
 }
 
 // 分享部分
@@ -112,8 +182,30 @@ const onCouponExchange = (code) => {
       <van-button round type="success" size="small" @click="getCall">立即通话</van-button>
     </div>
     <div class="list">
-      <van-cell is-link title="联系人" @click="showContact = true" />
-      <van-action-sheet v-model:show="showContact" :actions="contactActions" @select="onContactSelect" />
+      <van-cell is-link title="联系人" @click="showContactList = true" />
+<!--      <van-action-sheet v-model:show="showContact" :actions="contactActions" @select="onContactSelect">-->
+      <van-action-sheet v-model:show="showContactList" title="联系人列表">
+        <van-contact-list
+            :list="contactList"
+            default-tag-text="默认"
+            @add="contactManage('add')"
+            @edit="(contact) => contactManage('edit', contact.id)"
+        />
+      </van-action-sheet>
+      <van-action-sheet v-model:show="showContactManage" title="联系人管理" @close="todo">
+        <van-contact-edit
+            :is-edit="isEdit"
+            :is-saving="isSaving"
+            :is-deleting="isDeleting"
+            show-set-default
+            :contact-info="editingContact"
+            set-default-label="设为默认联系人"
+            @save="onContactSave"
+            @delete="onContactDelete"
+        />
+      </van-action-sheet>
+
+
 
       <van-cell is-link title="分享景区" @click="showShare = true" />
       <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="shareOptions" @select="onShareSelect" />
@@ -198,8 +290,21 @@ const onCouponExchange = (code) => {
         font-size: 28px;
       }
     }
-    .list {
+    /deep/.list {
       margin-top: 30px;
+      .van-popup {
+        .van-action-sheet__content {
+          .van-contact-list {
+            .van-radio-group {
+              .van-cell {
+                .van-radio {
+                  display: none;
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 
