@@ -1,5 +1,5 @@
 <script setup>
-import {reactive, ref} from "vue";
+import {onBeforeMount, reactive, ref} from "vue";
 import tx from "@/assets/tx.jpg";
 import { showConfirmDialog, showToast } from 'vant';
 
@@ -29,15 +29,16 @@ const isEdit = ref(false);
 const isSaving = ref(false);
 const isDeleting = ref(false);
 const chosenContactId = ref('1');
-const contactList = ref([
+const clickedAddOrEdit = ref(-1);  // add-0 edit-1
+let contactList = reactive([
   {
-    id: '1',
+    id: '0',
     name: '张三',
     tel: '13000000000',
     isDefault: true,
   },
   {
-    id: '2',
+    id: '1',
     name: '李四',
     tel: '13100000000',
   },
@@ -48,60 +49,79 @@ const editingContact = ref({
 });
 // const editingContact = { tel: '', name: '' };
 const contactManage = (key, info) => {
+  console.log("contactList===>", contactList)
   switch (key) {
     case "add": {
       isEdit.value = false;
       editingContact.value.tel = "";
       editingContact.value.name = "";
       showContactManage.value = true;
+      clickedAddOrEdit.value = 0;
       break;
     }
     case "edit": {
       isEdit.value = true;
       showContactManage.value = true;
       editingContact.value = info;
+      clickedAddOrEdit.value = 1;
       break;
     }
     default: return;
   }
 }
 const onContactSave = (val) => {
-  const list = contactList.value;
-  console.log("list===>", list)
+  let isExist;
+  for (let i=0; i<contactList.length; i++) {
+    const item = contactList[i];
+    if (item.tel === val.tel && item.name === val.name) {
+      isExist = true;
+      break;
+    }
+  }
+  // console.log("isExist===>", isExist)
   isSaving.value = true;
-  // 是否已存在相同id
-  const isExist = list.some((item) => item.id === val.id);
-  console.log("isExist===>", isExist)
-  if (isExist) {
-    // 正常保存
-    const rows = list.findIndex(item => item.id === val.id);
-    contactList.value[rows] = { ...val };
+
+  // 新增时采用push方法，更新时采用重新赋值一个新数组
+
+  // 先判断是通过新增过来的，还是编辑过来的
+  if (clickedAddOrEdit.value === 0) { // add
     setTimeout(() => {
-      showToast("保存成功")
-      showContactManage.value = false;
-      isSaving.value = false;
-    }, 800)
-  } else {
-    // 否则为新添加联系人
-    setTimeout(() => {
-      const temp = [];
-      for (const item of list) {
-        console.log("item===>", item)
-        temp.push(item.id)
+      if (isExist) {
+        // 已存在相同联系人
+        showToast("已存在相同联系人，请重试~")
+        isSaving.value = false;
+        return;
       }
-      temp.sort((a, b) => {
-        return a - b
-      });
-      console.log(temp)
-      const newId = +temp[temp.length - 1] + 1 + "";
-      console.log("newId===>", newId)
-      contactList.value.push({
-        id: newId,
-        ...val
+      // 否则正常保存
+      console.log("新增时的自增id是：", contactList.length)
+      contactList.push({
+        id: String(contactList.length), ...val
       })
       showContactManage.value = false;
       isSaving.value = false;
-    }, 800)
+    }, 600)
+  } else if(clickedAddOrEdit.value === 1) { // edit
+    // 编辑时也需要查重
+    if (isExist) {
+      showToast("已存在相同联系人，请重试~")
+      isSaving.value = false;
+      return;
+    }
+    setTimeout(() => {
+
+      // contactList.splice(+val.id, 1, { ...val });
+      const listTemp = contactList;
+      listTemp.splice(+val.id, 1, { ...val });
+      contactList = listTemp
+
+      // contactList[val.id] = { ...val };
+      showToast("保存成功")
+      showContactManage.value = false;
+      isSaving.value = false;
+    }, 600)
+  } else {
+    // 默认状态
+    console.log("默认状态")
   }
 }
 const onContactDelete = (val) => {
