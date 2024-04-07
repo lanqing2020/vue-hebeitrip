@@ -22,159 +22,12 @@ const getCall = () => {
   });
 }
 
-// 联系人管理
-const showContactList = ref(false);
-const showContactManage = ref(false);
-const isEdit = ref(false);
-const isSaving = ref(false);
-const isDeleting = ref(false);
-const clickedAddOrEdit = ref(-1);  // add-0 edit-1
-const contactFull = ref(false);
-let contactList = ref([
-  {
-    id: 0,
-    tel: '13000000000',
-    name: '张三',
-    isDefault: true,
-  },
-  {
-    id: 1,
-    tel: '13100000000',
-    name: '李四',
-  },
-]);
-const editingContact = ref({
-  tel: '',
-  name: ''
-});
-/**
- * 点击和编辑的 分流
- * @param key
- * @param info
- */
-const contactManage = (key, info) => {
-  switch (key) {
-    case "add": {
-      if (contactFull.value) {
-        showToast("联系人已满~")
-        return;
-      }
-      console.log("info===>", info)
-      isEdit.value = false;
-      showContactManage.value = true;
-      clickedAddOrEdit.value = 0;
-      break;
-    }
-    case "edit": {
-      isEdit.value = true;
-      showContactManage.value = true;
-      editingContact.value = info;
-      clickedAddOrEdit.value = 1;
-      break;
-    }
-    default: return;
-  }
-}
-
-/**
- * 查找引用类型的数组（也叫数组对象）中item中最大的id 那一项
- * @param arr
- * @returns {*[]}
- */
-const findMaxId = (arr) => {
-  const sorted = [];
-  for (const item of arr) {
-    sorted.push(item.id)
-  }
-  sorted.sort((a, b) => {
-    return b - a;
-  })
-  console.log("排序后", sorted)
-  return sorted[0];
-}
-
-/**
- * 保存联系人
- * @param val
- */
-const onContactSave = (val) => {
-  const list = contactList.value;
-  // 引用数组类型超过4个，vue3出现无法正确渲染的bug
-  isSaving.value = true;
-  // 查重
-  let isExist;
-  for (let i=0; i<list.length; i++) {
-    const item = list[i];
-    if (item.tel === val.tel && item.name === val.name) {
-      isExist = true;
-      break;
-    }
-    if (val.isDefault) {
-      item.isDefault = false;
-    }
-  }
-  switch (clickedAddOrEdit.value) {
-    // add
-    case 0: {
-      setTimeout(() => {
-        if (isExist) {
-          // 已存在相同联系人
-          showToast("已存在相同联系人，请重试~");
-          isSaving.value = false;
-          return;
-        }
-        let appendText = "";
-        if (list.length > 1) {
-          contactFull.value = true;
-          appendText = "，最多保存3位联系人~";
-        }
-        // 否则正常保存
-        contactList.value.push({
-          // id: findMaxId(list) + 1, ...val
-          id: contactList.value[contactList.value.length - 1]["id"] + 1, ...val
-        });
-        // contactList.value = list;
-        showToast("新增成功" + appendText);
-        showContactManage.value = false;
-        isSaving.value = false;
-      }, 600)
-      console.log("新增后的数组是", contactList.value)
-
-      break;
-    }
-    // edit
-    case 1: {
-      if (val.isDefault) {
-        contactList.value.forEach(item => {
-          if (item.isDefault) {
-            item.isDefault = false
-          }
-        })
-      }
-      setTimeout(() => {
-        contactList.value.splice(+val.id, 1, { ...val });
-        showToast("保存成功");
-        showContactManage.value = false;
-        isSaving.value = false;
-      }, 600)
-      break;
-    }
-    default: {
-      return;
-    }
-  }
-}
-const onContactDelete = (val) => {
-  console.log("点击删除", val)
-  setTimeout(() => {
-    contactList.value.splice(contactList.value.findIndex(item => item.id === +val.id), 1);
-    console.log("删除后的数组", contactList.value)
-    showToast("删除联系人成功");
-    contactFull.value = false;
-    isSaving.value = false;
-    showContactManage.value = false;
-  }, 600)
-}
+// 智能辅助
+const showActionSheet = ref(false);
+const actionsStatic = [
+  { name: '浏览地图' },
+  { name: '语音讲解' },
+];
 
 // 分享部分
 const showShare = ref(false);
@@ -247,27 +100,14 @@ const onCouponExchange = (code) => {
       <van-button round type="success" size="small" @click="getCall">立即通话</van-button>
     </div>
     <div class="list">
-      <van-cell is-link title="联系人" @click="showContactList = true" />
-      <van-action-sheet v-model:show="showContactList" title="联系人列表">
-        <van-contact-list
-            :list="contactList"
-            default-tag-text="默认"
-            @add="() => contactManage('add', {})"
-            @edit="(info) => contactManage('edit', info)"
-        />
-      </van-action-sheet>
-      <van-action-sheet v-model:show="showContactManage" title="联系人管理">
-        <van-contact-edit
-            :contact-info="editingContact"
-            :is-edit="isEdit"
-            :is-saving="isSaving"
-            :is-deleting="isDeleting"
-            show-set-default
-            set-default-label="设为默认联系人"
-            @save="onContactSave"
-            @delete="onContactDelete"
-        />
-      </van-action-sheet>
+      <van-cell is-link title="智能辅助" @click="showActionSheet = true" />
+      <van-action-sheet
+          v-model:show="showActionSheet"
+          :actions="actionsStatic"
+          cancel-text="取消"
+          description="您可能需要"
+          close-on-click-action
+      />
 
 
 
