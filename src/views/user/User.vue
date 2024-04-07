@@ -28,33 +28,38 @@ const showContactManage = ref(false);
 const isEdit = ref(false);
 const isSaving = ref(false);
 const isDeleting = ref(false);
-const chosenContactId = ref('1');
 const clickedAddOrEdit = ref(-1);  // add-0 edit-1
+const contactFull = ref(false);
 let contactList = reactive([
   {
     id: '0',
-    name: '张三',
     tel: '13000000000',
+    name: '张三',
     isDefault: true,
   },
   {
     id: '1',
-    name: '李四',
     tel: '13100000000',
+    name: '李四',
   },
 ]);
 const editingContact = ref({
   tel: '',
   name: ''
 });
-// const editingContact = { tel: '', name: '' };
+/**
+ * 点击和编辑的 分流
+ * @param key
+ * @param info
+ */
 const contactManage = (key, info) => {
-  console.log("contactList===>", contactList)
   switch (key) {
     case "add": {
+      if (contactFull.value) {
+        showToast("联系人已满~")
+        return;
+      }
       isEdit.value = false;
-      editingContact.value.tel = "";
-      editingContact.value.name = "";
       showContactManage.value = true;
       clickedAddOrEdit.value = 0;
       break;
@@ -69,7 +74,14 @@ const contactManage = (key, info) => {
     default: return;
   }
 }
+/**
+ * 保存联系人
+ * @param val
+ */
 const onContactSave = (val) => {
+  // 引用数组类型超过4个，vue出现无法渲染正确的bug
+  isSaving.value = true;
+  // 查重
   let isExist;
   for (let i=0; i<contactList.length; i++) {
     const item = contactList[i];
@@ -77,51 +89,55 @@ const onContactSave = (val) => {
       isExist = true;
       break;
     }
+    if (val.isDefault) {
+      item.isDefault = false;
+    }
   }
-  // console.log("isExist===>", isExist)
-  isSaving.value = true;
-
-  // 新增时采用push方法，更新时采用重新赋值一个新数组
-
-  // 先判断是通过新增过来的，还是编辑过来的
-  if (clickedAddOrEdit.value === 0) { // add
-    setTimeout(() => {
-      if (isExist) {
-        // 已存在相同联系人
-        showToast("已存在相同联系人，请重试~")
+  switch (clickedAddOrEdit.value) {
+    // add
+    case 0: {
+      setTimeout(() => {
+        if (isExist) {
+          // 已存在相同联系人
+          showToast("已存在相同联系人，请重试~");
+          isSaving.value = false;
+          return;
+        }
+        let appendText = "";
+        if (contactList.length > 2) {
+          contactFull.value = true;
+          appendText = "，最多保存4位联系人~";
+        }
+        // 否则正常保存
+        contactList.push({
+          id: String(contactList.length), ...val
+        });
+        showToast("新增成功" + appendText);
+        showContactManage.value = false;
         isSaving.value = false;
-        return;
+      }, 600)
+      break;
+    }
+    // edit
+    case 1: {
+      if (val.isDefault) {
+        contactList.forEach(item => {
+          if (item.isDefault) {
+            item.isDefault = false
+          }
+        })
       }
-      // 否则正常保存
-      console.log("新增时的自增id是：", contactList.length)
-      contactList.push({
-        id: String(contactList.length), ...val
-      })
-      showContactManage.value = false;
-      isSaving.value = false;
-    }, 600)
-  } else if(clickedAddOrEdit.value === 1) { // edit
-    // 编辑时也需要查重
-    if (isExist) {
-      showToast("已存在相同联系人，请重试~")
-      isSaving.value = false;
+      setTimeout(() => {
+        contactList.splice(+val.id, 1, { ...val });
+        showToast("保存成功");
+        showContactManage.value = false;
+        isSaving.value = false;
+      }, 600)
+      break;
+    }
+    default: {
       return;
     }
-    setTimeout(() => {
-
-      // contactList.splice(+val.id, 1, { ...val });
-      const listTemp = contactList;
-      listTemp.splice(+val.id, 1, { ...val });
-      contactList = listTemp
-
-      // contactList[val.id] = { ...val };
-      showToast("保存成功")
-      showContactManage.value = false;
-      isSaving.value = false;
-    }, 600)
-  } else {
-    // 默认状态
-    console.log("默认状态")
   }
 }
 const onContactDelete = (val) => {
@@ -212,10 +228,9 @@ const onCouponExchange = (code) => {
       <van-cell is-link title="联系人" @click="showContactList = true" />
       <van-action-sheet v-model:show="showContactList" title="联系人列表">
         <van-contact-list
-            v-model="chosenContactId"
             :list="contactList"
             default-tag-text="默认"
-            @add="() => contactManage('add')"
+            @add="() => contactManage('add', {})"
             @edit="(info) => contactManage('edit', info)"
         />
       </van-action-sheet>
@@ -248,8 +263,7 @@ const onCouponExchange = (code) => {
 
 <style scoped lang="less">
   header {
-    background: url("../../assets/user.jpg");
-    background-repeat: no-repeat;
+    background: url("../../assets/user.jpg") no-repeat;
     background-size: cover;
     padding: 0 30px;
     height: 350px;
@@ -325,7 +339,7 @@ const onCouponExchange = (code) => {
             .van-radio-group {
               .van-cell {
                 .van-radio {
-                  //display: none;
+                  display: none;
                 }
               }
             }
