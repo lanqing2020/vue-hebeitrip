@@ -29,20 +29,6 @@ const actionsStatic = [
   { name: '语音讲解' },
 ];
 
-// 分享部分
-const showShare = ref(false);
-const shareOptions = [
-  { name: '微信', icon: 'wechat' },
-  { name: '微博', icon: 'weibo' },
-  { name: '复制链接', icon: 'link' },
-  { name: '分享海报', icon: 'poster' },
-  { name: '二维码', icon: 'qrcode' },
-];
-const onShareSelect = (option) => {
-  // showToast(option.name);
-  showShare.value = false;
-};
-
 // 优惠券部分
 const coupon = {
   available: 1,
@@ -78,6 +64,19 @@ const onCouponExchange = (code) => {
   coupons.value.push(coupon);
 };
 
+// 分享部分
+const showShare = ref(false);
+const shareOptions = [
+  { name: '微信', icon: 'wechat' },
+  { name: '微博', icon: 'weibo' },
+  { name: '复制链接', icon: 'link' },
+  { name: '分享海报', icon: 'poster' },
+  { name: '二维码', icon: 'qrcode' },
+];
+const onShareSelect = (option) => {
+  // showToast(option.name);
+  showShare.value = false;
+};
 </script>
 
 <template>
@@ -109,16 +108,15 @@ const onCouponExchange = (code) => {
           close-on-click-action
       />
 
-
-
-      <van-cell is-link title="分享景区" @click="showShare = true" />
-      <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="shareOptions" @select="onShareSelect" />
-
       <van-coupon-cell :coupons="coupons" :chosen-coupon="chosenCoupon" @click="showCouponList = true" />
       <!-- 优惠券列表 -->
       <van-popup v-model:show="showCouponList" round position="bottom" style="height: 90%; padding-top: 4px;" >
         <van-coupon-list :coupons="coupons" :chosen-coupon="chosenCoupon" :disabled-coupons="disabledCoupons" @change="onCouponChange" @exchange="onCouponExchange" />
       </van-popup>
+
+      <van-cell is-link title="分享景区" @click="showShare = true" />
+      <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="shareOptions" @select="onShareSelect" />
+
     </div>
   </main>
 </template>
