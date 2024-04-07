@@ -30,15 +30,15 @@ const isSaving = ref(false);
 const isDeleting = ref(false);
 const clickedAddOrEdit = ref(-1);  // add-0 edit-1
 const contactFull = ref(false);
-let contactList = reactive([
+let contactList = ref([
   {
-    id: '0',
+    id: 0,
     tel: '13000000000',
     name: '张三',
     isDefault: true,
   },
   {
-    id: '1',
+    id: 1,
     tel: '13100000000',
     name: '李四',
   },
@@ -59,6 +59,7 @@ const contactManage = (key, info) => {
         showToast("联系人已满~")
         return;
       }
+      console.log("info===>", info)
       isEdit.value = false;
       showContactManage.value = true;
       clickedAddOrEdit.value = 0;
@@ -74,17 +75,36 @@ const contactManage = (key, info) => {
     default: return;
   }
 }
+
+/**
+ * 查找引用类型的数组（也叫数组对象）中item中最大的id 那一项
+ * @param arr
+ * @returns {*[]}
+ */
+const findMaxId = (arr) => {
+  const sorted = [];
+  for (const item of arr) {
+    sorted.push(item.id)
+  }
+  sorted.sort((a, b) => {
+    return b - a;
+  })
+  console.log("排序后", sorted)
+  return sorted[0];
+}
+
 /**
  * 保存联系人
  * @param val
  */
 const onContactSave = (val) => {
-  // 引用数组类型超过4个，vue出现无法渲染正确的bug
+  const list = contactList.value;
+  // 引用数组类型超过4个，vue3出现无法正确渲染的bug
   isSaving.value = true;
   // 查重
   let isExist;
-  for (let i=0; i<contactList.length; i++) {
-    const item = contactList[i];
+  for (let i=0; i<list.length; i++) {
+    const item = list[i];
     if (item.tel === val.tel && item.name === val.name) {
       isExist = true;
       break;
@@ -104,31 +124,34 @@ const onContactSave = (val) => {
           return;
         }
         let appendText = "";
-        if (contactList.length > 2) {
+        if (list.length > 2) {
           contactFull.value = true;
           appendText = "，最多保存4位联系人~";
         }
         // 否则正常保存
-        contactList.push({
-          id: String(contactList.length), ...val
+        list.push({
+          id: findMaxId(list) + 1, ...val
         });
+        contactList.value = list;
         showToast("新增成功" + appendText);
         showContactManage.value = false;
         isSaving.value = false;
       }, 600)
+      console.log("新增后的数组是", contactList.value)
+
       break;
     }
     // edit
     case 1: {
       if (val.isDefault) {
-        contactList.forEach(item => {
+        contactList.value.forEach(item => {
           if (item.isDefault) {
             item.isDefault = false
           }
         })
       }
       setTimeout(() => {
-        contactList.splice(+val.id, 1, { ...val });
+        contactList.value.splice(+val.id, 1, { ...val });
         showToast("保存成功");
         showContactManage.value = false;
         isSaving.value = false;
@@ -141,17 +164,15 @@ const onContactSave = (val) => {
   }
 }
 const onContactDelete = (val) => {
-  const { tel, name } = val;
+  console.log("点击删除", val)
   setTimeout(() => {
-    const list = contactList.value;
-    const rows = list.findIndex((item) => {
-      return item.tel === tel && item.name === name
-    })
-    console.log("rows===>", rows)
-    // console.log("contactList===>", contactList)
-    // isSaving.value = false;
-    // showContactManage.value = false;
-  }, 3000)
+    contactList.value.splice(contactList.value.findIndex(item => item.id === +val.id), 1);
+    console.log("删除后的数组", contactList.value)
+    showToast("删除联系人成功");
+    contactFull.value = false;
+    isSaving.value = false;
+    showContactManage.value = false;
+  }, 600)
 }
 
 // 分享部分
