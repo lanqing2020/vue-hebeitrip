@@ -24,9 +24,33 @@ const router = createRouter({
     {
       path: '/detail',
       name: 'detail',
-      component: () => import('@/views/detail/Detail.vue')
-    }
+      component: () => import('@/views/detail/Detail.vue'),
+      meta: {
+        acceptedQueryParams: ['productId']
+      }
+    },
+    {
+      path: '/error',
+      name: 'error',
+      component: () => import('@/views/error/Error.vue')
+    },
   ]
 })
+
+// 在路由守卫中检查query参数
+router.beforeEach((to, from, next) => {
+  const acceptedQueryParams = to.meta.acceptedQueryParams || [];
+  const queryParams = Object.keys(to.query);
+  const invalidQueryParams = queryParams.filter(param => !acceptedQueryParams.includes(param));
+
+  if (invalidQueryParams.length > 0) {
+    // 如果存在未指定的query参数，则拦截并跳转到一个错误页面或其他页面
+    console.error(`Invalid query params: ${invalidQueryParams.join(', ')}`);
+    next('/error');
+  } else {
+    // 继续导航
+    next();
+  }
+});
 
 export default router
