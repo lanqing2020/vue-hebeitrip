@@ -124,15 +124,16 @@ const onContactSave = (val) => {
           return;
         }
         let appendText = "";
-        if (list.length > 2) {
+        if (list.length > 1) {
           contactFull.value = true;
-          appendText = "，最多保存4位联系人~";
+          appendText = "，最多保存3位联系人~";
         }
         // 否则正常保存
-        list.push({
-          id: findMaxId(list) + 1, ...val
+        contactList.value.push({
+          // id: findMaxId(list) + 1, ...val
+          id: contactList.value[contactList.value.length - 1]["id"] + 1, ...val
         });
-        contactList.value = list;
+        // contactList.value = list;
         showToast("新增成功" + appendText);
         showContactManage.value = false;
         isSaving.value = false;
