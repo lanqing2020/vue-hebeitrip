@@ -1,18 +1,37 @@
 <script setup>
-import {RouterView, useRouter} from 'vue-router';
-import { ref, watchEffect } from "vue";
+import {RouterView, useRoute, useRouter} from 'vue-router';
+import {ref, watch, watchEffect} from "vue";
+import Home from "@/views/home/Home.vue";
+import Order from "@/views/order/Order.vue";
+import User from "@/views/user/User.vue";
 
 const active = ref(0);
 const router = useRouter();
+const change = (curr) => {
+  console.log("curr===>", curr)
+  active.value = curr;
+
+}
 /**
  * vue3: vue-router刷新获取不到路由路径
  */
-watchEffect(() => {
-  router.getRoutes().map((item, index) => {
-    if(item.path === router.currentRoute.value.path){
-      active.value = index
-    }
-  })
+watch(() => router.currentRoute.value.path, (path, oldPath) => {
+  // 至少会渲染两次，选择new-path保证这是最后一次的正确渲染
+  if (path) {
+    const allRoutes = router.getRoutes();
+    console.log("allRoutes===>", allRoutes)
+    const firstLevelRoutes = allRoutes.filter(route => route.path === '/');
+    console.log("firstLevelRoutes===>", firstLevelRoutes)
+
+    router.getRoutes().map((item, index) => {
+      if(item.path === router.currentRoute.value.path){
+        active.value = index
+        // console.log("item.path===>", item.path)
+        // console.log("index===>", index)
+        // console.log("router.currentRoute.value===>", router.currentRoute.value)
+      }
+    })
+  }
 })
 
 </script>
@@ -22,8 +41,8 @@ watchEffect(() => {
   <van-nav-bar safe-area-inset-top />
   <RouterView />
   <footer>
-    <van-tabbar v-model="active" @change="(curr) => active = curr" active-color="#ffa43f">
-        <van-tabbar-item icon="home-o" to="/">首页</van-tabbar-item>
+    <van-tabbar route v-model="active" @change="change" active-color="#ffa43f">
+        <van-tabbar-item icon="home-o" to="/index">首页</van-tabbar-item>
         <van-tabbar-item icon="coupon-o" to="/order">我的订单</van-tabbar-item>
         <van-tabbar-item icon="friends-o" to="/user">个人中心</van-tabbar-item>
     </van-tabbar>

@@ -1,5 +1,5 @@
 <script setup>
-import {onBeforeMount, reactive, ref} from "vue";
+import { ref } from "vue";
 import tx from "@/assets/tx.jpg";
 import { showConfirmDialog, showToast } from 'vant';
 
