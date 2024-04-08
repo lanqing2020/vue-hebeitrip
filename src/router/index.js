@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from 'vue-router'
+import {createRouter, createWebHistory, useRouter} from 'vue-router'
 import { showDialog } from 'vant';
 
 const router = createRouter({
@@ -47,18 +47,19 @@ router.beforeEach((to, from, next) => {
   const acceptedQueryParams = to.meta.acceptedQueryParams || [];
   const queryParams = Object.keys(to.query);
   const invalidQueryParams = queryParams.filter(param => !acceptedQueryParams.includes(param));
+
+  // 如果存在未指定的query参数，则拦截并跳转到一个错误页面或其他页面
   if (invalidQueryParams.length > 0) {
-    // 如果存在未指定的query参数，则拦截并跳转到一个错误页面或其他页面
     showDialog({
       title: '错误',
       message: `不合法的查询参数，${invalidQueryParams.join(', ')}` ,
     }).then(() => {
       next(to.path)
-      // next('/error');
     });
+  } else if (router.getRoutes().every(item => item.path.indexOf(to.fullPath) === -1)) {
+    next('/error')
   } else {
-    // 继续导航
-    next();
+    next(); // 继续导航
   }
 });
 

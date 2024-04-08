@@ -18,17 +18,9 @@ const change = (curr) => {
 watch(() => router.currentRoute.value.path, (path, oldPath) => {
   // 至少会渲染两次，选择new-path保证这是最后一次的正确渲染
   if (path) {
-    const allRoutes = router.getRoutes();
-    console.log("allRoutes===>", allRoutes)
-    const firstLevelRoutes = allRoutes.filter(route => route.path === '/');
-    console.log("firstLevelRoutes===>", firstLevelRoutes)
-
     router.getRoutes().map((item, index) => {
       if(item.path === router.currentRoute.value.path){
         active.value = index
-        // console.log("item.path===>", item.path)
-        // console.log("index===>", index)
-        // console.log("router.currentRoute.value===>", router.currentRoute.value)
       }
     })
   }

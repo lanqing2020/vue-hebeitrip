@@ -79,13 +79,14 @@ const onSubmit = () => {
         padding-bottom: 100px;
         p {
           font-size: 28px;
-          line-height: 48px;
           width: 100%;
           height: auto;
           text-align: justify;
           color: #2c3e50;
           margin-top: 15px;
-          //padding-bottom: 100px;
+          .van-text-ellipsis {
+            line-height: 54px;
+          }
         }
       }
     }
