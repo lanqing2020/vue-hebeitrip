@@ -1,35 +1,36 @@
 <script setup>
-import {reactive, ref} from "vue";
+import { reactive, ref } from "vue";
+import { showConfirmDialog } from 'vant';
 
-  const activeName = ref("a");
-  const payment = reactive([
-    {
-      id: "0",
-      productId: "",
-      productTitle: "全新elementUI项目实战教程Vue整合Echarts后台权限",
-      productImg: "https://xd-video-pc-img.oss-cn-beijing.aliyuncs.com/xdclass_pro/video/2019_frontend/element/elementui.png",
-      productPrice: "20.00",
-      num: "2"
-    },
-    {
-      id: "1",
-      productId: "",
-      productTitle: "全新elementUI项目实战2222",
-      productImg: "https://xd-video-pc-img.oss-cn-beijing.aliyuncs.com/xdclass_pro/video/2019_frontend/element/elementui.png",
-      productPrice: "30.00",
-      num: "4"
-    }
-  ])
-  const paid = reactive([
-    {
-      id: "0",
-      productId: "",
-      productTitle: "全新elementUI项目实战已购买",
-      productImg: "https://xd-video-pc-img.oss-cn-beijing.aliyuncs.com/xdclass_pro/video/2019_frontend/element/elementui.png",
-      productPrice: "30.00",
-      num: "4"
-    },
-  ])
+const activeName = ref("payment");
+const payment = reactive([
+  {
+    id: "0",
+    productId: "",
+    productTitle: "全新elementUI项目实战教程Vue整合Echarts后台权限",
+    productImg: "https://xd-video-pc-img.oss-cn-beijing.aliyuncs.com/xdclass_pro/video/2019_frontend/element/elementui.png",
+    productPrice: "20.00",
+    num: "2"
+  },
+  {
+    id: "1",
+    productId: "",
+    productTitle: "全新elementUI项目实战2222",
+    productImg: "https://xd-video-pc-img.oss-cn-beijing.aliyuncs.com/xdclass_pro/video/2019_frontend/element/elementui.png",
+    productPrice: "30.00",
+    num: "4"
+  }
+])
+const paid = reactive([
+  {
+    id: "0",
+    productId: "",
+    productTitle: "全新elementUI项目实战已购买",
+    productImg: "https://xd-video-pc-img.oss-cn-beijing.aliyuncs.com/xdclass_pro/video/2019_frontend/element/elementui.png",
+    productPrice: "30.00",
+    num: "4"
+  },
+])
 const complete = reactive([
   {
     id: "0",
@@ -40,13 +41,28 @@ const complete = reactive([
     num: "1"
   }
 ])
+// position 为关闭时点击的位置
+const beforeClose = ({ position }) => {
+  switch (position) {
+    case 'left':
+    case 'cell':
+    case 'outside':
+      return true;
+    case 'right':
+      return new Promise((resolve) => {
+        showConfirmDialog({
+          title: '确定删除吗？',
+        }).then(() => resolve(true)).catch(() => resolve(false));
+      });
+  }
+};
 </script>
 
 <template>
   <van-tabs v-model:active="activeName">
-    <van-tab title="待付款" name="a" badge="2">
+    <van-tab title="待付款" name="payment" badge="2">
       <div v-for="item in payment" :key="item.id" class="goods-wrap">
-        <van-swipe-cell>
+        <van-swipe-cell :before-close="beforeClose">
             <van-card class="goods-card" :num="item.num" :price="item.productPrice" :title="item.productTitle" :thumb="item.productImg" />
           <template #right>
             <van-button square text="删除" type="danger" class="delete-button" />
@@ -54,9 +70,9 @@ const complete = reactive([
         </van-swipe-cell>
       </div>
     </van-tab>
-    <van-tab title="已付款，待核销" name="b" badge="1">
+    <van-tab title="已付款，待核销" name="paid" badge="1">
       <div v-for="item in paid" :key="item.id" class="goods-wrap">
-        <van-swipe-cell>
+        <van-swipe-cell disabled>
           <van-card class="goods-card" :num="item.num" :price="item.productPrice" :title="item.productTitle" :thumb="item.productImg" />
           <template #right>
             <van-button square text="删除" type="danger" class="delete-button" />
@@ -64,9 +80,9 @@ const complete = reactive([
         </van-swipe-cell>
       </div>
     </van-tab>
-    <van-tab title="已完成" name="c">
+    <van-tab title="已完成" name="complete">
       <div v-for="item in complete" :key="item.id" class="goods-wrap">
-        <van-swipe-cell>
+        <van-swipe-cell disabled>
           <van-card class="goods-card" :num="item.num" :price="item.productPrice" :title="item.productTitle" :thumb="item.productImg" />
           <template #right>
             <van-button square text="删除" type="danger" class="delete-button" />

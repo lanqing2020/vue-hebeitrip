@@ -35,6 +35,14 @@ const router = createRouter({
       }
     },
     {
+      path: '/detail/result',
+      name: 'detail-result',
+      component: () => import('@/views/detail/DetailResult.vue'),
+      meta: {
+        acceptedQueryParams: ['result']
+      }
+    },
+    {
       path: '/error',
       name: 'error',
       component: () => import('@/views/error/Error.vue')
@@ -56,7 +64,7 @@ router.beforeEach((to, from, next) => {
     }).then(() => {
       next(to.path)
     });
-  } else if (router.getRoutes().every(item => item.path.indexOf(to.fullPath) === -1)) {
+  } else if (router.getRoutes().every(item => item.path.indexOf(to.path) === -1)) {
     next('/error')
   } else {
     next(); // 继续导航
