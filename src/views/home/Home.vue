@@ -3,12 +3,20 @@ import swiper1 from "@/assets/swiper-1.jpg";
 import swiper2 from "@/assets/swiper-2.jpg";
 import swiper3 from "@/assets/swiper-3.jpg";
 import picList1 from "@/assets/pic-list-1.jpg";
-import { ref } from "vue";
+import { home } from '@/apis';
+import {onMounted, ref} from "vue";
 
 const searchVal = ref("");
 const doSearch = (val) => {
   searchVal.value = val;  // 记录当前搜索的值
   console.log("val===>", val)
+}
+
+const getListBanner = async () => {
+  const { code, data } = await home.getListBanner();
+  if (code === 0 && data) {
+    console.log("data===>", data)
+  }
 }
 
 const productList = ref([]);
@@ -36,6 +44,13 @@ const listOnLoad = () => {
     }
   }, 1000);
 }
+
+const init = () => {
+  getListBanner();
+}
+onMounted(() => {
+  init();
+})
 </script>
 
 <template>

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Toast } from 'vant';
 
 let config = {
     baseURL: "http://localhost:8081/api",
@@ -15,7 +16,7 @@ instance.interceptors.response.use(responseSuccessInterceptor, responseErrorInte
  * @returns {*}
  */
 export function requestSuccessInterceptor(config) {
-    console.log("请求前成功")
+    console.log("请求前成功", config)
     return config;
 }
 
@@ -25,7 +26,7 @@ export function requestSuccessInterceptor(config) {
  * @returns {Promise<never>}
  */
 export function requestErrorInterceptor(error) {
-    console.log("请求前失败")
+    console.log("请求前失败", error)
     return Promise.reject(error);
 }
 
@@ -35,8 +36,12 @@ export function requestErrorInterceptor(error) {
  * @returns {*}
  */
 export function responseSuccessInterceptor(response) {
-    console.log("请求前失败")
-    return response;
+    console.log("响应成功", response)
+    const { code, data, msg } = response;
+    if (code !== 0) {
+        // Toast(msg)
+    }
+    return data;
 }
 
 /**
@@ -45,7 +50,7 @@ export function responseSuccessInterceptor(response) {
  * @returns {Promise<never>}
  */
 export function responseErrorInterceptor(error) {
-    console.log("请求前失败")
+    console.log("响应失败", error)
     return Promise.reject(error);
 }
 
