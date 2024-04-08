@@ -1,14 +1,19 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
+import { showDialog } from 'vant';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/index',
-      name: 'index',
+      path: '/',
+      redirect: '/index',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
+    },
+    {
+      path: '/index',
+      name: 'index',
       component: () => import('@/views/home/Home.vue'),
     },
     {
@@ -45,8 +50,13 @@ router.beforeEach((to, from, next) => {
 
   if (invalidQueryParams.length > 0) {
     // 如果存在未指定的query参数，则拦截并跳转到一个错误页面或其他页面
-    console.error(`Invalid query params: ${invalidQueryParams.join(', ')}`);
-    next('/error');
+    showDialog({
+      title: '错误',
+      message: `不合法的查询参数，${invalidQueryParams.join(', ')}` ,
+    }).then(() => {
+      next(to.path)
+      // next('/error');
+    });
   } else {
     // 继续导航
     next();
