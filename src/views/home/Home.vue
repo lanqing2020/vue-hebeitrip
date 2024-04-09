@@ -1,10 +1,10 @@
 <script setup>
-import swiper1 from "@/assets/swiper-1.jpg";
-import swiper2 from "@/assets/swiper-2.jpg";
-import swiper3 from "@/assets/swiper-3.jpg";
 import picList1 from "@/assets/pic-list-1.jpg";
 import { home } from '@/apis';
-import {onMounted, ref} from "vue";
+import {onBeforeMount, onMounted, ref} from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const searchVal = ref("");
 const doSearch = (val) => {
@@ -12,11 +12,30 @@ const doSearch = (val) => {
   console.log("val===>", val)
 }
 
+/**
+ * 轮播图
+ * @returns {Promise<void>}
+ */
+const swipeList = ref([])
 const getListBanner = async () => {
   const { code, data } = await home.getListBanner();
   if (code === 0 && data) {
-    console.log("data===>", data)
+    swipeList.value = data;
   }
+}
+
+/**
+ * 跳转详情页
+ * @type {Ref<UnwrapRef<*[]>>}
+ */
+const goDetailPage = (url) => {
+  console.log("url===>", url)
+  router.push({
+    path: "/detail",
+    query: {
+      productId: "1"
+    }
+  })
 }
 
 const productList = ref([]);
@@ -48,7 +67,7 @@ const listOnLoad = () => {
 const init = () => {
   getListBanner();
 }
-onMounted(() => {
+onBeforeMount(() => {
   init();
 })
 </script>
@@ -59,15 +78,11 @@ onMounted(() => {
   </header>
   <main>
     <van-swipe class="my-swipe" :autoplay="4000" indicator-color="white">
-      <van-swipe-item>
-        <van-image :src="swiper1" alt="swiper-1" width="381" height="166" radius="15" :lazy-load="true" />
-      </van-swipe-item>
-      <van-swipe-item>
-        <van-image :src="swiper2" alt="swiper-2" width="381" height="166" radius="15" :lazy-load="true" />
-      </van-swipe-item>
-      <van-swipe-item>
-        <van-image :src="swiper3" alt="swiper-3" width="381" height="166" radius="15" :lazy-load="true" />
-      </van-swipe-item>
+      <div v-for="item in swipeList" :key="item.id">
+        <van-swipe-item @click="() => goDetailPage(item.url)">
+          <van-image :src="item.img" alt="swiper-1" width="381" height="166" radius="15" :lazy-load="true" />
+        </van-swipe-item>
+      </div>
     </van-swipe>
     <div class="list">
       <van-list

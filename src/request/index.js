@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { Toast } from 'vant';
-import { Loading } from 'vant-weapp';
+import { showToast } from 'vant';
 
 let config = {
     baseURL: "http://localhost:8081/api",
@@ -18,7 +17,6 @@ instance.interceptors.response.use(responseSuccessInterceptor, responseErrorInte
  */
 export function requestSuccessInterceptor(config) {
     console.log("请求前成功", config)
-    Loading.show();
     return config;
 }
 
@@ -39,11 +37,11 @@ export function requestErrorInterceptor(error) {
  */
 export function responseSuccessInterceptor(response) {
     console.log("响应成功", response)
-    const { code, data, msg } = response;
+    const { code, msg } = response.data;
     if (code !== 0) {
-        // Toast(msg)
+        showToast(msg)
     }
-    return data;
+    return response.data;
 }
 
 /**

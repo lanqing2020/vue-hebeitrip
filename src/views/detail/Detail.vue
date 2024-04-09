@@ -1,15 +1,11 @@
 <script setup>
-import coverImg from '@/assets/cover-img.jpg';
-import orderImg from '@/assets/order-img.jpg';
-import { ref } from "vue";
-import { useRouter } from 'vue-router';
+import {onBeforeMount, ref} from "vue";
+import {useRoute, useRouter} from 'vue-router';
+import { product } from '@/apis';
 
-const pointValue = ref(3.5);
-const text = ref("          万里长城是中华民族的象征和骄傲，也是世界上最宏伟的古代军事防御工程。始建于战国时期，直到明代。八达岭长城是明代长城的精华，是明代长城最杰出的代表地段，其地位之显要，名声远大，景色之壮观，是其他任何地段的长城所不能替代的。\n" +
-    "          早在1961年八达岭长城就被国务院列为“全国首批重点文化保护单位”；1990年八达岭代表万里长城接受了联合国颁发的人类文化遗产证书。\n" +
-    "          八达岭长城历史悠久，风光也这边独好。登上八达岭长城饱览长城雄姿，脚下的长城依山就势，扶摇而上，蜿蜒起伏，宛若一条腾飞的巨龙，气势磅礴，雄伟壮观，而自然风光也独具特色，四时皆有佳景，赵朴初先生曾赋诗曰：“…最是春花锦锦，夏绿叠云，漫道秋春，风光尽收方寸…”\n" +
-    "          此外，八达岭长城景区还建有大型中国长城博物馆和长城全国影院，置游人于历史与现实交叉的空间，以全新的感受去领略长城的风姿及沿途的历史文化，民族风情。1995年10月1日，八达岭长城万盏明灯一齐点亮，它那威武雄浑的身姿如同一条灿烂辉煌的巨龙，飞腾在崇山峻岭与苍松翠柏之间，从此开创了长城旅游的历史新纪元。\n" +
-    "          “不到长城非好汉”。迄今，八达岭长城已接待包括尼克松、里根、伊丽莎白、撒切尔夫人在内的中外游人8000万，年接待游人50万人，成为令人向往的世界级旅游观光之胜地。\n")
+const router = useRouter();
+const route = useRoute();
+
 const loading = ref(false);
 const showDialog = ref(false);
 const handleSubmit = () => {
@@ -35,7 +31,7 @@ const inputBlur = () => {
   const regex = /^1\d{10}$/;
   validPhoneNumber.value = !regex.test(orderTel.value);
 }
-const router = useRouter();
+
 const submitConfirm = () => {
   loading.value = true;
   // 接口处理
@@ -49,35 +45,70 @@ const submitConfirm = () => {
     })
   }, 600)
 }
+
+/**
+ * 请求详情接口
+ * @returns {Promise<void>}
+ */
+const productTitle = ref("");
+const productCreateTime = ref("");
+const productCoverImg = ref("");
+const smallImg = ref("");
+const productPoint = ref(0);
+const productPrice = ref(0);
+const productText = ref("");
+const getProductDetail = async () => {
+  const { productId } = route.query;
+  if (productId) {
+    const { code, data } = await product.getProductDetail(productId);
+    if (code === 0 && data) {
+      productTitle.value = data["title"];
+      productCreateTime.value = data["create_time"];
+      productCoverImg.value = data["cover_img"];
+      smallImg.value = data["small_img"];
+      productPoint.value = data["point"] / 2;
+      productPrice.value = data["price"];
+      productText.value = data["description"];
+    }
+  }
+}
+
+const init = () => {
+  getProductDetail();
+}
+
+onBeforeMount(() => {
+  init();
+})
 </script>
 
 <template>
   <main>
-    <div class="title">这是景区的标题介绍这是景区</div>
-    <div class="create-time">编辑：2024-04-01 18:00:20</div>
+    <div class="title">{{ productTitle }}</div>
+    <div class="create-time">编辑：{{ productCreateTime }}</div>
     <div class="img-wrap">
-      <img :src="coverImg" alt="cover-img" />
+      <img :src="productCoverImg" alt="cover-img" />
     </div>
     <div class="introduce-wrap">
       <div class="point-wrap">
-        <div class="label">评分：</div><van-rate v-model="pointValue" readonly allow-half />
+        <div class="label">评分：</div><van-rate v-model="productPoint" readonly allow-half />
       </div>
       <div class="introduce">
         <p>
-          <van-text-ellipsis rows="8" :content="text" expand-text="展开" collapse-text="收起" />
+          <van-text-ellipsis rows="8" :content="productText" expand-text="展开" collapse-text="收起" />
         </p>
       </div>
     </div>
-    <van-submit-bar :price="3050" button-text="提交订单" @submit="handleSubmit" />
+    <van-submit-bar :price="productPrice" button-text="提交订单" @submit="handleSubmit" />
     <div v-if="loading" class="loading">
       <van-loading type="spinner" color="#1989fa" />
     </div>
     <van-dialog v-model:show="showDialog" title="确认订单" show-cancel-button @confirm="submitConfirm" :confirmButtonDisabled="validPhoneNumber">
       <div class="order-wrap">
         <div class="order-info">
-          <img class="order-img" :src="orderImg" width="50" height="50" alt="cover-img-small" />
+          <img class="order-img" :src="smallImg" width="50" height="50" alt="cover-img-small" />
           <div class="flex">
-            <div class="order-title">这是景区的标题介绍这是景区</div>
+            <div class="order-title">{{ productTitle }}</div>
             <div class="order-time">创建日期：{{ getNowTime() }}</div>
           </div>
         </div>
