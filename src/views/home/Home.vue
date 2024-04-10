@@ -29,21 +29,27 @@ const getListBanner = async () => {
  * @type {Ref<UnwrapRef<*[]>>}
  */
 const goDetailPage = (url) => {
-  console.log("url===>", url)
-  router.push({
-    path: "/detail",
-    query: {
-      productId: "1"
-    }
-  })
+  router.push(url)
 }
 
+/**
+ * 产品列表
+ * @type {Ref<UnwrapRef<*[]>>}
+ */
 const productList = ref([]);
+const getListProduct = async () => {
+  const { code, data } = await home.getListProduct();
+  if (code === 0 && data) {
+    productList.value = data;
+  }
+}
 const loading = ref(false);
 const finished = ref(false);
+/**
+ * 异步更新数据，需要后端配合，分步返回数据
+ */
 const listOnLoad = () => {
-  // 异步更新数据
-  // setTimeout 仅做示例，真实场景中一般为 ajax 请求
+  // setTimeout 仅做示例，一般为 ajax 请求
   setTimeout(() => {
     for (let i = 0; i < 5; i++) {
       const obj = {
@@ -66,6 +72,7 @@ const listOnLoad = () => {
 
 const init = () => {
   getListBanner();
+  getListProduct();
 }
 onBeforeMount(() => {
   init();
@@ -85,13 +92,13 @@ onBeforeMount(() => {
       </div>
     </van-swipe>
     <div class="list">
-      <van-list
-          v-model:loading="loading"
-          :finished="finished"
-          finished-text="没有更多了"
-          @load="listOnLoad">
-        <van-card v-for="item in productList" :key="item.title" :num="item.num" :price="item.price" :desc="item.desc" :title="item.title" :thumb="item.thumb" :lazy-load="true" />
-      </van-list>
+<!--      <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="listOnLoad">-->
+        <van-card v-for="item in productList" :key="item.title" :price="+item.price / 100 + '.00'" :desc="item.description" :title="item.title" :thumb="item.cover_img" :lazy-load="true" :thumb-link="'/detail?productId=' + item.id">
+          <template #num>
+            <van-tag type="warning">{{ item.point }} 分</van-tag>
+          </template>
+        </van-card>
+<!--      </van-list>-->
     </div>
   </main>
 </template>

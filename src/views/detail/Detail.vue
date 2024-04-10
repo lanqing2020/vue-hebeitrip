@@ -57,6 +57,7 @@ const smallImg = ref("");
 const productPoint = ref(0);
 const productPrice = ref(0);
 const productText = ref("");
+const productSummary = ref("");
 const getProductDetail = async () => {
   const { productId } = route.query;
   if (productId) {
@@ -69,6 +70,7 @@ const getProductDetail = async () => {
       productPoint.value = data["point"] / 2;
       productPrice.value = data["price"];
       productText.value = data["description"];
+      productSummary.value = data["summary"];
     }
   }
 }
@@ -94,10 +96,15 @@ onBeforeMount(() => {
         <div class="label">评分：</div><van-rate v-model="productPoint" readonly allow-half />
       </div>
       <div class="introduce">
+        <h2>文字简介</h2>
         <p>
           <van-text-ellipsis rows="8" :content="productText" expand-text="展开" collapse-text="收起" />
         </p>
       </div>
+    </div>
+    <div class="summary-wrap">
+      <h2>其他相关</h2>
+      <img :src="productSummary" alt="summary-img" />
     </div>
     <van-submit-bar :price="productPrice" button-text="提交订单" @submit="handleSubmit" />
     <div v-if="loading" class="loading">
@@ -127,6 +134,9 @@ onBeforeMount(() => {
     min-height: 100vh;
     padding: 0 30px 50px 30px;
     box-sizing: border-box;
+    h2 {
+      font-size: 32px;
+    }
     .title {
       font-size: 32px;
       line-height: 48px;
@@ -163,7 +173,7 @@ onBeforeMount(() => {
       }
       .introduce {
         margin-top: 40px;
-        padding-bottom: 100px;
+        padding-bottom: 30px;
         p {
           font-size: 28px;
           width: 100%;
@@ -171,10 +181,22 @@ onBeforeMount(() => {
           text-align: justify;
           color: #2c3e50;
           margin-top: 15px;
+          text-indent: 2em;
           .van-text-ellipsis {
             line-height: 54px;
           }
         }
+      }
+    }
+    .summary-wrap {
+      width: 100%;
+      height: auto;
+      padding-bottom: 100px;
+      img {
+        width: 100%;
+        height: auto;
+        border: 1px solid #ededed;
+        border-radius: 10px;
       }
     }
     .van-submit-bar {
