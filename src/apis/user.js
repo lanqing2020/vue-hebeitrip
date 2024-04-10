@@ -17,10 +17,10 @@ import request from '@/request'
  * });
  * @returns {Promise<axios.AxiosResponse<any>>}
  */
-export function findInfoByToken() {
+export function findInfoByToken(token) {
     return request.get("/v1/pri/user/find_by_token", {
         params: {
-            "token": "xdclasseyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ4ZGNsYXNzIiwiaGVhZF9pbWciOiJodHRwczovL3hkLXZpZGVvLXBjLWltZy5vc3MtY24tYmVpamluZy5hbGl5dW5jcy5jb20veGRjbGFzc19wcm8vZGVmYXVsdC9oZWFkX2ltZy8xMi5qcGVnIiwiaWQiOjE0LCJuYW1lIjoi5bCP5ru0dHQiLCJpYXQiOjE3MTI3MzUzMDMsImV4cCI6MTcxMzM0MDEwM30.LdPtR8qiiGfYLljrtt4ifrGV9-ZUYBaikn5aE6kDc60"
+            "token": token
         },
     })
 }

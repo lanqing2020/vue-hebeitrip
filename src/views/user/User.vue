@@ -1,8 +1,8 @@
 <script setup>
 import {onBeforeMount, reactive, ref} from "vue";
-import tx from "@/assets/tx.jpg";
 import { showConfirmDialog, showToast } from 'vant';
 import { user } from '@/apis';
+import { useUserStore } from '@/stores';
 
 // 头部信息：姓名和当前游览位置
 const userInfo = reactive({
@@ -10,10 +10,9 @@ const userInfo = reactive({
   headImg: "",
   phone: ""
 })
-const userName = ref("啄木鸟");
 const currPosition = ref("C");
-const findInfoByToken = async () => {
-  const { code, data } = await user.findInfoByToken();
+const findInfoByToken = async (token) => {
+  const { code, data } = await user.findInfoByToken(token);
   if (code === 0 && data) {
     userInfo.name = data.name;
     userInfo.headImg = data.head_img;
@@ -93,7 +92,9 @@ const onShareSelect = (option) => {
 };
 
 const init = () => {
-  findInfoByToken();
+  const store = useUserStore();
+  store.getToken();
+  findInfoByToken(store.token);
 }
 
 onBeforeMount(() => {
@@ -106,9 +107,9 @@ onBeforeMount(() => {
   <header>
     <h1>我的</h1>
     <div class="content">
-      <van-image round width="70px" height="70px" :src="tx" />
+      <van-image round width="70px" height="70px" :src="userInfo.headImg" />
       <div class="info">
-        <div class="title">Hello，{{ userName }}</div>
+        <div class="title">Hello，{{ userInfo.name }}</div>
         <div class="route">
           <div>已游览至{{ currPosition }}点</div>
           <van-icon name="arrow" />
