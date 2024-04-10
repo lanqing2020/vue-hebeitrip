@@ -3,7 +3,7 @@ import { showToast } from 'vant';
 
 let config = {
     baseURL: "http://localhost:8081/api",
-    timeout: 5000
+    timeout: 5000,
 }
 
 const instance = axios.create({...config});
@@ -11,12 +11,22 @@ instance.interceptors.request.use(requestSuccessInterceptor, requestErrorInterce
 instance.interceptors.response.use(responseSuccessInterceptor, responseErrorInterceptor);
 
 /**
- * 请求拦截器，在发送请求前拦截
+ * 请求拦截器，在发送请求前拦截，需要统一把token信息，放入每个请求的请求头？
  * @param config
  * @returns {*}
  */
 export function requestSuccessInterceptor(config) {
-    console.log("请求前成功", config)
+    console.log("请求前的config", config)
+    // config.headers['Access-Control-Allow-Origin'] = '*';
+    // 私有接口进行登录限制
+    if (config.url.indexOf("/pri") !== -1) {
+        // const token = localStorage.getItem("token");
+        // if (token) {
+        //
+        //     config.headers['token'] = token;
+        // }
+    }
+    // 公开接口放开
     return config;
 }
 

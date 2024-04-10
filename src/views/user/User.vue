@@ -1,11 +1,25 @@
 <script setup>
-import { ref } from "vue";
+import {onBeforeMount, reactive, ref} from "vue";
 import tx from "@/assets/tx.jpg";
 import { showConfirmDialog, showToast } from 'vant';
+import { user } from '@/apis';
 
 // 头部信息：姓名和当前游览位置
+const userInfo = reactive({
+  name: "",
+  headImg: "",
+  phone: ""
+})
 const userName = ref("啄木鸟");
 const currPosition = ref("C");
+const findInfoByToken = async () => {
+  const { code, data } = await user.findInfoByToken();
+  if (code === 0 && data) {
+    userInfo.name = data.name;
+    userInfo.headImg = data.head_img;
+    userInfo.phone = data.phone;
+  }
+}
 
 /**
  * 立即通话
@@ -77,6 +91,15 @@ const onShareSelect = (option) => {
   // showToast(option.name);
   showShare.value = false;
 };
+
+const init = () => {
+  findInfoByToken();
+}
+
+onBeforeMount(() => {
+  init();
+})
+
 </script>
 
 <template>
