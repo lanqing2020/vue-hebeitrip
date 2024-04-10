@@ -24,3 +24,16 @@ export function findInfoByToken(token) {
         },
     })
 }
+
+/**
+ * 查询用户浏览到的位置信息
+ * @param token
+ * @returns {Promise<axios.AxiosResponse<any>>}
+ */
+export function queryCurrPosition(token) {
+    return request.get("/v1/pri/user/find_curr_position_by_token", {
+        params: {
+            "token": token
+        },
+    })
+}

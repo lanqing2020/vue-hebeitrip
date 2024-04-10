@@ -1,22 +1,31 @@
 <script setup>
-import {onBeforeMount, reactive, ref} from "vue";
-import { showConfirmDialog, showToast } from 'vant';
+import { onBeforeMount, reactive, ref } from "vue";
+import { showConfirmDialog, showToast, showDialog } from 'vant';
 import { user } from '@/apis';
 import { useUserStore } from '@/stores';
+import { useRouter } from "vue-router";
 
-// 头部信息：姓名和当前游览位置
+// 头部信息：姓名和头像
 const userInfo = reactive({
   name: "",
   headImg: "",
   phone: ""
 })
-const currPosition = ref("C");
 const findInfoByToken = async (token) => {
   const { code, data } = await user.findInfoByToken(token);
   if (code === 0 && data) {
-    userInfo.name = data.name;
-    userInfo.headImg = data.head_img;
-    userInfo.phone = data.phone;
+    userInfo.name = data["name"];
+    userInfo.headImg = data["head_img"];
+    userInfo.phone = data["phone"];
+  }
+}
+
+// 当前游览位置
+const currPosition = ref("");
+const getCurrPosition = async (token) => {
+  const { code, data } = await user.queryCurrPosition(token);
+  if (code === 0 && data) {
+    currPosition.value = data;
   }
 }
 
@@ -92,9 +101,20 @@ const onShareSelect = (option) => {
 };
 
 const init = () => {
-  const store = useUserStore();
-  store.getToken();
-  findInfoByToken(store.token);
+  const token = useUserStore().getToken();
+  if (!token) {
+    const router = useRouter();
+    showDialog({
+      title: '还未登陆',
+      message: '遇到麻烦，检车到您还未登录本站，是否现在跳转登录页？',
+      closeOnPopstate: false,
+    }).then(() => {
+      router.push({ path: "/login", query: {} })
+    });
+    return;
+  }
+  findInfoByToken(token);
+  getCurrPosition(token);
 }
 
 onBeforeMount(() => {
@@ -111,7 +131,7 @@ onBeforeMount(() => {
       <div class="info">
         <div class="title">Hello，{{ userInfo.name }}</div>
         <div class="route">
-          <div>已游览至{{ currPosition }}点</div>
+          <div>已游览至 {{ currPosition }} 点</div>
           <van-icon name="arrow" />
         </div>
       </div>

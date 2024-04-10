@@ -25,14 +25,6 @@ const getListBanner = async () => {
 }
 
 /**
- * 跳转详情页
- * @type {Ref<UnwrapRef<*[]>>}
- */
-const goDetailPage = (url) => {
-  router.push(url)
-}
-
-/**
  * 产品列表
  * @type {Ref<UnwrapRef<*[]>>}
  */
@@ -86,7 +78,7 @@ onBeforeMount(() => {
   <main>
     <van-swipe class="my-swipe" :autoplay="4000" indicator-color="white">
       <div v-for="item in swipeList" :key="item.id">
-        <van-swipe-item @click="() => goDetailPage(item.url)">
+        <van-swipe-item @click="() => router.push(item.url)">
           <van-image :src="item.img" alt="swiper-1" width="381" height="166" radius="15" :lazy-load="true" />
         </van-swipe-item>
       </div>
