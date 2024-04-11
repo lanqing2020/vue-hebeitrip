@@ -21,6 +21,7 @@ export default defineConfig({
         changeOrigin: true,  // 开启跨域
         rewrite: path => path.replace(/^\/api/, "") // 去除前缀api
       }
-    }
+    },
+    cors: true
   }
 })

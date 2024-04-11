@@ -37,3 +37,15 @@ export function queryCurrPosition(token) {
         },
     })
 }
+
+/**
+ * 用户登录
+ * @returns {Promise<axios.AxiosResponse<any>>}
+ * @param phone
+ * @param pwd
+ */
+export function doLogin(phone, pwd) {
+    console.log("phone===>", phone)
+    console.log("pwd===>", pwd)
+    return request.post("/v1/pri/user/login", { phone, pwd })
+}

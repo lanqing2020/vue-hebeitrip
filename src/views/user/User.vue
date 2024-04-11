@@ -4,11 +4,12 @@ import { showConfirmDialog, showToast, showDialog } from 'vant';
 import { user } from '@/apis';
 import { useUserStore } from '@/stores';
 import { useRouter } from "vue-router";
+import TxDefault from '@/assets/default-tx.jpg';
 
 // 头部信息：姓名和头像
 const userInfo = reactive({
   name: "",
-  headImg: "",
+  headImg: TxDefault,
   phone: ""
 })
 const findInfoByToken = async (token) => {

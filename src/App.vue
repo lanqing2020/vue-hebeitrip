@@ -30,7 +30,7 @@ watch(() => router.currentRoute.value.path, (path, oldPath) => {
 
 <template>
   <!-- 顶部安全区 -->
-  <van-nav-bar safe-area-inset-top />
+<!--  <van-nav-bar safe-area-inset-top />-->
   <RouterView />
   <footer>
     <van-tabbar route v-model="active" @change="change" active-color="#ffa43f">

@@ -9,6 +9,10 @@ import 'amfe-flexible'
 import App from './App.vue'
 import router from './router'
 
+import Axios from 'axios'
+Axios.defaults.baseURL = '/api'
+Axios.defaults.headers.post['Content-Type'] = 'application/json'
+
 const app = createApp(App)
 
 app.use(createPinia())
