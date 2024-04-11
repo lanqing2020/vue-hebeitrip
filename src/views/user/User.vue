@@ -1,34 +1,97 @@
 <script setup>
-import { onBeforeMount, reactive, ref } from "vue";
+import {onBeforeMount, onMounted, reactive, ref} from "vue";
 import { showConfirmDialog, showToast, showDialog } from 'vant';
 import { user } from '@/apis';
 import { useUserStore } from '@/stores';
 import { useRouter } from "vue-router";
 import TxDefault from '@/assets/default-tx.jpg';
 
-// 头部信息：姓名和头像
-const userInfo = reactive({
+/**
+ * 初始化必要变量
+ * @type {UnwrapNestedRefs<{headImg: *, phone: string, name: string}>}
+ */
+const initialVariable = reactive({
   name: "",
   headImg: TxDefault,
-  phone: ""
-})
+  phone: "",
+  currPosition: "",
+  clickedSignOut: false,
+});
+const router = useRouter();
+
+/**
+ * 头部信息：姓名和头像
+ * @type {UnwrapNestedRefs<{headImg: *, phone: string, name: string}>}
+ */
 const findInfoByToken = async (token) => {
   const { code, data } = await user.findInfoByToken(token);
   if (code === 0 && data) {
-    userInfo.name = data["name"];
-    userInfo.headImg = data["head_img"];
-    userInfo.phone = data["phone"];
+    initialVariable.name = data["name"];
+    initialVariable.headImg = data["head_img"];
+    initialVariable.phone = data["phone"];
   }
 }
 
-// 当前游览位置
-const currPosition = ref("");
+/**
+ * 当前游览位置
+ * @type {Ref<UnwrapRef<string>>}
+ */
 const getCurrPosition = async (token) => {
   const { code, data } = await user.queryCurrPosition(token);
   if (code === 0 && data) {
-    currPosition.value = data;
+    initialVariable.currPosition = data;
   }
 }
+
+/**
+ * 检查是否已登录
+ * @returns {boolean}
+ */
+const isLoginIn = () => {
+  const token = useUserStore().getToken();
+  if (!token) {
+    showDialog({
+      title: '还未登陆',
+      message: '遇到麻烦，检车到您还未登录本站，是否现在跳转登录页？',
+      closeOnPopstate: false,
+    }).then(() => {
+      router.push({ path: "/login", query: { } })
+    });
+    return false;
+  }
+  return token;
+}
+
+/**
+ * 初始化调用接口
+ */
+const init = () => {
+  const token = isLoginIn();
+  if (token) {
+    findInfoByToken(token);
+    getCurrPosition(token);
+  }
+}
+
+/**
+ * 退出登录
+ */
+const loginOut = () => {
+  useUserStore().setToken("");
+  initialVariable.clickedSignOut = true;
+  showToast({
+    type: "success",
+    message: "您已退出",
+    onClose: () => {
+      router.push({path: "/login"});
+    }
+  });
+}
+
+onMounted(() => {
+  init();
+})
+
 
 /**
  * 立即通话
@@ -101,41 +164,24 @@ const onShareSelect = (option) => {
   showShare.value = false;
 };
 
-const init = () => {
-  const token = useUserStore().getToken();
-  if (!token) {
-    const router = useRouter();
-    showDialog({
-      title: '还未登陆',
-      message: '遇到麻烦，检车到您还未登录本站，是否现在跳转登录页？',
-      closeOnPopstate: false,
-    }).then(() => {
-      router.push({ path: "/login", query: {} })
-    });
-    return;
-  }
-  findInfoByToken(token);
-  getCurrPosition(token);
-}
-
-onBeforeMount(() => {
-  init();
-})
-
 </script>
 
 <template>
   <header>
     <h1>我的</h1>
     <div class="content">
-      <van-image round width="70px" height="70px" :src="userInfo.headImg" />
+      <van-image round width="70px" height="70px" :src="initialVariable.headImg" />
       <div class="info">
-        <div class="title">Hello，{{ userInfo.name }}</div>
+        <div class="title">Hello，{{ initialVariable.name }}</div>
         <div class="route">
-          <div>已游览至 {{ currPosition }} 点</div>
+          <div>已游览至 {{ initialVariable.currPosition }} 点</div>
           <van-icon name="arrow" />
         </div>
       </div>
+    </div>
+    <div class="login-out" @click="loginOut">
+      <van-icon name="setting-o" />
+      <span>退出</span>
     </div>
   </header>
   <main>
@@ -163,6 +209,7 @@ onBeforeMount(() => {
       <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="shareOptions" @select="onShareSelect" />
 
     </div>
+    <div v-if="initialVariable.clickedSignOut" class="loading" />
   </main>
 </template>
 
@@ -221,6 +268,15 @@ onBeforeMount(() => {
         }
       }
     }
+    .login-out {
+      display: flex;
+      align-items: center;
+      min-width: 110px;
+      justify-content: space-between;
+      span {
+        font-size: 28px;
+      }
+    }
   }
   main {
     padding: 0 30px;
@@ -251,6 +307,16 @@ onBeforeMount(() => {
           }
         }
       }
+    }
+    .loading {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.35);
     }
   }
 

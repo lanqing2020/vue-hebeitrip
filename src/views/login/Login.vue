@@ -1,35 +1,76 @@
 <script setup>
-import {reactive, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {useRouter} from "vue-router";
 import { user } from '@/apis';
-import {doLogin} from "@/apis/user.js";
+import { useUserStore } from '@/stores';
+import {showToast} from "vant";
 
-const userPhone = ref("");
-const userPwd = ref("");
+/**
+ * 初始化毕业变量
+ * @type {Ref<UnwrapRef<string>>}
+ */
 const router = useRouter();
-const isValid = ref(false);
+const initialVariable = reactive({
+  phone: "",
+  pwd: "",
+  isValid: false,
+  beforeLoginLoading: false,
+  hasLogged: false,
+})
+
+const init = () => {
+  const token = useUserStore().getToken();
+  if (token) {
+    initialVariable.hasLogged = true;
+    showToast({
+      type: "success",
+      message: "您已登录",
+      onClose: () => {
+        router.push({path: "/user"});
+      }
+    });
+  }
+}
+
+onMounted(() => {
+  init();
+})
+
+/**
+ * 检查手机号格式
+ */
 const inputBlur = () => {
   const regex = /^1\d{10}$/;
-  isValid.value = !regex.test(userPhone.value);
-}
-const inputUpdate = () => {
-
+  initialVariable.isValid = !regex.test(initialVariable.phone);
 }
 
 /**
  * 点击登录按钮
  */
-const beforeLoginLoading = ref(false);
 const handleLogin = async () => {
-  beforeLoginLoading.value = true;
-  const params = {
-    phone: userPhone.value,
-    pwd: userPwd.value
+  if (initialVariable.phone === "" || initialVariable.pwd === "") {
+    showToast("账号密码不能为空，请重试~");
+    return;
   }
-  const { code, data } = await user.doLogin(userPhone.value, userPwd.value);
+  initialVariable.beforeLoginLoading = true;
+  const params = {
+    phone: initialVariable.phone,
+    pwd: initialVariable.pwd
+  }
+  const { code, data } = await user.doLogin(params);
   if (code === 0 && data) {
-    console.log("登录成功")
-    beforeLoginLoading.value = false;
+    // 登录成功，转入上一页，以后再说。统一到user页
+    useUserStore().setToken(data);
+    showToast({
+      type: "loading",
+      message: "登录成功\n跳转个人中心",
+      onClose: () => {
+        router.push({path: "/user"});
+      }
+    });
+  } else {
+    // 登录失败
+    initialVariable.beforeLoginLoading = false;
   }
 }
 </script>
@@ -39,18 +80,19 @@ const handleLogin = async () => {
     <div class="login-wrap">
       <div class="label">
         <div class="title">手机号</div>
-<!--        <van-field v-model="userPhone" required placeholder="请输入手机号" :error-message="isValid ? '手机号格式错误' : ''" @blur="inputBlur"/>-->
-        <van-field v-model="userPhone" required placeholder="请输入手机号" :error-message="isValid ? '手机号格式错误' : ''"/>
+<!--        <van-field v-model="initialVariable.phone" required placeholder="请输入手机号" :error-message="initialVariable.isValid ? '手机号格式错误' : ''" @blur="inputBlur"/>-->
+        <van-field v-model="initialVariable.phone" required placeholder="请输入手机号" :error-message="initialVariable.isValid ? '手机号格式错误' : ''"/>
       </div>
       <div class="label" style="margin-top: 30px;">
         <div class="title">密码</div>
-        <van-field v-model="userPwd" type="password" required placeholder="请输入密码" @update:model-value="inputUpdate" />
+        <van-field v-model="initialVariable.pwd" type="password" required placeholder="请输入密码" />
       </div>
     </div>
     <div class="button-wrap">
-      <van-button type="primary" color="#cd4204" block @click="handleLogin" :loading="beforeLoginLoading" loading-text="正在登录...">登录</van-button>
+      <van-button type="primary" color="#cd4204" block @click="handleLogin" :loading="initialVariable.beforeLoginLoading" loading-text="正在登录...">登录</van-button>
       <van-button color="#722b00" block plain style="margin-top: 30px;" @click="() => router.push('/register')">注册用户</van-button>
     </div>
+    <div v-if="initialVariable.hasLogged" class="loading" />
   </main>
 </template>
 
@@ -87,6 +129,16 @@ const handleLogin = async () => {
       padding: 0 30px;
       box-sizing: border-box;
       margin-top: 100px;
+    }
+    .loading {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.35);
     }
   }
 </style>

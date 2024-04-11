@@ -44,8 +44,6 @@ export function queryCurrPosition(token) {
  * @param phone
  * @param pwd
  */
-export function doLogin(phone, pwd) {
-    console.log("phone===>", phone)
-    console.log("pwd===>", pwd)
-    return request.post("/v1/pri/user/login", { phone, pwd })
+export function doLogin(data) {
+    return request.post("/v1/pri/user/login", data)
 }
