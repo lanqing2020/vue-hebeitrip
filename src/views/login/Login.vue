@@ -3,10 +3,11 @@ import {onMounted, reactive, ref} from "vue";
 import {useRouter} from "vue-router";
 import { user } from '@/apis';
 import { useUserStore } from '@/stores';
-import {showToast} from "vant";
+import { showToast } from "vant";
+import { checkLogged } from "@/utils/checkLogged.js";
 
 /**
- * 初始化毕业变量
+ * 初始化必要变量
  * @type {Ref<UnwrapRef<string>>}
  */
 const router = useRouter();
@@ -19,21 +20,24 @@ const initialVariable = reactive({
 })
 
 const init = () => {
-  const token = useUserStore().getToken();
-  if (token) {
-    initialVariable.hasLogged = true;
-    showToast({
-      type: "success",
-      message: "您已登录",
-      onClose: () => {
-        router.push({path: "/user"});
-      }
-    });
-  }
+  // const token = useUserStore().getToken();
+  // if (token) {
+  //   initialVariable.hasLogged = true;
+  //   showToast({
+  //     type: "success",
+  //     message: "您已登录",
+  //     onClose: () => {
+  //       router.push({path: "/user"});
+  //     }
+  //   });
+  // }
 }
 
 onMounted(() => {
-  init();
+  // init();
+  if (checkLogged()) {
+    initialVariable.hasLogged = true;
+  }
 })
 
 /**
@@ -103,7 +107,7 @@ const handleLogin = async () => {
     min-height: 100vh;
     background-size: contain;
     .login-wrap {
-      padding-top: 110%;
+      padding-top: 800px;
       padding-left: 60px;
       padding-right: 60px;
       .label {

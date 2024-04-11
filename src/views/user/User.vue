@@ -5,6 +5,7 @@ import { user } from '@/apis';
 import { useUserStore } from '@/stores';
 import { useRouter } from "vue-router";
 import TxDefault from '@/assets/default-tx.jpg';
+import { clearLogged } from "@/utils/checkLogged.js";
 
 /**
  * 初始化必要变量
@@ -29,6 +30,10 @@ const findInfoByToken = async (token) => {
     initialVariable.name = data["name"];
     initialVariable.headImg = data["head_img"];
     initialVariable.phone = data["phone"];
+  } else {
+    console.log("停止")
+    clearLogged();
+    return false;
   }
 }
 
@@ -68,8 +73,9 @@ const isLoginIn = () => {
 const init = () => {
   const token = isLoginIn();
   if (token) {
-    findInfoByToken(token);
-    getCurrPosition(token);
+    findInfoByToken(token).then(() => {
+      getCurrPosition(token);
+    });
   }
 }
 
@@ -91,7 +97,6 @@ const loginOut = () => {
 onMounted(() => {
   init();
 })
-
 
 /**
  * 立即通话

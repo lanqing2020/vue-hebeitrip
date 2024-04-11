@@ -1,10 +1,25 @@
 <script setup>
-import {ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {useRouter} from "vue-router";
 
-const userName = ref("");
-const userPwd = ref("");
+/**
+ * 初始化必要变量
+ * @type {Ref<UnwrapRef<string>>}
+ */
+const initialVariable = reactive({
+  name: "",
+  phone: "",
+  pwd: "",
+});
 const router = useRouter();
+
+const init = () => {
+
+}
+
+onMounted(() => {
+  init();
+})
 </script>
 
 <template>
@@ -12,15 +27,19 @@ const router = useRouter();
     <div class="login-wrap">
       <div class="label">
         <div class="title">用户名</div>
-        <van-field v-model="userName" required placeholder="请输入用户名" />
+        <van-field v-model="initialVariable.name" required placeholder="请输入用户名" />
+      </div>
+      <div class="label" style="margin-top: 30px;">
+        <div class="title">手机号</div>
+        <van-field v-model="initialVariable.phone" required placeholder="请输入手机号" />
       </div>
       <div class="label" style="margin-top: 30px;">
         <div class="title">密码</div>
-        <van-field v-model="userPwd" required placeholder="请输入密码" />
+        <van-field v-model="initialVariable.pwd" required placeholder="请输入密码" />
       </div>
     </div>
     <div class="button-wrap">
-      <van-button type="primary" color="#0683e9" block>注册</van-button>
+      <van-button type="primary" color="#0683e9" block @click="handleRegister">注册</van-button>
       <van-button color="#070c15" block plain style="margin-top: 30px;" @click="() => router.push('/login')">返回登录</van-button>
     </div>
   </main>
@@ -33,7 +52,7 @@ main {
   min-height: 100vh;
   background-size: contain;
   .login-wrap {
-    padding-top: 110%;
+    padding-top: 613px;
     padding-left: 60px;
     padding-right: 60px;
     .label {
