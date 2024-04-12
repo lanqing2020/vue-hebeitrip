@@ -1,15 +1,15 @@
 import { useUserStore } from "@/stores/index.js";
 import { showToast } from "vant";
-import { useRouter } from "vue-router";
+import router from "@/router/index.js";
+import { user } from "@/apis/index.js";
 
 /**
- * 检查是否登录过
+ * 在登录检查是否已登录
  * @returns {boolean}
  */
 export function checkLogged() {
-    const token = useUserStore().getToken();
-    if (token) {
-        const router = useRouter();
+    const hasLogged = useUserStore().getLogged();
+    if (hasLogged) {
         showToast({
             type: "success",
             message: "您已登录",
@@ -25,6 +25,5 @@ export function checkLogged() {
 
 export function clearLogged() {
     useUserStore().setToken("");
-    const router = useRouter();
     router.push({path: "/login"});
 }

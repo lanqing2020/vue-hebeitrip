@@ -1,6 +1,6 @@
 <script setup>
-import {onMounted, reactive, ref} from "vue";
-import {useRouter} from "vue-router";
+import { onMounted, reactive, ref } from "vue";
+import { useRouter } from "vue-router";
 import { user } from '@/apis';
 import { useUserStore } from '@/stores';
 import { showToast } from "vant";
@@ -16,28 +16,6 @@ const initialVariable = reactive({
   pwd: "",
   isValid: false,
   beforeLoginLoading: false,
-  hasLogged: false,
-})
-
-const init = () => {
-  // const token = useUserStore().getToken();
-  // if (token) {
-  //   initialVariable.hasLogged = true;
-  //   showToast({
-  //     type: "success",
-  //     message: "您已登录",
-  //     onClose: () => {
-  //       router.push({path: "/user"});
-  //     }
-  //   });
-  // }
-}
-
-onMounted(() => {
-  // init();
-  if (checkLogged()) {
-    initialVariable.hasLogged = true;
-  }
 })
 
 /**
@@ -96,7 +74,7 @@ const handleLogin = async () => {
       <van-button type="primary" color="#cd4204" block @click="handleLogin" :loading="initialVariable.beforeLoginLoading" loading-text="正在登录...">登录</van-button>
       <van-button color="#722b00" block plain style="margin-top: 30px;" @click="() => router.push('/register')">注册用户</van-button>
     </div>
-    <div v-if="initialVariable.hasLogged" class="loading" />
+    <div v-if="checkLogged()" class="loading" />
   </main>
 </template>
 

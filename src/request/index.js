@@ -1,5 +1,7 @@
 import axios from 'axios';
-import { showToast } from 'vant';
+import { showDialog, showToast } from 'vant';
+import router from "@/router/index.js";
+import { useUserStore } from '@/stores';
 
 let config = {
     baseURL: "http://localhost:8081/api",
@@ -16,16 +18,8 @@ instance.interceptors.response.use(responseSuccessInterceptor, responseErrorInte
  * @returns {*}
  */
 export function requestSuccessInterceptor(config) {
-    console.log("请求前的config", config)
-    // config.headers['Access-Control-Allow-Origin'] = '*';
-    // 私有接口进行登录限制
-    if (config.url.indexOf("/pri") !== -1) {
-        // const token = localStorage.getItem("token");
-        // if (token) {
-        //
-        //     config.headers['token'] = token;
-        // }
-    }
+    // 私有接口限制
+    if (config.url.indexOf("/pri") !== -1) { }
     // 公开接口放开
     return config;
 }
@@ -46,10 +40,23 @@ export function requestErrorInterceptor(error) {
  * @returns {*}
  */
 export function responseSuccessInterceptor(response) {
-    console.log("响应成功", response)
     const { code, msg } = response.data;
     if (code !== 0) {
-        showToast(msg)
+        // 对于pri路径下的私有接口，进行登录过期的判断，然后跳转去登录页
+        if (response.config.url.indexOf("/pri") !== -1) {
+            useUserStore().setLogged(false);
+            showDialog({
+                title: '还未登陆',
+                message: '检测到您还未登录或登录过期，\n是否立即跳转登录页？',
+            }).then(() => {
+                router.push({
+                    path: "/login",
+                    query: { }
+                });
+            })
+        } else {
+            showToast(msg)
+        }
     }
     return response.data;
 }
@@ -60,7 +67,6 @@ export function responseSuccessInterceptor(response) {
  * @returns {Promise<never>}
  */
 export function responseErrorInterceptor(error) {
-    console.log("响应失败", error)
     return Promise.reject(error);
 }
 

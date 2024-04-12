@@ -1,11 +1,10 @@
 <script setup>
-import {onBeforeMount, onMounted, reactive, ref} from "vue";
+import { onBeforeMount, onMounted, reactive, ref } from "vue";
 import { showConfirmDialog, showToast, showDialog } from 'vant';
 import { user } from '@/apis';
 import { useUserStore } from '@/stores';
 import { useRouter } from "vue-router";
 import TxDefault from '@/assets/default-tx.jpg';
-import { clearLogged } from "@/utils/checkLogged.js";
 
 /**
  * 初始化必要变量
@@ -30,10 +29,6 @@ const findInfoByToken = async (token) => {
     initialVariable.name = data["name"];
     initialVariable.headImg = data["head_img"];
     initialVariable.phone = data["phone"];
-  } else {
-    console.log("停止")
-    clearLogged();
-    return false;
   }
 }
 
@@ -49,34 +44,12 @@ const getCurrPosition = async (token) => {
 }
 
 /**
- * 检查是否已登录
- * @returns {boolean}
- */
-const isLoginIn = () => {
-  const token = useUserStore().getToken();
-  if (!token) {
-    showDialog({
-      title: '还未登陆',
-      message: '遇到麻烦，检车到您还未登录本站，是否现在跳转登录页？',
-      closeOnPopstate: false,
-    }).then(() => {
-      router.push({ path: "/login", query: { } })
-    });
-    return false;
-  }
-  return token;
-}
-
-/**
  * 初始化调用接口
  */
 const init = () => {
-  const token = isLoginIn();
-  if (token) {
-    findInfoByToken(token).then(() => {
-      getCurrPosition(token);
-    });
-  }
+  const token = useUserStore().getToken();
+  findInfoByToken(token);
+  getCurrPosition(token);
 }
 
 /**

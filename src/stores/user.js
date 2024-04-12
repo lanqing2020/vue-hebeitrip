@@ -2,7 +2,8 @@ import { defineStore } from 'pinia'
 
 export default defineStore('user', {
   state: () => ({
-    token: ""
+    token: "",
+    hasLogged: false,
   }),
   // 计算属性，有数据缓存
   getters: {},
@@ -25,6 +26,24 @@ export default defineStore('user', {
       localStorage.setItem("token", str);
       this.token = str;
     },
+
+    /**
+     * 获取登录状态
+     * @returns {*}
+     */
+    getLogged() {
+      this.hasLogged = JSON.parse(localStorage.getItem("hasLogged"));
+      return this.hasLogged;
+    },
+
+    /**
+     * 设置登录状态
+     * @param bool
+     */
+    setLogged(bool) {
+      localStorage.setItem("hasLogged", bool);
+      this.hasLogged = bool;
+    }
 
   },
 })

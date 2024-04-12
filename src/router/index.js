@@ -77,11 +77,11 @@ router.beforeEach((to, from, next) => {
     }).then(() => {
       next(to.path)
     });
-  } else if (router.getRoutes().every(item => item.path.indexOf(to.path) === -1)) {
-    next('/error')
-  } else {
-    next(); // 继续导航
   }
+  if (router.getRoutes().every(item => item.path.indexOf(to.path) === -1)) {
+    next('/error')
+  }
+  next(); // 正常导航
 });
 
 export default router
