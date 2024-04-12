@@ -47,3 +47,12 @@ export function queryCurrPosition(token) {
 export function doLogin(data) {
     return request.post("/v1/pri/user/login", data)
 }
+
+/**
+ * 用户注册
+ * @param data
+ * @returns {Promise<axios.AxiosResponse<any>>}
+ */
+export function doRegister(data) {
+    return request.post("/v1/pri/user/register", data)
+}

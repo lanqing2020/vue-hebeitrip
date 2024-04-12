@@ -47,13 +47,16 @@ const router = createRouter({
       name: 'login',
       component: () => import('@/views/login/Login.vue'),
       meta: {
-        acceptedQueryParams: ['fromPage']
+        acceptedQueryParams: ['errorTimes']
       }
     },
     {
       path: '/register',
       name: 'register',
-      component: () => import('@/views/register/Register.vue')
+      component: () => import('@/views/register/Register.vue'),
+      meta: {
+        acceptedQueryParams: ['errorTimes']
+      }
     },
     {
       path: '/error',

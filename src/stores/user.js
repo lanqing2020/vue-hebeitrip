@@ -4,6 +4,7 @@ export default defineStore('user', {
   state: () => ({
     token: "",
     hasLogged: false,
+    errorTimes: 0,
   }),
   // 计算属性，有数据缓存
   getters: {},
@@ -43,6 +44,24 @@ export default defineStore('user', {
     setLogged(bool) {
       localStorage.setItem("hasLogged", bool);
       this.hasLogged = bool;
+    },
+
+    /**
+     * 获取操作错误次数
+     * @returns {any}
+     */
+    getErrorTimes() {
+      this.errorTimes = JSON.parse(localStorage.getItem("errorTimes") || 0);
+      return this.errorTimes;
+    },
+
+    /**
+     * 设置操作错误次数
+     * @param num
+     */
+    setErrorTimes(num) {
+      localStorage.setItem("errorTimes", num);
+      this.errorTimes = num;
     }
 
   },

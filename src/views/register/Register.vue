@@ -1,8 +1,10 @@
 <script setup>
-import {onBeforeMount, onMounted, reactive, ref} from "vue";
-import { useRouter } from "vue-router";
+import { onBeforeMount, onBeforeUpdate, onMounted, reactive } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { user } from '@/apis';
 import { showToast } from "vant";
 import { checkLogged } from "@/utils/checkLogged.js";
+import { useUserStore } from "@/stores/index.js";
 
 /**
  * 初始化必要变量
@@ -12,10 +14,12 @@ const initialVariable = reactive({
   name: "",
   phone: "",
   pwd: "",
+  isValid: false,
   beforeRegisterLoading: false,
   hasLoggedPage: false,
 });
 const router = useRouter();
+const route = useRoute()
 
 onBeforeMount(() => {
   if (checkLogged()) {
@@ -23,32 +27,67 @@ onBeforeMount(() => {
   }
 })
 
+onMounted(() => {
+  if (JSON.stringify(route.query) !== "'{}'") {
+    initialVariable.beforeLoginLoading = false;
+  }
+})
+
+/**
+ * 检查手机号格式
+ */
+const inputBlur = () => {
+  const regex = /^1\d{10}$/;
+  initialVariable.isValid = !regex.test(initialVariable.phone);
+}
+
 /**
  * 点击注册按钮
  */
-const handleRegister = () => {
+const handleRegister = async () => {
   if (initialVariable.phone === "" || initialVariable.pwd === "" || initialVariable.name === "") {
     showToast("账号密码或手机号不能为空，请重试~");
     return;
   }
-  initialVariable.beforeRegisterLoading = true;
+  if (!initialVariable.isValid) {
+    initialVariable.beforeRegisterLoading = true;
+    const params = {
+      name: initialVariable.name,
+      phone: initialVariable.phone,
+      pwd: initialVariable.pwd
+    }
+    const { code } = await user.doRegister(params);
+    if (code === 0) {
+      // 注册成功，到登录页
+      showToast({
+        type: "loading",
+        message: "注册成功\n跳转登录页",
+        onClose: () => {
+          router.push({path: "/login"});
+        }
+      });
+    } else {
+      // 注册失败
+      initialVariable.beforeLoginLoading = false;
+    }
+  }
 }
 </script>
 
 <template>
   <main>
-    <div class="login-wrap">
+    <div class="register-wrap">
       <div class="label">
         <div class="title">用户名</div>
         <van-field v-model="initialVariable.name" required placeholder="请输入用户名" />
       </div>
       <div class="label" style="margin-top: 30px;">
         <div class="title">手机号</div>
-        <van-field v-model="initialVariable.phone" required placeholder="请输入手机号" />
+        <van-field v-model="initialVariable.phone" required placeholder="请输入手机号" :error-message="initialVariable.isValid ? '手机号格式错误' : ''" @blur="inputBlur"/>
       </div>
       <div class="label" style="margin-top: 30px;">
         <div class="title">密码</div>
-        <van-field v-model="initialVariable.pwd" required placeholder="请输入密码" />
+        <van-field v-model="initialVariable.pwd" required placeholder="请输入密码" type="password" />
       </div>
     </div>
     <div class="button-wrap">
@@ -65,7 +104,7 @@ main {
   width: 100%;
   min-height: 100vh;
   background-size: contain;
-  .login-wrap {
+  .register-wrap {
     padding-top: 613px;
     padding-left: 60px;
     padding-right: 60px;

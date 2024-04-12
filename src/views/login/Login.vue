@@ -41,26 +41,28 @@ const handleLogin = async () => {
     showToast("账号密码不能为空，请重试~");
     return;
   }
-  initialVariable.beforeLoginLoading = true;
-  const params = {
-    phone: initialVariable.phone,
-    pwd: initialVariable.pwd
-  }
-  const { code, data } = await user.doLogin(params);
-  if (code === 0 && data) {
-    // 登录成功，转入上一页，以后再说。统一到user页
-    useUserStore().setToken(data);
-    useUserStore().setLogged(true);
-    showToast({
-      type: "loading",
-      message: "登录成功\n跳转个人中心",
-      onClose: () => {
-        router.push({path: "/user"});
-      }
-    });
-  } else {
-    // 登录失败
-    initialVariable.beforeLoginLoading = false;
+  if (!initialVariable.isValid) {
+    initialVariable.beforeLoginLoading = true;
+    const params = {
+      phone: initialVariable.phone,
+      pwd: initialVariable.pwd
+    }
+    const { code, data } = await user.doLogin(params);
+    if (code === 0 && data) {
+      // 登录成功，转入上一页，以后再说。统一到user页
+      useUserStore().setToken(data);
+      useUserStore().setLogged(true);
+      showToast({
+        type: "loading",
+        message: "登录成功\n跳转个人中心",
+        onClose: () => {
+          router.push({path: "/user"});
+        }
+      });
+    } else {
+      // 登录失败
+      initialVariable.beforeLoginLoading = false;
+    }
   }
 }
 </script>
@@ -70,8 +72,8 @@ const handleLogin = async () => {
     <div class="login-wrap">
       <div class="label">
         <div class="title">手机号</div>
-<!--        <van-field v-model="initialVariable.phone" required placeholder="请输入手机号" :error-message="initialVariable.isValid ? '手机号格式错误' : ''" @blur="inputBlur"/>-->
-        <van-field v-model="initialVariable.phone" required placeholder="请输入手机号" :error-message="initialVariable.isValid ? '手机号格式错误' : ''"/>
+        <van-field v-model="initialVariable.phone" required placeholder="请输入手机号" :error-message="initialVariable.isValid ? '手机号格式错误' : ''" @blur="inputBlur"/>
+<!--        <van-field v-model="initialVariable.phone" required placeholder="请输入手机号" :error-message="initialVariable.isValid ? '手机号格式错误' : ''"/>-->
       </div>
       <div class="label" style="margin-top: 30px;">
         <div class="title">密码</div>

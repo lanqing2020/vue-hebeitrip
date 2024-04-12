@@ -40,18 +40,25 @@ export function requestErrorInterceptor(error) {
  * @returns {*}
  */
 export function responseSuccessInterceptor(response) {
+    console.log("response===>", response)
     const { code, msg } = response.data;
     if (code !== 0) {
         // 对于pri路径下的私有接口，进行登录过期的判断，然后跳转去登录页
-        if (response.config.url.indexOf("/pri") !== -1) {
+        const url = response.config.url;
+        if (url.indexOf("/pri") !== -1) {
             useUserStore().setLogged(false);
+            const errorTimes = useUserStore().getErrorTimes();
+            useUserStore().setErrorTimes(errorTimes + 1);
             showDialog({
                 title: '提示',
                 message: msg,
             }).then(() => {
                 router.push({
-                    path: "/login",
-                    query: { }
+                    // 判断是登录页还是注册页，如果是注册页报错，还停留在注册页。订单页和登录页和用户中心页，都跳到登录页
+                    path: url.indexOf("/register") !== -1 ? "/register" : "/login",
+                    query: {
+                        errorTimes: errorTimes + 1
+                    }
                 });
             })
         } else {
