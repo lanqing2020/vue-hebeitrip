@@ -12,3 +12,17 @@ export function getListOrder(token) {
         }
     })
 }
+
+/**
+ * 下单接口
+ * @param token
+ * @param data
+ * @returns {Promise<axios.AxiosResponse<any>>}
+ */
+export function saveOrder(token, data) {
+    return request.post("/v1/pri/order/save", data, {
+        headers: {
+            "token": token
+        }
+    })
+}

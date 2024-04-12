@@ -1,24 +1,44 @@
 <script setup>
-import {onBeforeMount, ref} from "vue";
-import {useRoute, useRouter} from 'vue-router';
-import { product } from '@/apis';
+import {onBeforeMount, reactive, ref} from "vue";
+import { useRoute, useRouter } from 'vue-router';
+import { product, order, user } from '@/apis';
+import { useUserStore } from '@/stores';
 
 const router = useRouter();
 const route = useRoute();
 
-const loading = ref(false);
-const showDialog = ref(false);
+const initialState = reactive({
+  loading: false,
+  showDialog: false
+})
+
+const initialUser = reactive({
+  name: "",
+  phone: "",
+  validPhoneNumber: false
+})
+
+const initialProduct = reactive({
+  productTitle: "",
+  productCreateTime: "",
+  productCoverImg: "",
+  smallImg: "",
+  productPoint: 0,
+  productPrice: 0,
+  productText: "",
+  productSummary: "",
+  productId: ""
+})
+
 const handleSubmit = () => {
-  loading.value = true;
+  initialState.loading = true;
   // 检查提交订单前的信息，拦截，校验，登录
   setTimeout(() => {
-    showDialog.value = true;
-    loading.value = false;
+    initialState.showDialog = true;
+    initialState.loading = false;
   }, 600)
 }
-const orderName = ref("王先生");
-const orderTel = ref("18033339125");
-const validPhoneNumber = ref(false);
+
 const getNowTime = () => {
   return new Date().toLocaleDateString('zh-CN', {
     year: 'numeric',
@@ -26,56 +46,75 @@ const getNowTime = () => {
     day: '2-digit'
   });
 }
+
 const inputBlur = () => {
   // 正则表达式匹配中国大陆手机号（11位数字，以1开头）
   const regex = /^1\d{10}$/;
-  validPhoneNumber.value = !regex.test(orderTel.value);
+  initialUser.validPhoneNumber = !regex.test(initialUser.phone);
 }
 
-const submitConfirm = () => {
-  loading.value = true;
-  // 接口处理
-  console.log("接口处理")
-  setTimeout(() => {
+/**
+ * 获取用户信息
+ * @type {UnwrapNestedRefs<{headImg: *, phone: string, name: string}>}
+ */
+const findInfoByToken = async (token) => {
+  const { code, data } = await user.findInfoByToken(token);
+  if (code === 0 && data) {
+    initialUser.name = data.name;
+    initialUser.phone = data.phone;
+  }
+}
+
+/**
+ * 下单接口
+ */
+const saveOrder = async () => {
+  const token = useUserStore().getToken();
+  const params = {
+    "video_id": initialProduct.productId + ""
+  }
+  const { code, data } = order.saveOrder(token, params);
+  if (code === 0 && data) {
     router.push({
       path: '/detail/result',
       query: {
         result: "0"
       }
     })
-  }, 600)
+  }
+}
+
+const submitConfirm = () => {
+  initialState.loading = true;
+  // 接口处理
+  saveOrder();
 }
 
 /**
  * 请求详情接口
  * @returns {Promise<void>}
  */
-const productTitle = ref("");
-const productCreateTime = ref("");
-const productCoverImg = ref("");
-const smallImg = ref("");
-const productPoint = ref(0);
-const productPrice = ref(0);
-const productText = ref("");
-const productSummary = ref("");
 const getProductDetail = async () => {
   const { productId } = route.query;
   if (productId) {
     const { code, data } = await product.getProductDetail(productId);
     if (code === 0 && data) {
-      productTitle.value = data["title"];
-      productCreateTime.value = data["create_time"];
-      productCoverImg.value = data["cover_img"];
-      smallImg.value = data["small_img"];
-      productPoint.value = data["point"] / 2;
-      productPrice.value = data["price"];
-      productText.value = data["description"];
-      productSummary.value = data["summary"];
+      initialProduct.productId = data["id"];
+      initialProduct.productTitle = data["title"];
+      initialProduct.productCreateTime = data["create_time"];
+      initialProduct.productCoverImg = data["cover_img"];
+      initialProduct.smallImg = data["small_img"];
+      initialProduct.productPoint = data["point"] / 2;
+      initialProduct.productPrice = data["price"];
+      initialProduct.productText = data["description"];
+      initialProduct.productSummary = data["summary"];
     }
   }
 }
 
 const init = () => {
+  const token = useUserStore().getToken();
+  findInfoByToken(token);
   getProductDetail();
 }
 
@@ -86,42 +125,42 @@ onBeforeMount(() => {
 
 <template>
   <main>
-    <div class="title">{{ productTitle }}</div>
-    <div class="create-time">编辑：{{ productCreateTime }}</div>
+    <div class="title">{{ initialProduct.productTitle }}</div>
+    <div class="create-time">编辑：{{ initialProduct.productCreateTime }}</div>
     <div class="img-wrap">
-      <img :src="productCoverImg" alt="cover-img" />
+      <img :src="initialProduct.productCoverImg" alt="cover-img" />
     </div>
     <div class="introduce-wrap">
       <div class="point-wrap">
-        <div class="label">评分：</div><van-rate v-model="productPoint" readonly allow-half />
+        <div class="label">评分：</div><van-rate v-model="initialProduct.productPoint" readonly allow-half />
       </div>
       <div class="introduce">
         <h2>文字简介</h2>
         <p>
-          <van-text-ellipsis rows="8" :content="productText" expand-text="展开" collapse-text="收起" />
+          <van-text-ellipsis rows="8" :content="initialProduct.productText" expand-text="展开" collapse-text="收起" />
         </p>
       </div>
     </div>
     <div class="summary-wrap">
       <h2>其他相关</h2>
-      <img :src="productSummary" alt="summary-img" />
+      <img :src="initialProduct.productSummary" alt="summary-img" />
     </div>
-    <van-submit-bar :price="productPrice" button-text="提交订单" @submit="handleSubmit" />
-    <div v-if="loading" class="loading">
+    <van-submit-bar :price="initialProduct.productPrice" button-text="提交订单" @submit="handleSubmit" />
+    <div v-if="initialState.loading" class="loading">
       <van-loading type="spinner" color="#1989fa" />
     </div>
-    <van-dialog v-model:show="showDialog" title="确认订单" show-cancel-button @confirm="submitConfirm" :confirmButtonDisabled="validPhoneNumber">
+    <van-dialog v-model:show="initialState.showDialog" title="确认订单" show-cancel-button @confirm="submitConfirm" :confirmButtonDisabled="initialUser.validPhoneNumber">
       <div class="order-wrap">
         <div class="order-info">
-          <img class="order-img" :src="smallImg" width="50" height="50" alt="cover-img-small" />
+          <img class="order-img" :src="initialProduct.smallImg" width="50" height="50" alt="cover-img-small" />
           <div class="flex">
-            <div class="order-title">{{ productTitle }}</div>
+            <div class="order-title">{{ initialProduct.productTitle }}</div>
             <div class="order-time">创建日期：{{ getNowTime() }}</div>
           </div>
         </div>
         <van-cell-group inset>
-          <van-field v-model="orderName" label="姓名" />
-          <van-field v-model="orderTel" type="tel" label="手机号" :error-message="validPhoneNumber ? '手机号格式错误' : ''" @blur="inputBlur"/>
+          <van-field v-model="initialUser.name" label="姓名" />
+          <van-field v-model="initialUser.phone" type="tel" label="手机号" :error-message="initialUser.validPhoneNumber ? '手机号格式错误' : ''" @blur="inputBlur"/>
         </van-cell-group>
       </div>
     </van-dialog>
