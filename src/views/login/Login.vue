@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref } from "vue";
+import {onBeforeMount, onMounted, reactive, ref} from "vue";
 import { useRouter } from "vue-router";
 import { user } from '@/apis';
 import { useUserStore } from '@/stores';
@@ -16,6 +16,13 @@ const initialVariable = reactive({
   pwd: "",
   isValid: false,
   beforeLoginLoading: false,
+  hasLoggedPage: false,
+})
+
+onBeforeMount(() => {
+  if (checkLogged()) {
+    initialVariable.hasLoggedPage = true;
+  }
 })
 
 /**
@@ -75,7 +82,7 @@ const handleLogin = async () => {
       <van-button type="primary" color="#cd4204" block @click="handleLogin" :loading="initialVariable.beforeLoginLoading" loading-text="正在登录...">登录</van-button>
       <van-button color="#722b00" block plain style="margin-top: 30px;" @click="() => router.push('/register')">注册用户</van-button>
     </div>
-    <div v-if="checkLogged()" class="loading" />
+    <div v-if="initialVariable.hasLoggedPage" class="loading" />
   </main>
 </template>
 

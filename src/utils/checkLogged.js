@@ -1,7 +1,6 @@
 import { useUserStore } from "@/stores/index.js";
 import { showToast } from "vant";
 import router from "@/router/index.js";
-import { user } from "@/apis/index.js";
 
 /**
  * 在登录页检查是否已登录

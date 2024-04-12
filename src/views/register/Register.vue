@@ -1,6 +1,8 @@
 <script setup>
-import {onMounted, reactive, ref} from "vue";
-import {useRouter} from "vue-router";
+import {onBeforeMount, onMounted, reactive, ref} from "vue";
+import { useRouter } from "vue-router";
+import { showToast } from "vant";
+import { checkLogged } from "@/utils/checkLogged.js";
 
 /**
  * 初始化必要变量
@@ -10,16 +12,27 @@ const initialVariable = reactive({
   name: "",
   phone: "",
   pwd: "",
+  beforeRegisterLoading: false,
+  hasLoggedPage: false,
 });
 const router = useRouter();
 
-const init = () => {
-
-}
-
-onMounted(() => {
-  init();
+onBeforeMount(() => {
+  if (checkLogged()) {
+    initialVariable.hasLoggedPage = true;
+  }
 })
+
+/**
+ * 点击注册按钮
+ */
+const handleRegister = () => {
+  if (initialVariable.phone === "" || initialVariable.pwd === "" || initialVariable.name === "") {
+    showToast("账号密码或手机号不能为空，请重试~");
+    return;
+  }
+  initialVariable.beforeRegisterLoading = true;
+}
 </script>
 
 <template>
@@ -39,9 +52,10 @@ onMounted(() => {
       </div>
     </div>
     <div class="button-wrap">
-      <van-button type="primary" color="#0683e9" block @click="handleRegister">注册</van-button>
+      <van-button type="primary" color="#0683e9" block @click="handleRegister" :loading="initialVariable.beforeRegisterLoading" loading-text="正在注册...">注册</van-button>
       <van-button color="#070c15" block plain style="margin-top: 30px;" @click="() => router.push('/login')">返回登录</van-button>
     </div>
+    <div v-if="initialVariable.hasLoggedPage" class="loading" />
   </main>
 </template>
 
@@ -69,6 +83,7 @@ main {
         background: transparent;
         /deep/input {
           line-height: 80px;
+          color: #fff;
         }
       }
     }
@@ -79,6 +94,16 @@ main {
     padding: 0 30px;
     box-sizing: border-box;
     margin-top: 100px;
+  }
+  .loading {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.35);
   }
 }
 </style>
