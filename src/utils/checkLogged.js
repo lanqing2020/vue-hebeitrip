@@ -4,7 +4,7 @@ import router from "@/router/index.js";
 import { user } from "@/apis/index.js";
 
 /**
- * 在登录检查是否已登录
+ * 在登录页检查是否已登录
  * @returns {boolean}
  */
 export function checkLogged() {
@@ -21,9 +21,4 @@ export function checkLogged() {
     } else {
         return false;
     }
-}
-
-export function clearLogged() {
-    useUserStore().setToken("");
-    router.push({path: "/login"});
 }

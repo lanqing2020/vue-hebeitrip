@@ -57,6 +57,7 @@ const init = () => {
  */
 const loginOut = () => {
   useUserStore().setToken("");
+  useUserStore().setLogged(false);
   initialVariable.clickedSignOut = true;
   showToast({
     type: "success",

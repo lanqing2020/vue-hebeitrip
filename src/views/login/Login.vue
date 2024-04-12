@@ -43,6 +43,7 @@ const handleLogin = async () => {
   if (code === 0 && data) {
     // 登录成功，转入上一页，以后再说。统一到user页
     useUserStore().setToken(data);
+    useUserStore().setLogged(true);
     showToast({
       type: "loading",
       message: "登录成功\n跳转个人中心",

@@ -46,8 +46,8 @@ export function responseSuccessInterceptor(response) {
         if (response.config.url.indexOf("/pri") !== -1) {
             useUserStore().setLogged(false);
             showDialog({
-                title: '还未登陆',
-                message: '检测到您还未登录或登录过期，\n是否立即跳转登录页？',
+                title: '提示',
+                message: msg,
             }).then(() => {
                 router.push({
                     path: "/login",
