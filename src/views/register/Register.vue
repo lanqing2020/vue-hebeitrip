@@ -27,18 +27,13 @@ onBeforeMount(() => {
   }
 })
 
-onMounted(() => {
-  if (JSON.stringify(route.query) !== "'{}'") {
-    initialVariable.beforeLoginLoading = false;
-  }
-})
-
 /**
  * 检查手机号格式
  */
 const inputBlur = () => {
   const regex = /^1\d{10}$/;
-  initialVariable.isValid = !regex.test(initialVariable.phone);
+  // initialVariable.isValid = !regex.test(initialVariable.phone);
+  initialVariable.isValid = false;  // test
 }
 
 /**
@@ -67,7 +62,7 @@ const handleRegister = async () => {
         }
       });
     } else {
-      // 注册失败
+      // 注册失败，有bug。按钮的loading状态无法关闭
       initialVariable.beforeLoginLoading = false;
     }
   }

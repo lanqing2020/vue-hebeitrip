@@ -30,7 +30,8 @@ onBeforeMount(() => {
  */
 const inputBlur = () => {
   const regex = /^1\d{10}$/;
-  initialVariable.isValid = !regex.test(initialVariable.phone);
+  // initialVariable.isValid = !regex.test(initialVariable.phone);
+  initialVariable.isValid = false;  // test
 }
 
 /**
@@ -73,7 +74,6 @@ const handleLogin = async () => {
       <div class="label">
         <div class="title">手机号</div>
         <van-field v-model="initialVariable.phone" required placeholder="请输入手机号" :error-message="initialVariable.isValid ? '手机号格式错误' : ''" @blur="inputBlur"/>
-<!--        <van-field v-model="initialVariable.phone" required placeholder="请输入手机号" :error-message="initialVariable.isValid ? '手机号格式错误' : ''"/>-->
       </div>
       <div class="label" style="margin-top: 30px;">
         <div class="title">密码</div>
