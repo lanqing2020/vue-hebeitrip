@@ -71,8 +71,8 @@ const beforeClose = ({ position }) => {
         </div>
         <div v-else>
           <div v-for="itemInner in initialVariable[staticArrEN[index]]" :key="itemInner.id" class="goods-wrap">
-            <van-swipe-cell :before-close="beforeClose">
-              <van-card class="goods-card" :price="parseInt(itemInner.total_fee) / 100 + '.00'" :title="itemInner.video_title" :thumb="itemInner.video_img" />
+            <van-swipe-cell :before-close="beforeClose" :disabled="index !== 0">
+              <van-card class="goods-card" :price="parseInt(itemInner.total_fee) / 100 + '.00'" :title="itemInner.video_title" :thumb="itemInner.video_img" @click="() => router.push(`/detail?productId=${itemInner.video_id}`)" />
               <template #right>
                 <van-button square text="删除" type="danger" class="delete-button" />
               </template>
@@ -95,6 +95,7 @@ const beforeClose = ({ position }) => {
           margin: 0;
           background-color: #ffffff;
           .van-card__header {
+            border-bottom: 1px solid #ededed;
             .van-card__thumb {
               .van-image {
                 padding: 10px;
@@ -102,6 +103,7 @@ const beforeClose = ({ position }) => {
               }
             }
             .van-card__content {
+              padding: 10px 0;
               .van-card__title {
                 font-size: 26px;
                 color: #2c3e50;
