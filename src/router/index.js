@@ -39,7 +39,7 @@ const router = createRouter({
       name: 'detail-result',
       component: () => import('@/views/detail/DetailResult.vue'),
       meta: {
-        acceptedQueryParams: ['result']
+        acceptedQueryParams: ['type']
       }
     },
     {

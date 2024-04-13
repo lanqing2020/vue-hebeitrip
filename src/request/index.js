@@ -43,22 +43,37 @@ export function responseSuccessInterceptor(response) {
     const { code, msg } = response.data;
     if (code !== 0) {
         // 对于pri路径下的私有接口，进行登录过期的判断，然后跳转去登录页
+        // // 判断是登录页还是注册页，如果是注册页报错，还停留在注册页。订单页和登录页和用户中心页，都跳到登录页
         const url = response.config.url;
+        let path = "";
+        if (url.indexOf("/register") !== -1) {
+            path = "/register";
+        } else if (url.indexOf("/save") !== -1) {
+            path = "/index";
+        } else {
+            path = "/login";
+        }
         if (url.indexOf("/pri") !== -1) {
-            useUserStore().setLogged(false);
-            const errorTimes = useUserStore().getErrorTimes();
-            useUserStore().setErrorTimes(errorTimes + 1);
             showDialog({
                 title: '提示',
                 message: msg,
             }).then(() => {
-                router.push({
-                    // 判断是登录页还是注册页，如果是注册页报错，还停留在注册页。订单页和登录页和用户中心页，都跳到登录页
-                    path: url.indexOf("/register") !== -1 ? "/register" : "/login",
-                    query: {
-                        errorTimes: errorTimes + 1
-                    }
-                });
+                if (url.indexOf("/login") !== -1 || url.indexOf("/register") !== -1) {
+                    useUserStore().setLogged(false);
+                    const errorTimes = useUserStore().getErrorTimes();
+                    useUserStore().setErrorTimes(errorTimes + 1);
+                    router.push({
+                        path: path,
+                        query: {
+                            errorTimes: errorTimes + 1
+                        }
+                    });
+                } else {
+                    router.push({
+                        path: path,
+                        query: {}
+                    });
+                }
             })
         } else {
             showToast(msg)

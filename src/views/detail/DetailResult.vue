@@ -2,11 +2,13 @@
 import {useRoute, useRouter} from "vue-router";
 
 const route = useRoute();
-const { result } = route.query;
+const { type } = route.query;
+console.log("route.query===>", route.query)
+console.log("type===>", type, typeof type)
 </script>
 
 <template>
-  <div v-if="result === '0'" class="success">
+  <div v-if="type === '0'" class="success">
     <svg width="1em" height="1em" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="antd-mobile-icon" style="vertical-align: -0.125em;">
       <g id="CheckCircleFill-CheckCircleFill" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="CheckCircleFill-编组">

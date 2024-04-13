@@ -73,15 +73,16 @@ const saveOrder = async () => {
   const params = {
     "video_id": initialProduct.productId + ""
   }
-  const { code, data } = order.saveOrder(token, params);
-  if (code === 0 && data) {
+  order.saveOrder(token, params).then(res => {
     router.push({
       path: '/detail/result',
       query: {
-        result: "0"
+        type: res.code + ""
       }
     })
-  }
+  }).catch(err => {
+    console.log("err===>", err)
+  })
 }
 
 const submitConfirm = () => {
