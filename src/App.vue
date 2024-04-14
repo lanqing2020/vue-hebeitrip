@@ -34,7 +34,7 @@ watch(() => router.currentRoute.value.path, (path, oldPath) => {
   <RouterView />
   <footer>
     <van-tabbar route v-model="active" @change="change" active-color="#ffa43f">
-        <van-tabbar-item icon="home-o" to="/index">首页</van-tabbar-item>
+        <van-tabbar-item icon="home-o" to="/">首页</van-tabbar-item>
         <van-tabbar-item icon="coupon-o" to="/order">我的订单</van-tabbar-item>
         <van-tabbar-item icon="friends-o" to="/user">个人中心</van-tabbar-item>
     </van-tabbar>

@@ -85,7 +85,7 @@ onBeforeMount(() => {
     </van-swipe>
     <div class="list">
 <!--      <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="listOnLoad">-->
-        <van-card v-for="item in productList" :key="item.title" :price="+item.price / 100 + '.00'" :desc="item.description" :title="item.title" :thumb="item.cover_img" :lazy-load="true" :thumb-link="'/detail?productId=' + item.id">
+        <van-card v-for="item in productList" :key="item.title" :price="+item.price / 100 + '.00'" :desc="item.description" :title="item.title" :thumb="item.cover_img" :lazy-load="true" @click="() => router.push('/detail?productId=' + item.id)">
           <template #num>
             <van-tag type="warning">{{ item.point }} 分</van-tag>
           </template>
