@@ -4,7 +4,8 @@ import router from "@/router/index.js";
 import { useUserStore } from '@/stores';
 
 let config = {
-    baseURL: "http://localhost:8081/api",
+    // baseURL: "http://localhost:8080/api",
+    baseURL: import.meta.env.VITE_BASIC_API,
     timeout: 5000,
 }
 
