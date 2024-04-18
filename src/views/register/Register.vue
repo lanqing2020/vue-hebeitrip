@@ -100,7 +100,7 @@ main {
   min-height: 100vh;
   background-size: contain;
   .register-wrap {
-    padding-top: 613px;
+    padding-top: 490px;
     padding-left: 60px;
     padding-right: 60px;
     .label {

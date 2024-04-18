@@ -95,7 +95,7 @@ const handleLogin = async () => {
     min-height: 100vh;
     background-size: contain;
     .login-wrap {
-      padding-top: 800px;
+      padding-top: 650px;
       padding-left: 60px;
       padding-right: 60px;
       .label {
