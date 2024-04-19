@@ -7,7 +7,7 @@ const router = useRouter();
   <div class="main">
     <div class="center">
       <van-empty description="页面操作有误" />
-      <van-button type="primary" @click="() => router.push({ path: '/index' })">返回首页</van-button>
+      <van-button type="primary" @click="() => router.push({ path: '/' })">返回首页</van-button>
     </div>
   </div>
 </template>

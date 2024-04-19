@@ -50,7 +50,7 @@ export function responseSuccessInterceptor(response) {
         if (url.indexOf("/register") !== -1) {
             path = "/register";
         } else if (url.indexOf("/save") !== -1) {
-            path = "/index";
+            path = "/";
         } else {
             path = "/login";
         }
