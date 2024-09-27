@@ -54,31 +54,31 @@ export function responseSuccessInterceptor(response) {
         } else {
             path = "/login";
         }
-        if (url.indexOf("/pri") !== -1) {
-            showDialog({
-                title: '提示',
-                message: msg,
-            }).then(() => {
-                if (url.indexOf("/login") !== -1 || url.indexOf("/register") !== -1) {
-                    useUserStore().setLogged(false);
-                    const errorTimes = useUserStore().getErrorTimes();
-                    useUserStore().setErrorTimes(errorTimes + 1);
-                    router.push({
-                        path: path,
-                        query: {
-                            errorTimes: errorTimes + 1
-                        }
-                    });
-                } else {
-                    router.push({
-                        path: path,
-                        query: {}
-                    });
-                }
-            })
-        } else {
-            showToast(msg)
-        }
+        // if (url.indexOf("/pri") !== -1) {
+        //     showDialog({
+        //         title: '提示',
+        //         message: msg,
+        //     }).then(() => {
+        //         if (url.indexOf("/login") !== -1 || url.indexOf("/register") !== -1) {
+        //             useUserStore().setLogged(false);
+        //             const errorTimes = useUserStore().getErrorTimes();
+        //             useUserStore().setErrorTimes(errorTimes + 1);
+        //             router.push({
+        //                 path: path,
+        //                 query: {
+        //                     errorTimes: errorTimes + 1
+        //                 }
+        //             });
+        //         } else {
+        //             router.push({
+        //                 path: path,
+        //                 query: {}
+        //             });
+        //         }
+        //     })
+        // } else {
+        //     showToast(msg)
+        // }
     }
     return response.data;
 }

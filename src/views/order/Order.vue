@@ -4,6 +4,7 @@ import { showConfirmDialog } from 'vant';
 import { useRouter } from "vue-router";
 import { order } from "@/apis";
 import { useUserStore } from '@/stores';
+import notLoginImg from "@/assets/order-default.png";
 
 /**
  * 静态变量
@@ -17,6 +18,7 @@ const staticArrCN = ["待付款", "已付款，待核销", "已完成"];
  * @type {UnwrapNestedRefs<{activeName: string, paid: *[], payment: *[], complete: *[]}>}
  */
 const initialVariable = reactive({
+  notLogin: false,
   activeName: "payment",
   payment: [],
   paid: [],
@@ -33,6 +35,8 @@ const getListOrder = async (token) => {
   const { code, data } = await order.getListOrder(token);
   if (code === 0 && data) {
     initialVariable.paid = data;
+  } else {
+      initialVariable.notLogin = true;
   }
 }
 
@@ -63,7 +67,19 @@ const beforeClose = ({ position }) => {
 </script>
 
 <template>
-  <van-tabs v-model:active="initialVariable.activeName">
+  <div v-if="initialVariable.notLogin">
+    <div class="not-login-wrap">
+      <div class="not-login-img">
+        <img :src="notLoginImg" alt="notLogin" />
+      </div>
+      <div class="not-login-text">
+        <p>我的订单</p>
+        <div>登录后，可以查看订单和离线使用凭证</div>
+        <van-button class="login-button" round type="success">登录</van-button>
+      </div>
+    </div>
+  </div>
+  <van-tabs v-else v-model:active="initialVariable.activeName">
     <div v-for="(item, index) in staticArrEN">
       <van-tab :title="staticArrCN[index]" :name="staticArrEN[index]" :badge="initialVariable[staticArrEN[index]].length === 0 ? null : initialVariable[staticArrEN[index]].length">
         <div v-if="initialVariable[staticArrEN[index]].length === 0">
@@ -85,6 +101,51 @@ const beforeClose = ({ position }) => {
 </template>
 
 <style scoped lang="less">
+.not-login-wrap {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  margin-top: -350px;
+  .not-login-img {
+    width: 283px;
+    height: 328px;
+    margin: 0 auto;
+    img {
+      width: 100%;
+    }
+  }
+  .not-login-text {
+    width: 100%;
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    p {
+      font-size: 48px;
+      font-weight: bold;
+      margin: 0;
+    }
+    div {
+      margin-top: 20px;
+      font-size: 26px;
+      color: #999;
+    }
+    .login-button {
+      width: 260px;
+      margin-top: 30px;
+      background: linear-gradient(90deg, #fe7b21, #fe5010);
+      border: none;
+      /deep/ div {
+        .van-button__text {
+          font-size: 32px;
+        }
+      }
+    }
+  }
+}
 .van-tabs {
   .van-tabs__wrap {}
   /deep/.van-tabs__content {
