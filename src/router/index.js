@@ -44,22 +44,6 @@ const router = createRouter({
       }
     },
     {
-      path: '/login',
-      name: 'login',
-      component: () => import('@/views/login/Login.vue'),
-      meta: {
-        acceptedQueryParams: ['errorTimes']
-      }
-    },
-    {
-      path: '/register',
-      name: 'register',
-      component: () => import('@/views/register/Register.vue'),
-      meta: {
-        acceptedQueryParams: ['errorTimes']
-      }
-    },
-    {
       path: '/error',
       name: 'error',
       component: () => import('@/views/error/Error.vue')
