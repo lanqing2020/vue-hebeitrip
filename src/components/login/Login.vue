@@ -6,40 +6,33 @@ import { useUserStore } from '@/stores';
 import { showToast } from "vant";
 import { checkLogged } from "@/utils/checkLogged.js";
 
-/**
- * 初始化必要变量
- * @type {Ref<UnwrapRef<string>>}
- */
 const router = useRouter();
 const loginType = ref(0); // 0-手机号登录 1-账号密码登录 2-游客登录
+const btnCanClick = ref({
+  0: false,
+  1: false,
+  2: false
+}); // 不同登录状态下，用户是否可点击登录按钮
+const loginLoading = ref(false); // 正在登录
 const pageParameter = reactive({
-  isNumberLegal: false, // 手机号输入是否合法
-  beforeLoginLoading: false,
   alreadyLoggedIn: false,
 })
-/**
- * 提交给接口的数据
- * @type {UnwrapNestedRefs<{phone: string, pwd: string, yzm: string}>}
- */
+// 提交给接口的数据
 const submitData = reactive({
   phone: "",  // 登录手机号
   yzm: "",  // 发送的验证码
   pwd: "",  // 登录密码
 })
 
-/**
- * 检查手机号格式
- */
+// 检查手机号格式
+const isNumberLegal = ref(false); // 手机号输入是否合法，默认不合法
 const inputBlur = () => {
   const regex = /^1[3-9]\d{9}$/;  // 手机号的格式
-  pageParameter.isNumberLegal = regex.test(submitData.phone);
-  // console.log("pageParameter.isNumberLegal===>", pageParameter.isNumberLegal)
-  // pageParameter.isNumberLegal = false;  // test
+  isNumberLegal.value = regex.test(submitData.phone) && submitData.phone.length === 11;
+  console.log("isNumberLegal===>", isNumberLegal.value)
+  // isNumberLegal = false;  // test
 }
 
-/**
- * 验证码部分
- */
 const countdown = ref(60);
 // 更新倒计时
 const updateCountdown = () => {
@@ -55,7 +48,7 @@ const interval = ref(null);
 const clickedSMS = ref(false);
 const handleSMS = () => {
   clickedSMS.value = true;
-  // 触发接口
+  // 触发接口 未作
   // 接口正常返回后 开启定时器更新
   interval.value = setInterval(updateCountdown, 1000);
 }
@@ -63,44 +56,85 @@ const handleSMS = () => {
 // 切换登录方式
 const switchLoginType = (type) => {
   loginType.value = type;
+  loginLoading.value = false;
 }
 
-/**
- * 点击登录按钮
- */
+// 检查当前所有输入是否合法
+const checkAllInputs = () => {
+  switch (loginType.value) {
+    case 0: {
+      btnCanClick.value[0] = submitData.yzm.length === 4;
+      break;
+    }
+    case 1: {
+      btnCanClick.value[1] = submitData.pwd !== "";
+      break;
+    }
+    case 2: {
+
+      break;
+    }
+    default: {}
+  }
+}
+
+// 点击登录按钮
 const handleLogin = async () => {
-  if (submitData.phone === "" || submitData.pwd === "") {
-    showToast("账号密码不能为空，请重试~");
+  if (submitData.phone === "") {
+    showToast("手机号不能为空，请重试~");
     return;
   }
-  if (!pageParameter.isNumberLegal) {
-    pageParameter.beforeLoginLoading = true;
-    const params = {
-      phone: submitData.phone,
-      pwd: submitData.pwd
+  if (!isNumberLegal.value) {
+    showToast("手机号输入有误，请重试~");
+    return;
+  }
+  const params = {};
+  // 判断登录方式
+  switch (loginType.value) {
+    case 0: {
+      if (submitData.yzm === "") {
+        showToast("验证码不能为空，请重试~");
+        return;
+      }
+      // 检查验证码是否正确
+      if (submitData.yzm !== "1234") {
+        showToast("验证码错误，请重试~");
+        return;
+      }
+      params.phone = submitData.phone;
+      params.yzm = submitData.yzm;
+      break;
     }
-    const { code, data } = await user.doLogin(params);
-    if (code === 0 && data) {
-      // 登录成功，转入上一页，以后再说。统一到user页
-      useUserStore().setToken(data);
-      useUserStore().setLogged(true);
-      showToast({
-        type: "loading",
-        message: "登录成功\n跳转个人中心",
-        onClose: () => {
-          router.push({path: "/user"});
-        }
-      });
-    } else {
-      // 登录失败
-      pageParameter.beforeLoginLoading = false;
+    case 1: {
+
+      break;
     }
+    case 2: {
+      break;
+    }
+    default: {}
+  }
+  // 执行登录
+  loginLoading.value = true;
+  const { code, data } = await user.doLogin(params);
+  if (code === 0 && data) {
+    // 登录成功，转入上一页，以后再说。统一到user页
+    useUserStore().setToken(data);
+    useUserStore().setLogged(true);
+    showToast({
+      type: "loading",
+      message: "登录成功\n跳转个人中心",
+      onClose: () => {
+        router.push({path: "/user"});
+      }
+    });
+  } else {
+    // 登录失败
+    loginLoading.value = false;
   }
 }
 
-/**
- * 生命周期部分
- */
+// 生命周期部分
 onBeforeMount(() => {
   if (checkLogged()) {
     pageParameter.alreadyLoggedIn = true;
@@ -120,14 +154,14 @@ onUnmounted(() => {
       <div v-if="loginType === 0">
         <div class="login-title">手机号登录</div>
         <div class="label" style="margin-top: 50px;margin-bottom: 20px;">
-          <van-field v-model="submitData.phone" required maxlength="11" :clearable="true" placeholder="请输入手机号" @update:model-value="inputBlur"/>
+          <van-field v-model="submitData.phone" required maxlength="11" :clearable="true" placeholder="请输入手机号" @update:model-value="inputBlur" />
         </div>
         <div class="label">
-          <van-field v-model="submitData.pwd" type="password" required placeholder="请输入验证码" />
-          <van-button round type="primary" size="mini" :disabled="!pageParameter.isNumberLegal" :loading="clickedSMS" :loading-text="countdown + ' s'" loading-size="10" @click="handleSMS">发送验证码</van-button>
+          <van-field v-model="submitData.yzm" type="password" required placeholder="请输入验证码" @update:model-value="checkAllInputs" />
+          <van-button round type="primary" size="mini" :disabled="!isNumberLegal" :loading="clickedSMS" :loading-text="countdown + ' s'" loading-size="10" @click="handleSMS">发送验证码</van-button>
         </div>
         <div class="button-wrap">
-          <van-button round disabled type="primary" color="linear-gradient(to right, #ff6034, #ee0a24)" block @click="handleLogin" :loading="pageParameter.beforeLoginLoading" loading-text="正在登录...">登录</van-button>
+          <van-button round :disabled="!btnCanClick[0]" type="primary" color="linear-gradient(to right, #ff6034, #ee0a24)" block @click="handleLogin" :loading="loginLoading" loading-text="正在登录...">登录</van-button>
           <!--      <van-button color="#722b00" block plain style="margin-top: 30px;" @click="() => router.push('/register')">注册用户</van-button>-->
           <div class="other-login">
             <div @click="() => switchLoginType(1)">账号密码登录</div>
@@ -138,11 +172,19 @@ onUnmounted(() => {
       </div>
       <div v-else-if="loginType === 1">
         <div class="login-title">账号密码登录</div>
-        <div class="label" style="margin-top: 50px;margin-bottom: 10px;">
-          <van-field v-model="submitData.phone" required placeholder="请输入手机号" :error-message="pageParameter.isNumberLegal ? '手机号格式错误' : ''" @blur="inputBlur"/>
+        <div class="label" style="margin-top: 50px;margin-bottom: 20px;">
+          <van-field v-model="submitData.phone" required maxlength="11" :clearable="true" placeholder="请输入手机号" @update:model-value="inputBlur" />
         </div>
         <div class="label">
-          <van-field v-model="submitData.pwd" type="password" required placeholder="请输入密码" />
+          <van-field v-model="submitData.pwd" type="password" required placeholder="请输入密码" @update:model-value="checkAllInputs" />
+        </div>
+        <div class="button-wrap">
+          <van-button round :disabled="!btnCanClick[1]" type="primary" color="linear-gradient(to right, #ff6034, #ee0a24)" block @click="handleLogin" :loading="loginLoading" loading-text="正在登录...">登录</van-button>
+          <div class="other-login">
+            <div @click="() => switchLoginType(0)">手机号登录</div>
+            <span>|</span>
+            <div>游客登录</div>
+          </div>
         </div>
       </div>
       <div v-else>
@@ -197,6 +239,10 @@ onUnmounted(() => {
           /deep/ .van-button__content {
             font-size: 32px;
           }
+        }
+        .van-button--disabled {
+          background: #cfcfcf !important;
+          opacity: 1;
         }
         .other-login {
           margin-top: 80px;

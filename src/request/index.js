@@ -41,6 +41,7 @@ export function requestErrorInterceptor(error) {
  * @returns {*}
  */
 export function responseSuccessInterceptor(response) {
+    console.log("response===>", response)
     const { code, msg } = response.data;
     if (code !== 0) {
         // 对于pri路径下的私有接口，进行登录过期的判断，然后跳转去登录页
