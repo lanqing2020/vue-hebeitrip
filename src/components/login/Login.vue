@@ -5,6 +5,7 @@ import { user } from '@/apis';
 import { useUserStore } from '@/stores';
 import { showToast } from "vant";
 import { checkLogged } from "@/utils/checkLogged.js";
+import LogoImg from "@/assets/logo.png";
 
 const router = useRouter();
 const loginType = ref(0); // 0-手机号登录 1-账号密码登录 2-游客登录
@@ -61,42 +62,31 @@ const switchLoginType = (type) => {
 
 // 检查当前所有输入是否合法
 const checkAllInputs = () => {
-  switch (loginType.value) {
-    case 0: {
-      btnCanClick.value[0] = submitData.yzm.length === 4;
-      break;
-    }
-    case 1: {
-      btnCanClick.value[1] = submitData.pwd !== "";
-      break;
-    }
-    case 2: {
-
-      break;
-    }
-    default: {}
+  if (loginType.value === 0) {
+    btnCanClick.value[0] = submitData.yzm.length === 4;
+  }
+  if (loginType.value === 1) {
+    btnCanClick.value[1] = submitData.pwd !== "";
   }
 }
 
 // 点击登录按钮
 const handleLogin = async () => {
-  if (submitData.phone === "") {
-    showToast("手机号不能为空，请重试~");
-    return;
-  }
-  if (!isNumberLegal.value) {
-    showToast("手机号输入有误，请重试~");
-    return;
+  if (loginType.value !== 2) {
+    if (submitData.phone === "") {
+      showToast("手机号不能为空，请重试~");
+      return;
+    }
+    if (!isNumberLegal.value) {
+      showToast("手机号输入有误，请重试~");
+      return;
+    }
   }
   const params = {};
-  // 判断登录方式
+  // 验证登录方式
   switch (loginType.value) {
     case 0: {
-      if (submitData.yzm === "") {
-        showToast("验证码不能为空，请重试~");
-        return;
-      }
-      // 检查验证码是否正确
+      // 接口检查验证码是否正确
       if (submitData.yzm !== "1234") {
         showToast("验证码错误，请重试~");
         return;
@@ -106,7 +96,8 @@ const handleLogin = async () => {
       break;
     }
     case 1: {
-
+      params.phone = submitData.phone;
+      params.pwd = submitData.pwd;
       break;
     }
     case 2: {
@@ -166,7 +157,7 @@ onUnmounted(() => {
           <div class="other-login">
             <div @click="() => switchLoginType(1)">账号密码登录</div>
             <span>|</span>
-            <div>游客登录</div>
+            <div @click="() => switchLoginType(2)">游客登录</div>
           </div>
         </div>
       </div>
@@ -177,18 +168,29 @@ onUnmounted(() => {
         </div>
         <div class="label">
           <van-field v-model="submitData.pwd" type="password" required placeholder="请输入密码" @update:model-value="checkAllInputs" />
+          <van-button round type="default" size="mini" class="findPwd">找回密码</van-button>
         </div>
         <div class="button-wrap">
           <van-button round :disabled="!btnCanClick[1]" type="primary" color="linear-gradient(to right, #ff6034, #ee0a24)" block @click="handleLogin" :loading="loginLoading" loading-text="正在登录...">登录</van-button>
           <div class="other-login">
             <div @click="() => switchLoginType(0)">手机号登录</div>
             <span>|</span>
-            <div>游客登录</div>
+            <div @click="() => switchLoginType(2)">游客登录</div>
           </div>
         </div>
       </div>
       <div v-else>
-
+        <div class="login-box">
+          <img :src="LogoImg" alt="logo-img" />
+        </div>
+        <div class="button-wrap">
+          <van-button round type="primary" color="linear-gradient(to right, #ff6034, #ee0a24)" block @click="handleLogin" :loading="loginLoading" loading-text="正在登录...">游客登录</van-button>
+          <div class="other-login">
+            <div @click="() => switchLoginType(0)">手机号登录</div>
+            <span>|</span>
+            <div @click="() => switchLoginType(1)">账号密码登录</div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -226,8 +228,21 @@ onUnmounted(() => {
           top: 10px;
           padding: 0 20px;
         }
+        .findPwd {
+          border: 0;
+          color: #b0b0b0;
+        }
         .van-button--loading {
           opacity: 0.5;
+        }
+      }
+      .login-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+          width: 400px;
+          height: 400px;
         }
       }
       .button-wrap {
