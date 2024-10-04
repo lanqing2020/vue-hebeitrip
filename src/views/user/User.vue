@@ -6,16 +6,13 @@ import { useUserStore } from '@/stores';
 import { useRouter } from "vue-router";
 import TxDefault from '@/assets/default-tx.jpg';
 
-/**
- * 初始化必要变量
- * @type {UnwrapNestedRefs<{headImg: *, phone: string, name: string}>}
- */
+// 初始化必要变量
+const hasLogged = ref(false);
 const initialVariable = reactive({
   name: "",
   headImg: TxDefault,
   phone: "",
   currPosition: "",
-  clickedSignOut: false,
 });
 const router = useRouter();
 
@@ -42,35 +39,6 @@ const getCurrPosition = async (token) => {
     initialVariable.currPosition = data;
   }
 }
-
-/**
- * 初始化调用接口
- */
-const init = () => {
-  const token = useUserStore().getToken();
-  findInfoByToken(token);
-  getCurrPosition(token);
-}
-
-/**
- * 退出登录
- */
-const loginOut = () => {
-  useUserStore().setToken("");
-  useUserStore().setLogged(false);
-  initialVariable.clickedSignOut = true;
-  showToast({
-    type: "success",
-    message: "您已退出",
-    onClose: () => {
-      router.push({path: "/login"});
-    }
-  });
-}
-
-onMounted(() => {
-  init();
-})
 
 /**
  * 立即通话
@@ -143,14 +111,33 @@ const onShareSelect = (option) => {
   showShare.value = false;
 };
 
+/**
+ * 初始化调用接口
+ */
+const init = () => {
+  if (useUserStore().getLogged()) {
+    const token = useUserStore().getToken();
+    findInfoByToken(token);
+    getCurrPosition(token);
+    hasLogged.value = true;
+  }
+}
+
+// 生命周期部分
+onMounted(() => {
+  init();
+})
 </script>
 
 <template>
   <header>
-    <h1>我的</h1>
+    <h1>用户中心</h1>
     <div class="content">
       <van-image round width="70px" height="70px" :src="initialVariable.headImg" />
-      <div class="info">
+      <div v-if="!hasLogged" class="info">
+        <div class="title">注册登录</div>
+      </div>
+      <div v-else class="info">
         <div class="title">Hello，{{ initialVariable.name }}</div>
         <div class="route">
           <div>已游览至 {{ initialVariable.currPosition }} 点</div>
@@ -158,7 +145,7 @@ const onShareSelect = (option) => {
         </div>
       </div>
     </div>
-    <div class="login-out" @click="loginOut">
+    <div class="login-out" @click="useUserStore().loginOut">
       <van-icon name="setting-o" />
       <span>退出</span>
     </div>
@@ -188,7 +175,6 @@ const onShareSelect = (option) => {
       <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="shareOptions" @select="onShareSelect" />
 
     </div>
-    <div v-if="initialVariable.clickedSignOut" class="loading" />
   </main>
 </template>
 
@@ -224,7 +210,6 @@ const onShareSelect = (option) => {
         padding: 10px 0;
         .title {
           font-size: 34px;
-          font-weight: 600;
         }
         .route {
           font-size: 24px;

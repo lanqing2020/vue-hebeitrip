@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount, reactive, ref } from "vue";
+import {onBeforeMount, onMounted, reactive, ref} from "vue";
 import { showConfirmDialog } from 'vant';
 import { useRouter } from "vue-router";
 import { order } from "@/apis";
@@ -7,23 +7,18 @@ import { useUserStore } from '@/stores';
 import notLoginImg from "@/assets/order-default.png";
 import LoginComp from "@/components/login/Login.vue";
 
-/**
- * 静态变量
- * @type {string[]}
- */
+// 静态变量
 const staticArrEN = ["payment", "paid", "complete"];
 const staticArrCN = ["待付款", "已付款，待核销", "已完成"];
-
-/**
- * 初始化必要变量
- * @type {UnwrapNestedRefs<{activeName: string, paid: *[], payment: *[], complete: *[]}>}
- */
+// 初始化必要变量
+const hasLogged = ref(false);
+const loginSheet = ref(false);
+const activeName = ref("payment");
+const payment = ref([]);
+const paid = ref([]);
+const complete = ref([]);
 const initialVariable = reactive({
-  notLogin: true,
-  loginSheet: false,
-  activeName: "payment",
   payment: [],
-  paid: [],
   complete: []
 });
 const router = useRouter();
@@ -36,19 +31,16 @@ const router = useRouter();
 const getListOrder = async (token) => {
   const { code, data } = await order.getListOrder(token);
   if (code === 0 && data) {
-    initialVariable.paid = data;
-    initialVariable.notLogin = false;
+    paid.value = data;
   }
 }
 
 const init = () => {
-  const token = useUserStore().getToken();
-  getListOrder(token);
+  if (useUserStore().getLogged()) {
+    getListOrder(useUserStore().getToken());
+    hasLogged.value = true;
+  }
 }
-
-onBeforeMount(() => {
-  init();
-})
 
 // position 为关闭时点击的位置
 const beforeClose = ({ position }) => {
@@ -67,15 +59,21 @@ const beforeClose = ({ position }) => {
 };
 
 const pullUpLoginSheet = () => {
-  if (!initialVariable.loginSheet) {
-    initialVariable.loginSheet = true;
+  if (!loginSheet.value) {
+    loginSheet.value = true;
   }
 }
+
+// 生命周期部分
+onMounted(() => {
+  init();
+})
+
 </script>
 
 <template>
   <div class="container">
-    <div v-if="initialVariable.notLogin">
+    <div v-if="!hasLogged">
       <div class="not-login-wrap">
         <div class="not-login-img">
           <img :src="notLoginImg" alt="notLogin" />
@@ -87,7 +85,7 @@ const pullUpLoginSheet = () => {
         </div>
       </div>
     </div>
-    <van-tabs v-else v-model:active="initialVariable.activeName">
+    <van-tabs v-else v-model:active="activeName">
       <div v-for="(item, index) in staticArrEN">
         <van-tab :title="staticArrCN[index]" :name="staticArrEN[index]" :badge="initialVariable[staticArrEN[index]].length === 0 ? null : initialVariable[staticArrEN[index]].length">
           <div v-if="initialVariable[staticArrEN[index]].length === 0">
@@ -106,7 +104,7 @@ const pullUpLoginSheet = () => {
         </van-tab>
       </div>
     </van-tabs>
-    <van-action-sheet v-model:show="initialVariable.loginSheet" duration="0.2" :round="false" title="登录" class="my-action-sheet">
+    <van-action-sheet v-model:show="loginSheet" duration="0.2" :round="false" title="登录" class="my-action-sheet">
       <LoginComp />
     </van-action-sheet>
   </div>

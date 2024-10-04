@@ -1,9 +1,8 @@
 import { defineStore } from 'pinia'
+import { showToast } from "vant";
 
 export default defineStore('user', {
   state: () => ({
-    token: "",
-    hasLogged: false,
     errorTimes: 0,
   }),
   // 计算属性，有数据缓存
@@ -15,8 +14,7 @@ export default defineStore('user', {
      * @returns {*|string|string}
      */
     getToken() {
-      this.token = localStorage.getItem("token") || "";
-      return this.token;
+      return localStorage.getItem("token") || "";
     },
 
     /**
@@ -25,7 +23,6 @@ export default defineStore('user', {
      */
     setToken(str) {
       localStorage.setItem("token", str);
-      this.token = str;
     },
 
     /**
@@ -33,8 +30,7 @@ export default defineStore('user', {
      * @returns {*}
      */
     getLogged() {
-      this.hasLogged = JSON.parse(localStorage.getItem("hasLogged"));
-      return this.hasLogged;
+      return JSON.parse(localStorage.getItem("hasLogged"));
     },
 
     /**
@@ -43,7 +39,6 @@ export default defineStore('user', {
      */
     setLogged(bool) {
       localStorage.setItem("hasLogged", bool);
-      this.hasLogged = bool;
     },
 
     /**
@@ -62,7 +57,20 @@ export default defineStore('user', {
     setErrorTimes(num) {
       localStorage.setItem("errorTimes", num);
       this.errorTimes = num;
-    }
+    },
+
+    /**
+     * 退出登录
+     */
+    loginOut() {
+      this.setToken("");
+      this.setLogged(false);
+      showToast({
+        type: "success",
+        message: "您已退出",
+        onClose: () => {}
+      });
+    },
 
   },
 })
