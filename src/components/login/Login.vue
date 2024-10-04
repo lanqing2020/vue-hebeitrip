@@ -1,10 +1,9 @@
 <script setup>
-import {onBeforeMount, onMounted, onUnmounted, reactive, ref} from "vue";
+import { onUnmounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { user } from '@/apis';
 import { useUserStore } from '@/stores';
 import { showToast } from "vant";
-import { checkLogged } from "@/utils/checkLogged.js";
 import LogoImg from "@/assets/logo.png";
 
 const router = useRouter();
@@ -15,9 +14,6 @@ const btnCanClick = ref({
   2: false
 }); // 不同登录状态下，用户是否可点击登录按钮
 const loginLoading = ref(false); // 正在登录
-const pageParameter = reactive({
-  alreadyLoggedIn: false,
-})
 // 提交给接口的数据
 const submitData = reactive({
   phone: "",  // 登录手机号
@@ -125,12 +121,39 @@ const handleLogin = async () => {
   }
 }
 
+/**
+ * 点击注册按钮
+ */
+// const handleRegister = async () => {
+//   if (initialVariable.phone === "" || initialVariable.pwd === "" || initialVariable.name === "") {
+//     showToast("账号密码或手机号不能为空，请重试~");
+//     return;
+//   }
+//   if (!initialVariable.isValid) {
+//     initialVariable.beforeRegisterLoading = true;
+//     const params = {
+//       name: initialVariable.name,
+//       phone: initialVariable.phone,
+//       pwd: initialVariable.pwd
+//     }
+//     const { code } = await user.doRegister(params);
+//     if (code === 0) {
+//       // 注册成功，到登录页
+//       showToast({
+//         type: "loading",
+//         message: "注册成功\n跳转登录页",
+//         onClose: () => {
+//           router.push({path: "/login"});
+//         }
+//       });
+//     } else {
+//       // 注册失败，有bug。按钮的loading状态无法关闭
+//       initialVariable.beforeLoginLoading = false;
+//     }
+//   }
+// }
+
 // 生命周期部分
-onBeforeMount(() => {
-  if (checkLogged()) {
-    pageParameter.alreadyLoggedIn = true;
-  }
-})
 // 在组件卸载时清除定时器，避免内存泄露
 onUnmounted(() => {
   if (interval.value) {
@@ -192,10 +215,7 @@ onUnmounted(() => {
           </div>
         </div>
       </div>
-
     </div>
-
-    <div v-if="pageParameter.alreadyLoggedIn" class="loading" />
   </main>
 </template>
 
