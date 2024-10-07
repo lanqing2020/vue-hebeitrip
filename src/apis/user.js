@@ -30,13 +30,13 @@ export function findInfoByToken(token) {
  * @param token
  * @returns {Promise<axios.AxiosResponse<any>>}
  */
-export function queryCurrPosition(token) {
-    return request.get("/v1/pri/user/find_curr_position_by_token", {
-        params: {
-            "token": token
-        },
-    })
-}
+// export function queryCurrPosition(token) {
+//     return request.get("/v1/pri/user/find_curr_position_by_token", {
+//         params: {
+//             "token": token
+//         },
+//     })
+// }
 
 /**
  * 用户登录

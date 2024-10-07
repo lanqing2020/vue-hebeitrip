@@ -5,9 +5,11 @@ import { user } from '@/apis';
 import { useUserStore } from '@/stores';
 import { useRouter } from "vue-router";
 import TxDefault from '@/assets/default-tx.jpg';
+import LoginComp from "@/components/login/Login.vue";
 
 // 初始化必要变量
 const hasLogged = ref(false);
+const loginSheet = ref(false);
 const initialVariable = reactive({
   name: "",
   headImg: TxDefault,
@@ -29,15 +31,19 @@ const findInfoByToken = async (token) => {
   }
 }
 
-/**
- * 当前游览位置
- * @type {Ref<UnwrapRef<string>>}
- */
-const getCurrPosition = async (token) => {
-  const { code, data } = await user.queryCurrPosition(token);
-  if (code === 0 && data) {
-    initialVariable.currPosition = data;
+const clickOverlay = () => {
+  if (!hasLogged.value) {
+    loginSheet.value = true;
   }
+}
+
+const goToSetPage = () => {
+  router.push({
+    path: '/user/set',
+    // query: {
+    //   type: "123"
+    // }
+  })
 }
 
 /**
@@ -130,73 +136,62 @@ onMounted(() => {
 </script>
 
 <template>
-  <header>
-    <h1>用户中心</h1>
-    <div class="content">
-      <van-image round width="70px" height="70px" :src="initialVariable.headImg" />
-      <div v-if="!hasLogged" class="info">
-        <div class="title">注册登录</div>
-      </div>
-      <div v-else class="info">
-        <div class="title">Hello，{{ initialVariable.name }}</div>
-        <div class="route">
-          <div>已游览至 {{ initialVariable.currPosition }} 点</div>
-          <van-icon name="arrow" />
+  <div class="container">
+    <header>
+      <div class="content">
+        <van-image round width="70px" height="70px" :src="initialVariable.headImg" />
+        <div class="info">
+          <div class="title">{{ !hasLogged ? "注册登录" : "Hello," + initialVariable.name }}</div>
         </div>
       </div>
-    </div>
-    <div class="login-out" @click="useUserStore().loginOut">
-      <van-icon name="setting-o" />
-      <span>退出</span>
-    </div>
-  </header>
-  <main>
-    <div class="sos">
-      <div>是否现在联系景区管理人员</div>
-      <van-button round type="success" size="small" @click="getCall">立即通话</van-button>
-    </div>
-    <div class="list">
-      <van-cell is-link title="智能辅助" @click="showActionSheet = true" />
-      <van-action-sheet
+      <div class="login-out" @click="goToSetPage">
+        <van-icon name="setting-o" />
+        <span>设置</span>
+      </div>
+    </header>
+    <main>
+      <div class="sos">
+        <div>是否现在联系景区管理人员</div>
+        <van-button round type="success" size="small" @click="getCall">立即通话</van-button>
+      </div>
+      <div class="list">
+        <van-cell is-link title="智能辅助" @click="showActionSheet = true" />
+        <van-action-sheet
           v-model:show="showActionSheet"
           :actions="actionsStatic"
           cancel-text="取消"
           description="您可能需要"
           close-on-click-action
-      />
+        />
+        <van-coupon-cell :coupons="coupons" :chosen-coupon="chosenCoupon" @click="showCouponList = true" />
+        <!-- 优惠券列表 -->
+        <van-popup v-model:show="showCouponList" round position="bottom" style="height: 90%; padding-top: 4px;" >
+          <van-coupon-list :coupons="coupons" :chosen-coupon="chosenCoupon" :disabled-coupons="disabledCoupons" @change="onCouponChange" @exchange="onCouponExchange" />
+        </van-popup>
+        <van-cell is-link title="分享景区" @click="showShare = true" />
+        <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="shareOptions" @select="onShareSelect" />
 
-      <van-coupon-cell :coupons="coupons" :chosen-coupon="chosenCoupon" @click="showCouponList = true" />
-      <!-- 优惠券列表 -->
-      <van-popup v-model:show="showCouponList" round position="bottom" style="height: 90%; padding-top: 4px;" >
-        <van-coupon-list :coupons="coupons" :chosen-coupon="chosenCoupon" :disabled-coupons="disabledCoupons" @change="onCouponChange" @exchange="onCouponExchange" />
-      </van-popup>
-
-      <van-cell is-link title="分享景区" @click="showShare = true" />
-      <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="shareOptions" @select="onShareSelect" />
-
-    </div>
-  </main>
+      </div>
+    </main>
+    <van-action-sheet v-model:show="loginSheet" duration="0.2" :round="false" title="登录" class="my-action-sheet">
+      <LoginComp />
+    </van-action-sheet>
+  </div>
 </template>
 
 <style scoped lang="less">
+.container {
+  width: 100%;
+  z-index: 1;
   header {
     background: url("../../assets/user.jpg") no-repeat;
     background-size: cover;
     padding: 0 30px;
-    height: 350px;
+    height: 300px;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    h1 {
-      position: absolute;
-      left: 50%;
-      top: 5px;
-      margin-left: -20px;
-      font-size: 34px;
-      text-align: center;
-      font-weight: 500;
-    }
     .content {
       width: 100%;
       display: flex;
@@ -209,26 +204,7 @@ onMounted(() => {
         justify-content: space-around;
         padding: 10px 0;
         .title {
-          font-size: 34px;
-        }
-        .route {
-          font-size: 24px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border: 1px solid #07c160;
-          border-radius: 30px;
-          height: 38px;
-          width: 210px;
-          div {
-            color: #07c160;
-            letter-spacing: 2px;
-            margin-right: 10px;
-          }
-          i {
-            color: #07c160;
-            font-size: 20px;
-          }
+          font-size: 32px;
         }
       }
     }
@@ -283,5 +259,17 @@ onMounted(() => {
       background: rgba(255, 255, 255, 0.35);
     }
   }
-
+  /deep/ .my-action-sheet {
+    height: 100%;
+    max-height: 100%;
+    .van-action-sheet__header {
+      color: transparent;
+      font-size: 0;
+      i {
+        right: auto;
+        left: 0;
+      }
+    }
+  }
+}
 </style>

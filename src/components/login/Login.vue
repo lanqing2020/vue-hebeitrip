@@ -222,6 +222,7 @@ onUnmounted(() => {
 <style scoped lang="less">
   main {
     width: 100%;
+    padding: 0 !important;
     .login-wrap {
       padding: 0 80px;
       margin-top: 100px;
