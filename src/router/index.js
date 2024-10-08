@@ -48,6 +48,11 @@ const router = createRouter({
       component: () => import('@/views/user/ChangePwd.vue')
     },
     {
+      path: '/user/bindPhone',
+      name: 'user-bindPhone',
+      component: () => import('@/views/user/BindPhone.vue')
+    },
+    {
       path: '/detail',
       name: 'detail',
       component: () => import('@/views/detail/Detail.vue'),
