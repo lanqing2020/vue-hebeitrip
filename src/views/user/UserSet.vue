@@ -1,14 +1,6 @@
 <script setup>
 import router from "@/router/index.js";
 
-const onClickLeft = () => {
-  router.push({ path: '/user' })
-}
-
-const onClickRight = () => {
-  router.push({ path: '/' })
-}
-
 const afterRead = (file) => {
   // 文件上传完毕后会触发 after-read 回调函数，获取到对应的 file 对象。
   // 此时可以自行将文件上传至服务器
@@ -20,10 +12,10 @@ const afterRead = (file) => {
   <van-nav-bar
     title="编辑账户"
     left-arrow
-    @click-left="onClickLeft"
+    @click-left="() => router.push({ path: '/user' })"
   >
     <template #right>
-      <van-icon name="wap-home-o" size="20" @click="onClickRight" />
+      <van-icon name="wap-home-o" size="20" @click="() => router.push({ path: '/' })" />
     </template>
   </van-nav-bar>
   <main>
