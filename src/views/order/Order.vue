@@ -10,33 +10,13 @@ import LoginComp from "@/components/login/Login.vue";
 // 初始化必要变量
 const hasLogged = ref(false);
 const loginSheet = ref(false);
-const activeName = ref("payment");
+const activeName = ref("all");  // 默认显示的tab
 const ordersData = reactive([
-  {
-    type: "all",
-    title: "全部",
-    list: []
-  },
-  {
-    type: "payment",
-    title: "待付款",
-    list: []
-  },
-  {
-    type: "paid",
-    title: "待使用",
-    list: []
-  },
-  {
-    type: "reviews",
-    title: "待评价",
-    list: []
-  },
-  {
-    type: "refund",
-    title: "退款/售后",
-    list: []
-  }
+  { type: "all", title: "全部", list: [] },
+  { type: "payment", title: "待付款", list: [] },
+  { type: "paid", title: "待使用", list: [] },
+  { type: "reviews", title: "待评价", list: [] },
+  { type: "refund", title: "退款/售后", list: [] }
 ]);
 const router = useRouter();
 
@@ -54,6 +34,7 @@ const getListOrder = async (token, method) => {
         item.list = data
       }
     })
+    console.log("ordersData===>", ordersData)
   }
 }
 
@@ -62,6 +43,11 @@ const init = () => {
     getListOrder(useUserStore().getToken(), "all");
     hasLogged.value = true;
   }
+}
+
+const onClickTab = ({ title, name }) => {
+  console.log(title, name)
+  getListOrder(useUserStore().getToken(), name);
 }
 
 // position 为关闭时点击的位置
@@ -109,9 +95,9 @@ onMounted(() => {
     </div>
     <div v-else>
       <van-nav-bar title="我的订单" />
-      <van-tabs v-model:active="activeName">
+      <van-tabs v-model:active="activeName" @click-tab="onClickTab">
         <div v-for="(item, index) in ordersData">
-          <van-tab :title="ordersData[index]['title']" :name="ordersData[index]['type']" :badge="ordersData[index]['list'].length === 0 ? null : ordersData[index]['list'].length">
+          <van-tab :title="ordersData[index]['title']" :name="ordersData[index]['type']">
             <div v-if="ordersData[index]['list'].length === 0">
               <van-empty image-size="100" :description="'暂无' + ordersData[index]['title'] + '订单'" />
             </div>

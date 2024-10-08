@@ -124,7 +124,6 @@ const init = () => {
   if (useUserStore().getLogged()) {
     const token = useUserStore().getToken();
     findInfoByToken(token);
-    getCurrPosition(token);
     hasLogged.value = true;
   }
 }
@@ -187,7 +186,7 @@ onMounted(() => {
     background: url("../../assets/user.jpg") no-repeat;
     background-size: cover;
     padding: 0 30px;
-    height: 300px;
+    height: 350px;
     position: relative;
     display: flex;
     align-items: center;
