@@ -7,37 +7,59 @@ import { useUserStore } from '@/stores';
 import notLoginImg from "@/assets/order-default.png";
 import LoginComp from "@/components/login/Login.vue";
 
-// 静态变量
-const staticArrEN = ["payment", "paid", "complete"];
-const staticArrCN = ["待付款", "已付款，待核销", "已完成"];
 // 初始化必要变量
 const hasLogged = ref(false);
 const loginSheet = ref(false);
 const activeName = ref("payment");
-const payment = ref([]);
-const paid = ref([]);
-const complete = ref([]);
-const initialVariable = reactive({
-  payment: [],
-  complete: []
-});
+const ordersData = reactive([
+  {
+    type: "all",
+    title: "全部",
+    list: []
+  },
+  {
+    type: "payment",
+    title: "待付款",
+    list: []
+  },
+  {
+    type: "paid",
+    title: "待使用",
+    list: []
+  },
+  {
+    type: "reviews",
+    title: "待评价",
+    list: []
+  },
+  {
+    type: "refund",
+    title: "退款/售后",
+    list: []
+  }
+]);
 const router = useRouter();
 
 /**
  * 获取订单列表
  * @param token
+ * @param method
  * @returns {Promise<void>}
  */
-const getListOrder = async (token) => {
-  const { code, data } = await order.getListOrder(token);
+const getListOrder = async (token, method) => {
+  const { code, data } = await order.getListOrder(token, method);
   if (code === 0 && data) {
-    paid.value = data;
+    ordersData.map((item) => {
+      if (item.type === method) {
+        item.list = data
+      }
+    })
   }
 }
 
 const init = () => {
   if (useUserStore().getLogged()) {
-    getListOrder(useUserStore().getToken());
+    getListOrder(useUserStore().getToken(), "all");
     hasLogged.value = true;
   }
 }
@@ -85,25 +107,28 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <van-tabs v-else v-model:active="activeName">
-      <div v-for="(item, index) in staticArrEN">
-        <van-tab :title="staticArrCN[index]" :name="staticArrEN[index]" :badge="initialVariable[staticArrEN[index]].length === 0 ? null : initialVariable[staticArrEN[index]].length">
-          <div v-if="initialVariable[staticArrEN[index]].length === 0">
-            <van-empty image-size="100" :description="'暂无' + staticArrCN[index] + '订单'" />
-          </div>
-          <div v-else>
-            <div v-for="itemInner in initialVariable[staticArrEN[index]]" :key="itemInner.id" class="goods-wrap">
-              <van-swipe-cell :before-close="beforeClose" :disabled="index !== 0">
-                <van-card class="goods-card" :price="parseInt(itemInner.total_fee) / 100 + '.00'" :title="itemInner.video_title" :thumb="itemInner.video_img" @click="() => router.push(`/detail?productId=${itemInner.video_id}`)" />
-                <template #right>
-                  <van-button square text="删除" type="danger" class="delete-button" />
-                </template>
-              </van-swipe-cell>
+    <div v-else>
+      <van-nav-bar title="我的订单" />
+      <van-tabs v-model:active="activeName">
+        <div v-for="(item, index) in ordersData">
+          <van-tab :title="ordersData[index]['title']" :name="ordersData[index]['type']" :badge="ordersData[index]['list'].length === 0 ? null : ordersData[index]['list'].length">
+            <div v-if="ordersData[index]['list'].length === 0">
+              <van-empty image-size="100" :description="'暂无' + ordersData[index]['title'] + '订单'" />
             </div>
-          </div>
-        </van-tab>
-      </div>
-    </van-tabs>
+            <div v-else>
+              <div v-for="itemInner in ordersData[index]['list']" :key="itemInner.id" class="goods-wrap">
+                <van-swipe-cell :before-close="beforeClose" :disabled="index !== 0">
+                  <van-card class="goods-card" :price="parseInt(itemInner.total_fee) / 100 + '.00'" :title="itemInner.video_title" :thumb="itemInner.video_img" @click="() => router.push(`/detail?productId=${itemInner.video_id}`)" />
+                  <template #right>
+                    <van-button square text="删除" type="danger" class="delete-button" />
+                  </template>
+                </van-swipe-cell>
+              </div>
+            </div>
+          </van-tab>
+        </div>
+      </van-tabs>
+    </div>
     <van-action-sheet v-model:show="loginSheet" duration="0.2" :round="false" title="登录" class="my-action-sheet">
       <LoginComp />
     </van-action-sheet>

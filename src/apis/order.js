@@ -1,15 +1,14 @@
 import request from '@/request'
 
 /**
- * 获取用户的订单列表
- * @returns {Promise<axios.AxiosResponse<any>>}
+ * 根据不同type 获取用户的不同订单
  * @param token
+ * @param method
+ * @return {Promise<axios.AxiosResponse<any>>}
  */
-export function getListOrder(token) {
+export function getListOrder(token, method) {
     return request.get("/v1/pri/order/list_order", {
-        params: {
-            "token": token
-        }
+        params: { method, token }
     })
 }
 
