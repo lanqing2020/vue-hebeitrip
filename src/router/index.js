@@ -43,6 +43,11 @@ const router = createRouter({
       component: () => import('@/views/user/UserBind.vue')
     },
     {
+      path: '/user/changePwd',
+      name: 'user-changePwd',
+      component: () => import('@/views/user/ChangePwd.vue')
+    },
+    {
       path: '/detail',
       name: 'detail',
       component: () => import('@/views/detail/Detail.vue'),

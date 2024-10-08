@@ -1,5 +1,6 @@
 <script setup>
 import router from "@/router/index.js";
+import {useUserStore} from "@/stores/index.js";
 
 const afterRead = (file) => {
   // 文件上传完毕后会触发 after-read 回调函数，获取到对应的 file 对象。
@@ -27,10 +28,8 @@ const afterRead = (file) => {
       </van-cell>
       <van-cell title="账户详情" is-link to="/user/account" />
       <van-cell title="账户绑定与设置" is-link to="/user/bind" />
+      <van-cell title="退出" @click="useUserStore().loginOut()"/>
     </van-cell-group>
-    <van-cell title="退出" style="border-bottom: 1px solid #fcfcfd;"/>
-
-
   </main>
 </template>
 

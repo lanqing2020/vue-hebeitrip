@@ -1,6 +1,14 @@
 <script setup>
-
 import router from "@/router/index.js";
+import { ref } from "vue";
+
+const name = ref(null);
+const phone = ref(null);
+const email = ref(null);
+
+const onClickSaveBtn = () => {
+  // 保存信息接口
+}
 </script>
 
 <template>
@@ -13,13 +21,13 @@ import router from "@/router/index.js";
       <van-icon name="wap-home-o" size="20" @click="() => router.push({ path: '/' })" />
     </template>
   </van-nav-bar>
-  <van-cell-group inset>
-    <van-field v-model="value" placeholder="姓名（需与证件保持一致）" />
-    <van-field v-model="value" placeholder="电话（以便再紧急状态下联络）" />
-    <van-field v-model="value" placeholder="邮箱（用于接收优惠消息）" />
+  <van-cell-group>
+    <van-field v-model="name" placeholder="姓名（需与证件保持一致）" />
+    <van-field v-model="phone" placeholder="电话（以便再紧急状态下联络）" />
+    <van-field v-model="email" placeholder="邮箱（用于接收优惠消息）" />
   </van-cell-group>
   <div class="btn-wrap">
-    <van-button round type="success" class="save-button">保存</van-button>
+    <van-button round type="success" class="save-button" @click="onClickSaveBtn">保存</van-button>
   </div>
 </template>
 
