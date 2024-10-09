@@ -58,6 +58,11 @@ const router = createRouter({
       component: () => import('@/views/user/Certificate.vue')
     },
     {
+      path: '/user/help',
+      name: 'user-help',
+      component: () => import('@/views/user/UserHelp.vue')
+    },
+    {
       path: '/detail',
       name: 'detail',
       component: () => import('@/views/detail/Detail.vue'),

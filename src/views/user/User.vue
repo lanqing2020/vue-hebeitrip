@@ -160,35 +160,17 @@ onMounted(() => {
         </div>
       </div>
       <div class="list">
-        <van-cell is-link title="我的凭证" @click="router.push('/user/certificate')" />
-        <van-cell is-link title="我的评价" @click="router.push('/user/evaluate')" />
-        <van-cell is-link title="愿望清单" @click="router.push('/user/evaluate')" />
-        <van-cell is-link title="获得优惠" @click="router.push('/user/evaluate')" />
-
-        <!-- 优惠券列表 -->
-        <van-popup v-model:show="showCouponList" round position="bottom" style="height: 90%; padding-top: 4px;" >
-          <van-coupon-list :coupons="coupons" :chosen-coupon="chosenCoupon" :disabled-coupons="disabledCoupons" @change="onCouponChange" @exchange="onCouponExchange" />
-        </van-popup>
+        <van-cell is-link icon="todo-list-o" title="我的凭证" @click="router.push('/user/certificate')" />
+        <van-cell is-link icon="comment-circle-o" title="我的评价" @click="router.push('/user/evaluate')" />
+        <van-cell is-link icon="star-o" title="我的收藏" @click="router.push('/user/evaluate')" />
+        <van-cell is-link icon="coupon-o" title="获得优惠" @click="router.push('/user/evaluate')" />
+        <van-cell is-link icon="info-o" title="帮助中心" @click="router.push('/user/help')" />
+        <van-cell is-link icon="service-o" title="在线咨询" @click="router.push('/user/evaluate')" />
       </div>
-      <div class="list" style="margin-top: 10px">
-        <van-cell is-link title="帮助" @click="router.push('/user/certificate')" />
-        <van-cell is-link title="线上咨询" @click="router.push('/user/evaluate')" />
-        <van-cell is-link title="网站条款" @click="router.push('/user/evaluate')" />
-        <van-cell is-link title="关于我们" @click="router.push('/user/evaluate')" />
-      </div>
-      <div class="list" style="margin-top: 10px">
-        <van-cell is-link title="智能辅助" @click="showActionSheet = true" />
-        <van-action-sheet
-            v-model:show="showActionSheet"
-            :actions="actionsStatic"
-            cancel-text="取消"
-            description="您可能需要"
-            close-on-click-action
-        />
-        <van-cell is-link title="分享景区" @click="showShare = true" />
-        <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="shareOptions" @select="onShareSelect" />
-        <van-cell is-link title="联系景区管理人员" @click="getCall" icon="phone-o" />
-      </div>
+      <!-- 优惠券列表 -->
+      <van-popup v-model:show="showCouponList" round position="bottom" style="height: 90%; padding-top: 4px;" >
+        <van-coupon-list :coupons="coupons" :chosen-coupon="chosenCoupon" :disabled-coupons="disabledCoupons" @change="onCouponChange" @exchange="onCouponExchange" />
+      </van-popup>
     </main>
     <van-action-sheet v-model:show="loginSheet" duration="0.2" :round="false" title="登录" class="my-action-sheet">
       <LoginComp />
@@ -237,8 +219,6 @@ onMounted(() => {
     }
   }
   main {
-    background: #eee;
-
     .hot-wrap {
       width: 100%;
       height: 165px;
@@ -275,24 +255,6 @@ onMounted(() => {
         background-image: url("../../assets/coupon.jpg");
       }
     }
-    /deep/.list {
-      margin-top: 30px;
-      padding: 0 20px;
-      background: #fff;
-      .van-popup {
-        .van-action-sheet__content {
-          .van-contact-list {
-            .van-radio-group {
-              .van-cell {
-                .van-radio {
-                  display: none;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
     .loading {
       position: fixed;
       left: 0;
@@ -302,6 +264,18 @@ onMounted(() => {
       height: 100%;
       z-index: 10;
       background: rgba(255, 255, 255, 0.35);
+    }
+    .list {
+      margin-top: 40px;
+      .van-cell {
+        /deep/i {
+          font-size: 34px;
+          margin-right: 15px;
+        }
+        /deep/.van-cell__title {
+          font-size: 30px;
+        }
+      }
     }
   }
   /deep/ .my-action-sheet {

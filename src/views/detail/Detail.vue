@@ -165,6 +165,22 @@ onBeforeMount(() => {
         </van-cell-group>
       </div>
     </van-dialog>
+
+<!--    待修改的 -->
+<!--    <div class="list" style="margin-top: 10px">-->
+<!--      <van-cell is-link title="智能辅助" @click="showActionSheet = true" />-->
+<!--      <van-action-sheet-->
+<!--        v-model:show="showActionSheet"-->
+<!--        :actions="actionsStatic"-->
+<!--        cancel-text="取消"-->
+<!--        description="您可能需要"-->
+<!--        close-on-click-action-->
+<!--      />-->
+<!--      <van-cell is-link title="分享景区" @click="showShare = true" />-->
+<!--      <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="shareOptions" @select="onShareSelect" />-->
+<!--      <van-cell is-link title="联系景区管理人员" @click="getCall" icon="phone-o" />-->
+<!--    </div>-->
+
   </main>
 </template>
 
