@@ -18,6 +18,30 @@ const router = createRouter({
       component: () => import('@/views/city/City.vue')
     },
     {
+      path: '/city/more',
+      name: 'more',
+      component: () => import('@/views/city/More.vue'),
+      meta: {
+        acceptedQueryParams: ['city']
+      }
+    },
+    {
+      path: '/detail',
+      name: 'detail',
+      component: () => import('@/views/detail/Detail.vue'),
+      meta: {
+        acceptedQueryParams: ['productId']
+      }
+    },
+    {
+      path: '/detail/result',
+      name: 'detail-result',
+      component: () => import('@/views/detail/DetailResult.vue'),
+      meta: {
+        acceptedQueryParams: ['type']
+      }
+    },
+    {
       path: '/order',
       name: 'order',
       component: () => import('@/views/order/Order.vue')
@@ -78,33 +102,9 @@ const router = createRouter({
       component: () => import('@/views/user/UserHelp.vue')
     },
     {
-      path: '/detail',
-      name: 'detail',
-      component: () => import('@/views/detail/Detail.vue'),
-      meta: {
-        acceptedQueryParams: ['productId']
-      }
-    },
-    {
-      path: '/detail/result',
-      name: 'detail-result',
-      component: () => import('@/views/detail/DetailResult.vue'),
-      meta: {
-        acceptedQueryParams: ['type']
-      }
-    },
-    {
       path: '/error',
       name: 'error',
       component: () => import('@/views/error/Error.vue')
-    },
-    {
-      path: '/city/more',
-      name: 'more',
-      component: () => import('@/views/city/More.vue'),
-      meta: {
-        acceptedQueryParams: ['city']
-      }
     },
   ]
 })
