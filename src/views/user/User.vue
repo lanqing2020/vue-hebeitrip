@@ -144,7 +144,7 @@ onMounted(() => {
         </div>
       </div>
       <div class="login-out" @click="goToSetPage">
-        <van-icon name="setting-o" />
+        <van-icon name="setting-o" size="24" />
         <span>设置</span>
       </div>
     </header>
