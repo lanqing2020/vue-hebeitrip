@@ -53,6 +53,11 @@ const router = createRouter({
       component: () => import('@/views/user/BindPhone.vue')
     },
     {
+      path: '/user/certificate',
+      name: 'user-certificate',
+      component: () => import('@/views/user/Certificate.vue')
+    },
+    {
       path: '/detail',
       name: 'detail',
       component: () => import('@/views/detail/Detail.vue'),

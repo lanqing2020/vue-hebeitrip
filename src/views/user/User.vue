@@ -149,11 +149,19 @@ onMounted(() => {
       </div>
     </header>
     <main>
-      <div class="sos">
-        <div>是否现在联系景区管理人员</div>
-        <van-button round type="success" size="small" @click="getCall">立即通话</van-button>
+      <div class="hot-wrap">
+        <div class="flex-div integration">
+          <div class="title">我的积分</div>
+          <div class="nums">0</div>
+        </div>
+        <div class="flex-div coupon" @click="showCouponList = true">
+          <div class="title">我的优惠券</div>
+          <div class="nums">1张可用</div>
+        </div>
       </div>
       <div class="list">
+        <van-cell is-link title="我的凭证" @click="router.push('/user/certificate')" />
+
         <van-cell is-link title="智能辅助" @click="showActionSheet = true" />
         <van-action-sheet
           v-model:show="showActionSheet"
@@ -162,14 +170,14 @@ onMounted(() => {
           description="您可能需要"
           close-on-click-action
         />
-        <van-coupon-cell :coupons="coupons" :chosen-coupon="chosenCoupon" @click="showCouponList = true" />
+        <van-cell is-link title="分享景区" @click="showShare = true" />
+        <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="shareOptions" @select="onShareSelect" />
+        <van-cell is-link title="联系景区管理人员" @click="getCall" icon="phone-o" />
+
         <!-- 优惠券列表 -->
         <van-popup v-model:show="showCouponList" round position="bottom" style="height: 90%; padding-top: 4px;" >
           <van-coupon-list :coupons="coupons" :chosen-coupon="chosenCoupon" :disabled-coupons="disabledCoupons" @change="onCouponChange" @exchange="onCouponExchange" />
         </van-popup>
-        <van-cell is-link title="分享景区" @click="showShare = true" />
-        <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="shareOptions" @select="onShareSelect" />
-
       </div>
     </main>
     <van-action-sheet v-model:show="loginSheet" duration="0.2" :round="false" title="登录" class="my-action-sheet">
@@ -219,16 +227,37 @@ onMounted(() => {
   }
   main {
     padding: 0 30px;
-    .sos {
-      height: 60px;
-      background: #eedfbe;
-      border-radius: 35px;
+    .hot-wrap {
+      width: 100%;
+      height: 165px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 30px;
-      div {
-        font-size: 28px;
+      .flex-div {
+        flex: 1;
+        height: 150px;
+        border-radius: 25px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        box-sizing: border-box;
+        font-size: 32px;
+        color: white;
+        .nums {
+          font-size: 28px;
+          font-weight: 600;
+        }
+      }
+      .integration {
+        margin-right: 15px;
+        background-image: url("../../assets/integration.jpg");
+      }
+      .coupon {
+        margin-left: 15px;
+        background-image: url("../../assets/coupon.jpg");
       }
     }
     /deep/.list {
