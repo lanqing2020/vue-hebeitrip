@@ -4,12 +4,12 @@ import SearchComp from "@/components/search/Search.vue";
 import {computed, reactive, ref} from "vue";
 
 const hotCities = reactive([
-  { id: 0, title: "华清宫", url: "http://www.baidu.com", src: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" },
-  { id: 1, title: "陕西历史博物馆", url: "http://www.baidu.com", src: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" },
-  { id: 2, title: "华山", url: "http://www.baidu.com", src: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" },
-  { id: 3, title: "城墙", url: "http://www.baidu.com", src: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" },
-  { id: 4, title: "大雁塔", url: "http://www.baidu.com", src: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" },
-  { id: 5, title: "法门寺", url: "http://www.baidu.com", src: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" },
+  { id: 0, title: "华清宫", src: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" },
+  { id: 1, title: "陕西历史博物馆", src: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" },
+  { id: 2, title: "华山", src: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" },
+  { id: 3, title: "城墙", src: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" },
+  { id: 4, title: "大雁塔", src: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" },
+  { id: 5, title: "法门寺", src: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" },
 ])
 const numbersOfItems = ref(4);
 

@@ -26,8 +26,8 @@ const afterRead = (file) => {
           <van-uploader :after-read="afterRead" />
         </template>
       </van-cell>
-      <van-cell title="账户详情" is-link to="/user/account" />
-      <van-cell title="账户绑定与设置" is-link to="/user/bind" />
+      <van-cell title="账户详情" is-link to="/user/set-account" />
+      <van-cell title="账户绑定与设置" is-link to="/user/set-bind" />
       <van-cell title="退出" @click="useUserStore().loginOut()"/>
     </van-cell-group>
   </main>

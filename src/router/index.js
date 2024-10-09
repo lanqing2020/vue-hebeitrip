@@ -33,23 +33,23 @@ const router = createRouter({
       component: () => import('@/views/user/UserSet.vue')
     },
     {
-      path: '/user/account',
-      name: 'user-account',
-      component: () => import('@/views/user/UserAccount.vue')
+      path: '/user/set-account',
+      name: 'user-set-account',
+      component: () => import('@/views/user/SetAccount.vue')
     },
     {
-      path: '/user/bind',
-      name: 'user-bind',
-      component: () => import('@/views/user/UserBind.vue')
+      path: '/user/set-bind',
+      name: 'user-set-bind',
+      component: () => import('@/views/user/SetBind.vue')
     },
     {
-      path: '/user/changePwd',
-      name: 'user-changePwd',
-      component: () => import('@/views/user/ChangePwd.vue')
+      path: '/user/bind-password',
+      name: 'user-bind-password',
+      component: () => import('@/views/user/BindPassword.vue')
     },
     {
-      path: '/user/bindPhone',
-      name: 'user-bindPhone',
+      path: '/user/bind-phone',
+      name: 'user-bind-phone',
       component: () => import('@/views/user/BindPhone.vue')
     },
     {

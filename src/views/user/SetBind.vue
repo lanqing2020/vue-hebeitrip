@@ -16,10 +16,10 @@ import router from "@/router/index.js";
   <van-cell-group>
     <van-cell title="177****7777" icon="phone-o">
       <template #right-icon>
-        <van-button round type="default" size="small" @click="() => router.push({ path: '/user/bindPhone' })">去绑定</van-button>
+        <van-button round type="default" size="small" @click="() => router.push({ path: '/user/bind-phone' })">去绑定</van-button>
       </template>
     </van-cell>
-    <van-cell title="修改密码" icon="records-o" to="/user/changePwd" is-link/>
+    <van-cell title="修改密码" icon="records-o" to="/user/bind-password" is-link/>
   </van-cell-group>
 
 </template>
