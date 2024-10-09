@@ -1,36 +1,22 @@
 <script setup>
-import {ref} from "vue";
 import router from "@/router/index.js";
-const serchValue = ref('');
-const onSearch = (val) => {
-  console.log(val);
-};
-const onCancel = () => {
-  serchValue.value = '';
-};
+import Search from "@/components/search/Search.vue";
+
 const moreCity = (val) => {
   console.log(val)
   router.push({path: `/city/more`,query: {city: val}});
 }
-const moreHotCity = ref(false)
+
+
 </script>
 
 <template>
 <div class="container">
-  <form action="/">
-    <van-search
-        v-model="serchValue"
-        show-action
-        placeholder="请输入搜索关键词"
-        @search="onSearch"
-        @cancel="onCancel"
-        shape="round"
-    />
-  </form>
-  <div class="hotcity" :style="{height:moreHotCity?'13rem':'7.8rem'}">
+  <Search />
+  <div class="hotcity">
     <div class="hotcity_header">
       <span class="hot_name">热门目的地</span>
-      <span class="more" @click="moreHotCity = !moreHotCity">更多</span>
+      <span class="more">更多</span>
     </div>
     <div class="hotcity_list">
       <div class="hotcity_item">

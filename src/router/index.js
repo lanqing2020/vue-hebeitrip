@@ -86,7 +86,7 @@ const router = createRouter({
     {
       path: '/city/more',
       name: 'more',
-      component: () => import('@/views/city/more.vue'),
+      component: () => import('@/views/city/More.vue'),
       meta: {
         acceptedQueryParams: ['city']
       }

@@ -3,14 +3,9 @@ import picList1 from "@/assets/pic-list-1.jpg";
 import { home } from '@/apis';
 import {onBeforeMount, onMounted, ref} from "vue";
 import { useRouter } from "vue-router";
+import SearchComp from "@/components/search/Search.vue";
 
 const router = useRouter();
-
-const searchVal = ref("");
-const doSearch = (val) => {
-  searchVal.value = val;  // 记录当前搜索的值
-  console.log("val===>", val)
-}
 
 /**
  * 轮播图
@@ -73,7 +68,7 @@ onBeforeMount(() => {
 
 <template>
   <header>
-    <van-search v-model="searchVal" placeholder="请输入搜索关键词" background="transparent" shape="round" clearable @search="doSearch"/>
+    <SearchComp />
   </header>
   <main>
     <van-swipe class="my-swipe" :autoplay="4000" indicator-color="white">
@@ -96,11 +91,6 @@ onBeforeMount(() => {
 </template>
 
 <style scoped lang="less">
-header {
-  .van-search {
-    margin: 6px 0;
-  }
-}
 main {
   margin: 0 30px;
   padding-bottom: 140px;
