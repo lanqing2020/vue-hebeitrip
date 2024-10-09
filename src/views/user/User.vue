@@ -161,23 +161,33 @@ onMounted(() => {
       </div>
       <div class="list">
         <van-cell is-link title="我的凭证" @click="router.push('/user/certificate')" />
-
-        <van-cell is-link title="智能辅助" @click="showActionSheet = true" />
-        <van-action-sheet
-          v-model:show="showActionSheet"
-          :actions="actionsStatic"
-          cancel-text="取消"
-          description="您可能需要"
-          close-on-click-action
-        />
-        <van-cell is-link title="分享景区" @click="showShare = true" />
-        <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="shareOptions" @select="onShareSelect" />
-        <van-cell is-link title="联系景区管理人员" @click="getCall" icon="phone-o" />
+        <van-cell is-link title="我的评价" @click="router.push('/user/evaluate')" />
+        <van-cell is-link title="愿望清单" @click="router.push('/user/evaluate')" />
+        <van-cell is-link title="获得优惠" @click="router.push('/user/evaluate')" />
 
         <!-- 优惠券列表 -->
         <van-popup v-model:show="showCouponList" round position="bottom" style="height: 90%; padding-top: 4px;" >
           <van-coupon-list :coupons="coupons" :chosen-coupon="chosenCoupon" :disabled-coupons="disabledCoupons" @change="onCouponChange" @exchange="onCouponExchange" />
         </van-popup>
+      </div>
+      <div class="list" style="margin-top: 10px">
+        <van-cell is-link title="帮助" @click="router.push('/user/certificate')" />
+        <van-cell is-link title="线上咨询" @click="router.push('/user/evaluate')" />
+        <van-cell is-link title="网站条款" @click="router.push('/user/evaluate')" />
+        <van-cell is-link title="关于我们" @click="router.push('/user/evaluate')" />
+      </div>
+      <div class="list" style="margin-top: 10px">
+        <van-cell is-link title="智能辅助" @click="showActionSheet = true" />
+        <van-action-sheet
+            v-model:show="showActionSheet"
+            :actions="actionsStatic"
+            cancel-text="取消"
+            description="您可能需要"
+            close-on-click-action
+        />
+        <van-cell is-link title="分享景区" @click="showShare = true" />
+        <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="shareOptions" @select="onShareSelect" />
+        <van-cell is-link title="联系景区管理人员" @click="getCall" icon="phone-o" />
       </div>
     </main>
     <van-action-sheet v-model:show="loginSheet" duration="0.2" :round="false" title="登录" class="my-action-sheet">
@@ -190,6 +200,7 @@ onMounted(() => {
 .container {
   width: 100%;
   z-index: 1;
+  box-sizing: border-box;
   header {
     background: url("../../assets/user.jpg") no-repeat;
     background-size: cover;
@@ -226,13 +237,17 @@ onMounted(() => {
     }
   }
   main {
-    padding: 0 30px;
+    background: #eee;
+
     .hot-wrap {
       width: 100%;
       height: 165px;
+      padding: 0 30px;
+      background: #fff;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      box-sizing: border-box;
       .flex-div {
         flex: 1;
         height: 150px;
@@ -262,6 +277,8 @@ onMounted(() => {
     }
     /deep/.list {
       margin-top: 30px;
+      padding: 0 20px;
+      background: #fff;
       .van-popup {
         .van-action-sheet__content {
           .van-contact-list {
