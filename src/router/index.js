@@ -53,9 +53,24 @@ const router = createRouter({
       component: () => import('@/views/user/BindPhone.vue')
     },
     {
-      path: '/user/certificate',
-      name: 'user-certificate',
-      component: () => import('@/views/user/Certificate.vue')
+      path: '/user/tickets',
+      name: 'user-tickets',
+      component: () => import('@/views/user/UserTickets.vue')
+    },
+    {
+      path: '/user/evaluate',
+      name: 'user-evaluate',
+      component: () => import('@/views/user/UserEvaluate.vue')
+    },
+    {
+      path: '/user/collect',
+      name: 'user-collect',
+      component: () => import('@/views/user/UserCollect.vue')
+    },
+    {
+      path: '/user/discount',
+      name: 'user-discount',
+      component: () => import('@/views/user/UserDiscount.vue')
     },
     {
       path: '/user/help',
