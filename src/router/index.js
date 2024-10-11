@@ -18,11 +18,19 @@ const router = createRouter({
       component: () => import('@/views/city/City.vue')
     },
     {
+      path: '/city/detail',
+      name: 'cityDetail',
+      component: () => import('@/views/city/Detail.vue'),
+      meta: {
+        acceptedQueryParams: ['id']
+      }
+    },
+    {
       path: '/city/more',
       name: 'more',
       component: () => import('@/views/city/More.vue'),
       meta: {
-        acceptedQueryParams: ['city']
+        acceptedQueryParams: ['id']
       }
     },
     {

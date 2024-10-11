@@ -1,7 +1,7 @@
 <script setup>
 import router from "@/router/index.js";
 import SearchComp from "@/components/search/Search.vue";
-import {computed, reactive, ref} from "vue";
+import {computed, onMounted, reactive, ref} from "vue";
 
 const hotCities = reactive([
   { id: 0, title: "华清宫", src: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" },
@@ -17,16 +17,26 @@ const numbersOfItems = ref(4);
 const hotCitiesComputed = computed(() => {
   return hotCities.slice(0, numbersOfItems.value);
 })
-
+const hotCityLen = ref(0);
 // 通过切换要循环的箱数控制前台的更多或折叠
 const switchCities = () => {
   numbersOfItems.value = numbersOfItems.value === 4 ? hotCities.length : 4;
+  adjustNumber()
+}
+const adjustNumber = () => {
+  let len = Math.floor(hotCitiesComputed.value.length / 2);
+  if(hotCities.length % 2 !==0){
+    len+=1;
+  }
+  hotCityLen.value = len;
+}
+const moreCity = (val) => {
+  router.push({path: `/city/more`,query: {id: val}});
 }
 
-const moreCity = (val) => {
-  console.log(val)
-  router.push({path: `/city/more`,query: {city: val}});
-}
+onMounted(()=>{
+  adjustNumber()
+})
 
 </script>
 
@@ -34,13 +44,13 @@ const moreCity = (val) => {
 <div class="container">
   <SearchComp />
   <main>
-    <div class="hotCity">
+    <div class="hotCity" :style="{height:hotCityLen*3.67+1+'rem'}">
       <div class="title">
         <span class="hot_name">热门目的地</span>
         <span class="more" @click="switchCities">{{ numbersOfItems === 4 ? "更多" : "收起" }}</span>
       </div>
-      <div class="hotCity_list">
-        <div class="hotCity_list_item" v-for="(item, index) in hotCitiesComputed" :key="index" @click="router.push(`/city/detail?id=${ item.id }`)">
+      <div class="hotCity_list" :style="{height:hotCityLen*3.67}">
+        <div class="hotCity_list_item" v-for="(item, index) in hotCities" :key="index" @click="router.push(`/city/detail?id=${ item.id }`)">
           <van-image height="100%" :src="item.src">
             <template v-slot:loading>
               <van-loading type="spinner" size="20" />
@@ -53,7 +63,7 @@ const moreCity = (val) => {
     <div class="hotCity-text">
       <div class="title">
         <span class="hot_name">河北</span>
-        <span class="more">探索</span>
+        <span class="more" @click="moreCity">探索</span>
       </div>
       <div class="text-span">
         <span v-for="(item, index) in hotCities" :key="index" @click="router.push(`/city/detail?id=${ item.id }`)">{{ item.title }}</span>
@@ -74,15 +84,20 @@ const moreCity = (val) => {
     box-sizing: border-box;
     border-top: 1px solid #ebedf0;
     .hotCity{
+      height: 0;
+      transition: all .3s ease-in-out;
       overflow: hidden;
       &_list{
         display: flex;
         flex-wrap: wrap;
+        height: 0;
+        transition: all .3s ease-in-out;
         justify-content: space-between;
         &_item{
           width: 48%;
           margin-top: 25px;
           position: relative;
+          height: 250px;
           .item_name{
             background: rgba(0, 0, 0, 0.08);
             position: absolute;
