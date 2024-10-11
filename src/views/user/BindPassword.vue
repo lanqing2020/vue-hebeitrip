@@ -1,9 +1,7 @@
 <script setup>
 import router from "@/router/index.js";
-import { ref } from "vue";
+import {ref} from "vue";
 
-const phone = ref(null);
-const smsCode = ref(null);
 const btnStatus = ref(false);
 
 const onClickBindBtn = () => {
@@ -13,7 +11,7 @@ const onClickBindBtn = () => {
 
 <template>
   <van-nav-bar
-    title="手机号绑定"
+    title="修改密码"
     left-arrow
     @click-left="() => router.push({ path: '/user/set-bind' })"
   >
@@ -22,22 +20,15 @@ const onClickBindBtn = () => {
     </template>
   </van-nav-bar>
   <van-cell-group>
-    <van-field v-model="phone" label="+86" placeholder="请输入手机号" maxlength="11" />
-    <van-field v-model="smsCode" center label="验证码" placeholder="请输入验证码">
-      <template #button>
-        <van-button size="small" type="primary" class="send-sms">发送验证码</van-button>
-      </template>
-    </van-field>
+    <van-field v-model="phone" label-align="top" label="旧密码" placeholder="请输入旧密码" />
+    <van-field v-model="smsCode" label-align="top" label="新密码" placeholder="请输入新密码" />
   </van-cell-group>
   <div class="btn-wrap">
-    <van-button :disabled="!btnStatus" round type="success" class="save-button" @click="onClickBindBtn">完成绑定</van-button>
+    <van-button :disabled="!btnStatus" round type="success" class="save-button" @click="onClickBindBtn">确定修改</van-button>
   </div>
 </template>
 
 <style scoped lang="less">
-.send-sms {
-
-}
 .btn-wrap {
   width: 100%;
   margin-top: 50px;

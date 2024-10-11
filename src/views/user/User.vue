@@ -144,7 +144,7 @@ onMounted(() => {
         </div>
       </div>
       <div class="login-out" @click="goToSetPage">
-        <van-icon name="setting-o" />
+        <van-icon name="setting-o" size="24" />
         <span>设置</span>
       </div>
     </header>
@@ -160,10 +160,10 @@ onMounted(() => {
         </div>
       </div>
       <div class="list">
-        <van-cell is-link icon="todo-list-o" title="我的凭证" @click="router.push('/user/certificate')" />
+        <van-cell is-link icon="todo-list-o" title="门票凭证" @click="router.push('/user/tickets')" />
         <van-cell is-link icon="comment-circle-o" title="我的评价" @click="router.push('/user/evaluate')" />
-        <van-cell is-link icon="star-o" title="我的收藏" @click="router.push('/user/evaluate')" />
-        <van-cell is-link icon="coupon-o" title="获得优惠" @click="router.push('/user/evaluate')" />
+        <van-cell is-link icon="star-o" title="我的收藏" @click="router.push('/user/collect')" />
+        <van-cell is-link icon="coupon-o" title="获得优惠" @click="router.push('/user/discount')" />
         <van-cell is-link icon="info-o" title="帮助中心" @click="router.push('/user/help')" />
         <van-cell is-link icon="service-o" title="在线咨询" @click="router.push('/user/evaluate')" />
       </div>

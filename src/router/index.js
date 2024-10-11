@@ -18,49 +18,12 @@ const router = createRouter({
       component: () => import('@/views/city/City.vue')
     },
     {
-      path: '/order',
-      name: 'order',
-      component: () => import('@/views/order/Order.vue')
-    },
-    {
-      path: '/user',
-      name: 'user',
-      component: () => import('@/views/user/User.vue')
-    },
-    {
-      path: '/user/set',
-      name: 'user-set',
-      component: () => import('@/views/user/UserSet.vue')
-    },
-    {
-      path: '/user/account',
-      name: 'user-account',
-      component: () => import('@/views/user/UserAccount.vue')
-    },
-    {
-      path: '/user/bind',
-      name: 'user-bind',
-      component: () => import('@/views/user/UserBind.vue')
-    },
-    {
-      path: '/user/changePwd',
-      name: 'user-changePwd',
-      component: () => import('@/views/user/ChangePwd.vue')
-    },
-    {
-      path: '/user/bindPhone',
-      name: 'user-bindPhone',
-      component: () => import('@/views/user/BindPhone.vue')
-    },
-    {
-      path: '/user/certificate',
-      name: 'user-certificate',
-      component: () => import('@/views/user/Certificate.vue')
-    },
-    {
-      path: '/user/help',
-      name: 'user-help',
-      component: () => import('@/views/user/UserHelp.vue')
+      path: '/city/more',
+      name: 'more',
+      component: () => import('@/views/city/More.vue'),
+      meta: {
+        acceptedQueryParams: ['city']
+      }
     },
     {
       path: '/detail',
@@ -79,17 +42,69 @@ const router = createRouter({
       }
     },
     {
+      path: '/order',
+      name: 'order',
+      component: () => import('@/views/order/Order.vue')
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: () => import('@/views/user/User.vue')
+    },
+    {
+      path: '/user/set',
+      name: 'user-set',
+      component: () => import('@/views/user/UserSet.vue')
+    },
+    {
+      path: '/user/set-account',
+      name: 'user-set-account',
+      component: () => import('@/views/user/SetAccount.vue')
+    },
+    {
+      path: '/user/set-bind',
+      name: 'user-set-bind',
+      component: () => import('@/views/user/SetBind.vue')
+    },
+    {
+      path: '/user/bind-password',
+      name: 'user-bind-password',
+      component: () => import('@/views/user/BindPassword.vue')
+    },
+    {
+      path: '/user/bind-phone',
+      name: 'user-bind-phone',
+      component: () => import('@/views/user/BindPhone.vue')
+    },
+    {
+      path: '/user/tickets',
+      name: 'user-tickets',
+      component: () => import('@/views/user/UserTickets.vue')
+    },
+    {
+      path: '/user/evaluate',
+      name: 'user-evaluate',
+      component: () => import('@/views/user/UserEvaluate.vue')
+    },
+    {
+      path: '/user/collect',
+      name: 'user-collect',
+      component: () => import('@/views/user/UserCollect.vue')
+    },
+    {
+      path: '/user/discount',
+      name: 'user-discount',
+      component: () => import('@/views/user/UserDiscount.vue')
+    },
+    {
+      path: '/user/help',
+      name: 'user-help',
+      component: () => import('@/views/user/UserHelp.vue')
+    },
+    {
       path: '/error',
       name: 'error',
       component: () => import('@/views/error/Error.vue')
-    },
-    {
-      path: '/city/more',
-      name: 'more',
-      component: () => import('@/views/city/more.vue'),
-      meta: {
-        acceptedQueryParams: ['city']
-      }
     },
   ]
 })
