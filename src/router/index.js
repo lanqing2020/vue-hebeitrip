@@ -110,6 +110,21 @@ const router = createRouter({
       component: () => import('@/views/user/UserHelp.vue')
     },
     {
+      path: '/user/protocol',
+      name: 'user-protocol',
+      component: () => import('@/views/user/HelpProtocol.vue')
+    },
+    {
+      path: '/user/privacy',
+      name: 'user-privacy',
+      component: () => import('@/views/user/HelpPrivacy.vue')
+    },
+    {
+      path: '/user/about',
+      name: 'user-about',
+      component: () => import('@/views/user/HelpAbout.vue')
+    },
+    {
       path: '/error',
       name: 'error',
       component: () => import('@/views/error/Error.vue')

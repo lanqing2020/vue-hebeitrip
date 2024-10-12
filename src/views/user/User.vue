@@ -1,6 +1,5 @@
 <script setup>
-import { onBeforeMount, onMounted, reactive, ref } from "vue";
-import { showConfirmDialog, showToast, showDialog } from 'vant';
+import { onMounted, reactive, ref } from "vue";
 import { user } from '@/apis';
 import { useUserStore } from '@/stores';
 import { useRouter } from "vue-router";
@@ -31,12 +30,6 @@ const findInfoByToken = async (token) => {
   }
 }
 
-const clickOverlay = () => {
-  if (!hasLogged.value) {
-    loginSheet.value = true;
-  }
-}
-
 const goToSetPage = () => {
   router.push({
     path: '/user/set',
@@ -45,28 +38,6 @@ const goToSetPage = () => {
     // }
   })
 }
-
-/**
- * 立即通话
- * @returns {Promise<DialogAction | undefined>}
- */
-const getCall = () => {
-  return showConfirmDialog({
-    title: '联系官方（official）',
-    message: '遇到麻烦，并且周边人员无法给与帮助，\n现在联系管理人员？',
-  }).then(() => {
-    window.location.href = 'tel://' + 17777858251;
-  }).catch(() => {
-    console.log("点击了 cancel 按钮")
-  });
-}
-
-// 智能辅助
-const showActionSheet = ref(false);
-const actionsStatic = [
-  { name: '浏览地图' },
-  { name: '语音讲解' },
-];
 
 // 优惠券部分
 const coupon = {
