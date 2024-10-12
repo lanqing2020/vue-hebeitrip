@@ -41,7 +41,6 @@ onMounted(()=>{
 </script>
 
 <template>
-<div class="container">
   <SearchComp />
   <main>
     <div class="hotCity" :style="{height:hotCityLen*3.67+1+'rem'}">
@@ -69,91 +68,84 @@ onMounted(()=>{
         <span v-for="(item, index) in hotCities" :key="index" @click="router.push(`/city/detail?id=${ item.id }`)">{{ item.title }}</span>
       </div>
     </div>
-
   </main>
-</div>
 </template>
 
 <style scoped lang="less">
-.container{
-  box-sizing: border-box;
+main {
   width: 100%;
-  main {
-    width: 100%;
-    padding: 0 30px;
-    box-sizing: border-box;
-    border-top: 1px solid #ebedf0;
-    .hotCity{
+  padding: 0 30px 140px 30px;
+  box-sizing: border-box;
+  border-top: 1px solid #ebedf0;
+  .hotCity{
+    height: 0;
+    transition: all .3s ease-in-out;
+    overflow: hidden;
+    &_list{
+      display: flex;
+      flex-wrap: wrap;
       height: 0;
       transition: all .3s ease-in-out;
-      overflow: hidden;
-      &_list{
-        display: flex;
-        flex-wrap: wrap;
-        height: 0;
-        transition: all .3s ease-in-out;
-        justify-content: space-between;
-        &_item{
-          width: 48%;
-          margin-top: 25px;
-          position: relative;
-          height: 250px;
-          .item_name{
-            background: rgba(0, 0, 0, 0.08);
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            width: 100%;
-            height: 60px;
-            line-height: 60px;
-            font-size: 30px;
-            font-weight: bold;
-            color: #fff;
-            padding: 0 20px;
-            box-sizing: border-box;
-          }
-        }
-      }
-    }
-    .hotCity-text {
-      margin-top: 50px;
-      .text-span {
-        span {
-          font-size: 28px;
-          padding: 0 20px;
-          display: inline-block;
-          height: 70px;
-          line-height: 70px;
-          border: 1px solid #ddd;
-          border-radius: 10px;
-          margin-right: 25px;
-          margin-top: 25px;
-        }
-      }
-    }
-    .title{
-      display: flex;
       justify-content: space-between;
-      height: 50px;
-      margin-top: 25px;
-      .hot_name{
-        font-size: 32px;
-        font-weight: 700;
-        line-height: 50px;
-        display: inline-block;
-        height: 50px;
-      }
-      .more{
-        font-size: 28px;
-        line-height: 50px;
-        display: inline-block;
-        height: 50px;
-        color: #029db8;
+      &_item{
+        width: 48%;
+        margin-top: 25px;
+        position: relative;
+        height: 250px;
+        .item_name{
+          background: rgba(0, 0, 0, 0.08);
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          width: 100%;
+          height: 60px;
+          line-height: 60px;
+          font-size: 30px;
+          font-weight: bold;
+          color: #fff;
+          padding: 0 20px;
+          box-sizing: border-box;
+        }
       }
     }
   }
-
+  .hotCity-text {
+    margin-top: 50px;
+    .text-span {
+      span {
+        font-size: 28px;
+        padding: 0 20px;
+        display: inline-block;
+        height: 70px;
+        line-height: 70px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        margin-right: 25px;
+        margin-top: 25px;
+      }
+    }
+  }
+  .title{
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
+    margin-top: 25px;
+    .hot_name{
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 50px;
+      display: inline-block;
+      height: 50px;
+    }
+    .more{
+      font-size: 28px;
+      line-height: 50px;
+      display: inline-block;
+      height: 50px;
+      color: #029db8;
+    }
+  }
 }
 
 </style>
