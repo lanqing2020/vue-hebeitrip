@@ -281,9 +281,10 @@ onMounted(() => {
           font-size: 30px;
           .van-tag {
             height: 42px;
-            line-height: 42px;
+            line-height: 40px;
             margin-left: 15px;
             border-radius: 8px;
+            top: -2px;
           }
         }
       }
