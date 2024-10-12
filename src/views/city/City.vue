@@ -20,12 +20,13 @@ const hotCitiesComputed = computed(() => {
 const hotCityLen = ref(0);
 // 通过切换要循环的箱数控制前台的更多或折叠
 const switchCities = () => {
-  numbersOfItems.value = numbersOfItems.value === 4 ? hotCities.length : 4;
+  numbersOfItems.value = numbersOfItems.value === 4 ? hotCities.length > 4 ? hotCities.length : 4 : 4;
   adjustNumber()
 }
 const adjustNumber = () => {
-  let len = Math.floor(hotCitiesComputed.value.length / 2);
-  if(hotCities.length % 2 !==0){
+  let len = Math.floor(numbersOfItems.value / 2);
+
+  if(numbersOfItems.value % 2 !==0){
     len+=1;
   }
   hotCityLen.value = len;
