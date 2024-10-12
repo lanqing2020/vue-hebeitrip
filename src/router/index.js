@@ -90,9 +90,9 @@ const router = createRouter({
       component: () => import('@/views/user/UserTickets.vue')
     },
     {
-      path: '/user/evaluate',
-      name: 'user-evaluate',
-      component: () => import('@/views/user/UserEvaluate.vue')
+      path: '/user/publish',
+      name: 'user-publish',
+      component: () => import('@/views/user/UserPublish.vue')
     },
     {
       path: '/user/collect',
