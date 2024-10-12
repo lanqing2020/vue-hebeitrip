@@ -161,7 +161,7 @@ onMounted(() => {
       </div>
       <div class="list">
         <van-cell is-link icon="todo-list-o" title="门票凭证" @click="router.push('/user/tickets')" />
-        <van-cell is-link icon="comment-circle-o" @click="router.push('/user/evaluate')">
+        <van-cell is-link icon="comment-circle-o" @click="router.push('/user/publish')">
           <template #title>
             <span class="custom-title">我的发布</span>
             <van-tag type="primary">赢积分</van-tag>
