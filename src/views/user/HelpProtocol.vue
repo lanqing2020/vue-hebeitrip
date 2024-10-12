@@ -3,7 +3,7 @@
 </script>
 
 <template>
-
+protocol
 </template>
 
 <style scoped lang="less">
