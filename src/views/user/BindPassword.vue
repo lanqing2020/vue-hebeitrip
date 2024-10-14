@@ -1,7 +1,8 @@
 <script setup>
-import router from "@/router/index.js";
-import {ref} from "vue";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const btnStatus = ref(false);
 
 const onClickBindBtn = () => {
@@ -30,7 +31,7 @@ const onClickBindBtn = () => {
 
 <style scoped lang="less">
 .btn-wrap {
-  width: 100%;
+  width:  100%;
   margin-top: 50px;
   padding: 0 35px;
   box-sizing: border-box;

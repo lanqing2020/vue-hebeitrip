@@ -1,7 +1,8 @@
 <script setup>
-import router from "@/router/index.js";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const travelNotesData = ref([
   {
     id: 0,
@@ -38,9 +39,9 @@ const travelNotesData = ref([
 ])
 
 const IParticipated = ref([
-  { id:0, title: "aewerwer", src: "https://r1.visitbeijing.com.cn/vbj-s/2016/0530/20160530115232516.jpg", publishDate: "2024-10-10", content: "阿斯蒂芬撒旦萨芬，暗室逢灯阿斯蒂芬阿斯弗。" },
-  { id:1, title: "123123afasf", src: "https://p8.itc.cn/q_70/images03/20220107/38a41a775278495a944edd93bbf92ce8.jpeg", publishDate: "2024-09-23", content: "阿斯蒂芬撒旦萨芬，暗室逢灯阿斯蒂芬阿斯弗。" },
-
+  { id: 0, city: "蔚县", subject: "三天2晚张家口之行", commentDate: "2024-10-10", myComment: "这个景点不错，感谢博主的推荐，下次还来！" },
+  { id: 1, city: "任丘", subject: "河间·任丘一日游", commentDate: "2024-04-23", myComment: "请问五一时候人多吗？请问五一时候人多吗？请问五一时候人多吗？请问五一时候人多吗？请问五一时候人多吗？请问五一时候人多吗？" },
+  { id: 2, city: "河间", subject: "任丘渤海酒店住宿情况", commentDate: "2024-09-12", myComment: "请问房间里有烟味吗？" },
 ])
 
 
@@ -59,7 +60,7 @@ const IParticipated = ref([
         <van-button round type="primary" size="small" icon="plus" @click="router.push('/user/publish-edit')">去发布</van-button>
       </div>
       <div v-else>
-        <div class="publish-button">
+        <div class="publish-button" @click="router.push('/user/publish-edit')">
           <div class="flex-left">
             <div class="main-button">
               <van-icon name="plus" size="28" color="#c5c8cd" />
@@ -70,12 +71,12 @@ const IParticipated = ref([
             <div class="right-title">开启创作之旅</div>
             <div class="right-list">
               <div class="list-item">
-                <van-icon name="point-gift" size="20" color="#646566" />
+                <van-icon name="point-gift" size="18" color="#646566" />
                 <span>每篇奖励</span>
                 <em>100积分</em>
               </div>
               <div class="list-item">
-                <van-icon name="point-gift" size="20" color="#646566" />
+                <van-icon name="point-gift" size="18" color="#646566" />
                 <span>流量曝光</span>
                 <em>+100</em>
               </div>
@@ -107,7 +108,25 @@ const IParticipated = ref([
       </div>
     </van-tab>
     <van-tab title="我参与的">
-      内容 2
+      <div v-if="IParticipated.length === 0" class="not-published">
+        <van-empty image-size="100" description="还未参与任何评论" />
+      </div>
+      <div v-else v-for="item in IParticipated" :key="item.id" class="comment-wrap">
+        <div class="title">
+          <div class="location" @click="router.push(`/location/detail?id=${item.id}`)">
+            <van-icon name="location-o" size="18" />
+            {{ item.city }}
+          </div>
+          <div class="subject ellipsis">{{ item.subject }}</div>
+        </div>
+        <div class="text">
+          <div class="my-comment">
+            <van-icon name="chat-o" size="18" />
+            {{ item.myComment }}
+          </div>
+          <div class="comment-date">评论日期：{{ item.commentDate }}</div>
+        </div>
+      </div>
     </van-tab>
   </van-tabs>
 </template>
@@ -130,10 +149,10 @@ const IParticipated = ref([
 }
 .publish-button {
   width: 100%;
-  height: 200px;
+  height: 206px;
   border-radius: 15px;
   border: 1px solid #ebedf0;
-  margin-bottom: 20px;
+  margin-bottom: 45px;
   box-shadow: 0 0 30px rgba(0,0,0,0.02) inset;
   display: flex;
   align-items: center;
@@ -160,7 +179,7 @@ const IParticipated = ref([
     .main-click {
       width: 120px;
       font-size: 20px;
-      height: 40px;
+      height: 38px;
       line-height: 1;
     }
   }
@@ -169,7 +188,7 @@ const IParticipated = ref([
     margin-left: 30px;
     height: 100%;
     .right-title {
-      font-size: 30px;
+      font-size: 32px;
       color: #6c6d73;
       background: linear-gradient(to right, #0006ff, #b48cff); /*设置渐变的方向从左到右 颜色从ff0000到ffff00*/
       -webkit-background-clip: text;/*将设置的背景颜色限制在文字中*/
@@ -182,6 +201,9 @@ const IParticipated = ref([
         align-items: center;
         font-size: 26px;
         margin-bottom: 10px;
+        i {
+          left: -3px;
+        }
         span {
           color: #646566;
           margin-left: 10px;
@@ -204,7 +226,7 @@ const IParticipated = ref([
 .travel-wrap {
   width: 100%;
   height: auto;
-  margin-bottom: 45px;
+  margin-bottom: 55px;
   .title {
     font-size: 30px;
     font-weight: 600;
@@ -295,6 +317,60 @@ const IParticipated = ref([
           text-indent: 0;
         }
       }
+    }
+  }
+}
+.comment-wrap {
+  width: 100%;
+  margin-bottom: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid #ebedf0;
+  .title {
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #323233;
+    display: flex;
+    height: 50px;
+    line-height: 50px;
+    width: 100%;
+    .location {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      border: 1px solid #ebedf0;
+      padding: 0 10px;
+      border-radius: 10px;
+      font-size: 26px;
+      color: #646566;
+      margin-right: 20px;
+      i {
+        top: -1px;
+        margin-right: 5px;
+      }
+    }
+    .subject {
+      width: 80%;
+    }
+  }
+  .text {
+    font-size: 30px;
+    margin-top: 15px;
+    .my-comment {
+      color: #646566;
+      line-height: 50px;
+      width: 100%;
+      max-height: 200px;
+      height: auto;
+      overflow: hidden;
+      i {
+        top: 2px;
+      }
+    }
+    .comment-date {
+      margin-top: 15px;
+      font-size: 24px;
+      color: #999;
     }
   }
 }

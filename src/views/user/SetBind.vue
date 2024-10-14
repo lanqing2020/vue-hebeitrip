@@ -1,5 +1,7 @@
 <script setup>
-import router from "@/router/index.js";
+import {useRouter} from "vue-router";
+
+const router = useRouter();
 
 </script>
 

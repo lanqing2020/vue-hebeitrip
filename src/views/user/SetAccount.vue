@@ -1,7 +1,8 @@
 <script setup>
-import router from "@/router/index.js";
 import { ref } from "vue";
+import {useRouter} from "vue-router";
 
+const router = useRouter();
 const name = ref(null);
 const phone = ref(null);
 const email = ref(null);

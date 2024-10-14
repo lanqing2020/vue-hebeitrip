@@ -1,9 +1,10 @@
 <script setup>
-import router from "@/router/index.js";
 import { ref } from "vue";
 import { showConfirmDialog } from "vant";
 import ImgLogo from "@/assets/default-logo.jpg";
+import {useRouter} from "vue-router";
 
+const router = useRouter();
 const activeNames = ref(["1"]);
 const officialHotline = ref("400-800-8888");
 const workingHours = ref("09:00-17:30");
