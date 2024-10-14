@@ -110,6 +110,11 @@ const router = createRouter({
       component: () => import('@/views/user/UserDiscount.vue')
     },
     {
+      path: '/user/integral',
+      name: 'user-integral',
+      component: () => import('@/views/user/UserIntegral.vue')
+    },
+    {
       path: '/user/help',
       name: 'user-help',
       component: () => import('@/views/user/UserHelp.vue')

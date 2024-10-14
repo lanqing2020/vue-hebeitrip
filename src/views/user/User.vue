@@ -117,7 +117,7 @@ onMounted(() => {
     </header>
     <main>
       <div class="hot-wrap">
-        <div class="flex-div integration">
+        <div class="flex-div integration" @click="() => router.push({ path: '/user/integral' })">
           <div class="title">我的积分</div>
           <div class="nums">0</div>
         </div>

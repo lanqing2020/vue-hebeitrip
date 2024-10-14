@@ -61,6 +61,10 @@ onMounted(() => {
         <div class="text">当对方用户完成首次活动后，您也将获得20积分奖励！</div>
       </div>
     </div>
+    <van-button type="default" round size="small" class="integral-detail" @click="() => router.push({ path: '/user/integral' })">
+      积分明细
+      <van-icon name="arrow" color="#646566" />
+    </van-button>
   </main>
   <van-share-sheet v-model:show="showShare" :options="options" @select="onSelect" />
 </template>
@@ -75,6 +79,7 @@ main {
       font-weight: 700;
       margin: 0;
       text-align: center;
+      color: #323233;
     }
     /deep/.van-cell-group {
       border: 1px solid #ebedf0;
@@ -113,6 +118,7 @@ main {
     .item {
       display: flex;
       align-items: flex-start;
+      margin-bottom: 10px;
       i {
         top: 6px;
       }
@@ -120,8 +126,15 @@ main {
         font-size: 30px;
         margin-left: 15px;
         color: #646566;
+        line-height: 44px;
       }
     }
+  }
+  .integral-detail {
+    width: 180px;
+    display: block;
+    margin: 30px auto !important;
+    color: #646566;
   }
 }
 </style>
