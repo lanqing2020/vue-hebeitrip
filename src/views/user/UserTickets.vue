@@ -41,7 +41,7 @@ const tickets = ref([
         <span class="num">流水号：{{ item.transactionNum }}</span>
       </div>
       <div v-if="item.status === 1" class="write-off">
-        <van-image :src="ImgWriteOff" width="100" height="100" />
+        <van-image :src="ImgWriteOff" width="70" height="70" fit="cover" position="center" />
       </div>
     </div>
   </div>
@@ -87,14 +87,15 @@ const tickets = ref([
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      height: 240px;
+      height: 200px;
       .left {
         flex: 2;
         height: inherit;
         margin-right: 20px;
       }
       .right {
-        flex: 1;
+        //flex: 1;
+        width: 202px;
         height: inherit;
         border: 1px solid #ebedf0;
         border-radius: 10px;
@@ -104,6 +105,7 @@ const tickets = ref([
       font-size: 26px;
       color: #999999;
       margin-top: 20px;
+      width: 100%;
       .date {
         margin-right: 30px;
       }
@@ -117,7 +119,7 @@ const tickets = ref([
       background: rgb(255 255 255 / 75%);
       .van-image {
         position: absolute;
-        right: 170px;
+        right: 65px;
         top: 90px;
       }
     }

@@ -95,6 +95,11 @@ const router = createRouter({
       component: () => import('@/views/user/UserPublish.vue')
     },
     {
+      path: '/user/publish-edit',
+      name: 'user-publish-edit',
+      component: () => import('@/views/user/PublishEdit.vue')
+    },
+    {
       path: '/user/collect',
       name: 'user-collect',
       component: () => import('@/views/user/UserCollect.vue')

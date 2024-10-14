@@ -49,7 +49,7 @@ const getCall = () => {
   <div class="space" />
   <div class="logo">
     <van-image :src="ImgLogo" width="120" height="120" />
-    <div>客服热线：{{ officialHotline }}</div>
+    <div>河北旅途网：{{ officialHotline }}</div>
     <span>服务时间：{{ workingHours }}</span>
   </div>
 </template>
