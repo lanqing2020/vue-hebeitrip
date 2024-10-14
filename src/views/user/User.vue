@@ -83,10 +83,6 @@ const shareOptions = [
   { name: '分享海报', icon: 'poster' },
   { name: '二维码', icon: 'qrcode' },
 ];
-const onShareSelect = (option) => {
-  // showToast(option.name);
-  showShare.value = false;
-};
 
 /**
  * 初始化调用接口
