@@ -1,8 +1,9 @@
 <script setup>
-import router from "@/router/index.js";
 import { ref } from "vue";
 import ImgWriteOff from "@/assets/write-off.png";
+import {useRouter} from "vue-router";
 
+const router = useRouter();
 const tickets = ref([
   { id: 0, status: 0, title: "昌黎·碣石山", coverImg: "https://r1.visitbeijing.com.cn/vbj-s/2016/0530/20160530115232516.jpg", qrCode: "https://www.west.cn/images2016/west_wx_qrcode.jpg", createDate: "2024-10-10", transactionNum: "SF23as8f9s8d7f2" },
   { id: 1, status: 1, title: "洪湖·乌林寨", coverImg: "https://p8.itc.cn/q_70/images03/20220107/38a41a775278495a944edd93bbf92ce8.jpeg", qrCode: "https://www.west.cn/images2016/west_wx_qrcode.jpg", createDate: "2023-10-1", transactionNum: "P2dfa45fa8s7d9f7" },

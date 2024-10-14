@@ -1,7 +1,8 @@
 <script setup>
-import router from "@/router/index.js";
 import {useUserStore} from "@/stores/index.js";
+import {useRouter} from "vue-router";
 
+const router = useRouter();
 const afterRead = (file) => {
   // 文件上传完毕后会触发 after-read 回调函数，获取到对应的 file 对象。
   // 此时可以自行将文件上传至服务器
