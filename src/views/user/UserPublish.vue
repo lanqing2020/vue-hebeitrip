@@ -40,8 +40,8 @@ const travelNotesData = ref([
 
 const IParticipated = ref([
   { id: 0, city: "蔚县", subject: "三天2晚张家口之行", commentDate: "2024-10-10", myComment: "这个景点不错，感谢博主的推荐，下次还来！" },
-  { id: 1, city: "任丘", subject: "河间·任丘一日游", commentDate: "2024-04-23", myComment: "请问五一时候人多吗？请问五一时候人多吗？请问五一时候人多吗？请问五一时候人多吗？请问五一时候人多吗？请问五一时候人多吗？" },
-  { id: 2, city: "河间", subject: "任丘渤海酒店住宿情况", commentDate: "2024-09-12", myComment: "请问房间里有烟味吗？" },
+  { id: 1, city: "河间府属", subject: "河间·任丘一日游", commentDate: "2024-04-23", myComment: "请问五一时候人多吗？请问五一时候人多吗？请问五一时候人多吗？请问五一时候人多吗？请问五一时候人多吗？请问五一时候人多吗？" },
+  { id: 2, city: "小五台山", subject: "任丘渤海酒店住宿情况", commentDate: "2024-09-12", myComment: "请问房间里有烟味吗？" },
 ])
 
 
@@ -71,12 +71,12 @@ const IParticipated = ref([
             <div class="right-title">开启创作之旅</div>
             <div class="right-list">
               <div class="list-item">
-                <van-icon name="point-gift" size="18" color="#646566" />
+                <van-icon name="point-gift" size="18" color="#828587" />
                 <span>每篇奖励</span>
                 <em>100积分</em>
               </div>
               <div class="list-item">
-                <van-icon name="point-gift" size="18" color="#646566" />
+                <van-icon name="point-gift" size="18" color="#828587" />
                 <span>流量曝光</span>
                 <em>+100</em>
               </div>
@@ -205,7 +205,7 @@ const IParticipated = ref([
           left: -3px;
         }
         span {
-          color: #646566;
+          color: #828587;
           margin-left: 10px;
         }
         em {
@@ -243,8 +243,8 @@ const IParticipated = ref([
     .van-image {
       //flex: 1;
       margin-right: 15px;
-      width: 316px;
-      height: 239px;
+      width: 300px;
+      height: 227px;
       position: relative;
       /deep/img {
         border-radius: 15px;
@@ -335,6 +335,7 @@ const IParticipated = ref([
     line-height: 50px;
     width: 100%;
     .location {
+      width: auto;
       display: flex;
       align-items: center;
       height: 100%;
@@ -350,7 +351,8 @@ const IParticipated = ref([
       }
     }
     .subject {
-      width: 80%;
+      max-width: 80%;
+      width: auto;
     }
   }
   .text {
