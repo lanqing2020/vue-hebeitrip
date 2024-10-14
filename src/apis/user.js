@@ -56,3 +56,39 @@ export function doLogin(data) {
 export function doRegister(data) {
     return request.post("/v1/pri/user/register", data)
 }
+
+/**
+ * 获取用户全部积分以及消耗
+ * @param token
+ * @param data
+ * @return {Promise<axios.AxiosResponse<any>>}
+ */
+export function getTotalIntegral(token, data) {
+    return request.post("/v1/pri/user/getTotalIntegral", data, {
+        headers: {
+            "token": token
+        }
+    })
+}
+
+/**
+ * 获取用户积分明细记录
+ * @param token
+ * @param data
+ * @return {Promise<axios.AxiosResponse<any>>}
+ */
+export function getIntegralIncomeRecord(token, data) {
+    return request.post("/v1/pri/user/getIntegralIncomeRecord", data, {
+        headers: {
+            "token": token
+        }
+    })
+}
+
+export function getIntegralConsumeRecord(token, data) {
+    return request.post("/v1/pri/user/getIntegralConsumeRecord", data, {
+        headers: {
+            "token": token
+        }
+    })
+}
