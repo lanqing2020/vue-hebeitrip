@@ -77,7 +77,20 @@ onMounted(() => {
           </div>
         </div>
       </van-tab>
-      <van-tab title="积分兑换记录">内容 2</van-tab>
+      <van-tab title="积分兑换记录">
+        <div v-if="consumeData.length === 0">
+          <van-empty image-size="100" description="暂无任何记录" />
+        </div>
+        <div v-else class="content">
+          <div v-for="item in consumeData" :key="item.id" class="item">
+            <div class="item-left">
+              <div class="title">{{ item.title }}</div>
+              <span>{{ item.occurrenceDate }}</span>
+            </div>
+            <div class="item-right" style="color: #ff976a;">{{ item.count }}</div>
+          </div>
+        </div>
+      </van-tab>
     </van-tabs>
 
   </main>
