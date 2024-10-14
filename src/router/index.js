@@ -13,22 +13,22 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
     },
     {
-      path: '/city',
-      name: 'city',
-      component: () => import('@/views/city/City.vue')
+      path: '/location',
+      name: 'location',
+      component: () => import('@/views/location/Location.vue')
     },
     {
-      path: '/city/detail',
-      name: 'cityDetail',
-      component: () => import('@/views/city/Detail.vue'),
+      path: '/location/detail',
+      name: 'location-detail',
+      component: () => import('@/views/location/LocationDetail.vue'),
       meta: {
         acceptedQueryParams: ['id']
       }
     },
     {
-      path: '/city/more',
-      name: 'more',
-      component: () => import('@/views/city/More.vue'),
+      path: '/location/more',
+      name: 'location-more',
+      component: () => import('@/views/location/LocationMore.vue'),
       meta: {
         acceptedQueryParams: ['id']
       }

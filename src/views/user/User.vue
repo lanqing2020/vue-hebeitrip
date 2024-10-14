@@ -137,7 +137,7 @@ onMounted(() => {
         <van-cell is-link icon="star-o" title="我的收藏" @click="router.push('/user/collect')" />
         <van-cell is-link icon="coupon-o" title="获得优惠" @click="router.push('/user/discount')" />
         <van-cell is-link icon="info-o" title="帮助中心" @click="router.push('/user/help')" />
-        <van-cell is-link icon="service-o" title="在线咨询" @click="router.push('/user/publish')" />
+        <van-cell is-link icon="service-o" title="在线咨询" @click="" />
       </div>
       <!-- 优惠券列表 -->
       <van-popup v-model:show="showCouponList" round position="bottom" style="height: 90%; padding-top: 4px;" >
