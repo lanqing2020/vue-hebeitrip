@@ -11,9 +11,9 @@ const hotLocations = reactive([
   { id: 4, title: "大雁塔", src: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" },
   { id: 5, title: "法门寺", src: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" },
 ])
+// 想要首次展示的数据量
 const numbersOfItems = ref(4);
-
-// 计算属性 缓存数组数据
+// 计算属性 缓存热门目的地数组数据
 const hotLocationsComputed = computed(() => {
   return hotLocations.slice(0, numbersOfItems.value);
 })
@@ -23,9 +23,71 @@ const switchLocations = () => {
   numbersOfItems.value = numbersOfItems.value === 4 ? hotLocations.length : 4;
 }
 
-const moreLocation = (val) => {
-  router.push({path: `/city/more`,query: {id: val}});
-}
+const differentPartsData = reactive([
+  {
+    title: "冀中",
+    name: "center",
+    data: [
+      { id: 0, title: "河间府署" },
+      { id: 1, title: "直隶总督府" },
+      { id: 2, title: "天下第一城" },
+      { id: 3, title: "白石山地质公园" },
+      { id: 4, title: "野三坡" },
+      { id: 5, title: "狼牙山" },
+      { id: 6, title: "胜芳古镇" }
+    ]
+  },
+  {
+    title: "冀北",
+    name: "north",
+    data: [
+      { id: 0, title: "避暑山庄" },
+      { id: 1, title: "张北草原" },
+      { id: 3, title: "暖泉古镇" },
+      { id: 5, title: "鸡鸣驿古城" },
+      { id: 6, title: "飞狐峪" },
+      { id: 7, title: "张家口地址博物馆" },
+      { id: 8, title: "普宁寺" },
+      { id: 9, title: "金山岭长城" },
+      { id: 10, title: "木兰围场" },
+      { id: 11, title: "千松坝国家森林公园" },
+    ]
+  },
+  {
+    title: "冀东",
+    name: "east",
+    data: [
+      { id: 0, title: "北戴河鸽子窝" },
+      { id: 1, title: "和头老街" },
+      { id: 2, title: "凤凰山公园" },
+      { id: 3, title: "南湖开滦旅游区" },
+      { id: 4, title: "清东陵" },
+      { id: 5, title: "黄金海岸" },
+      { id: 6, title: "乐道海洋公园" },
+      { id: 7, title: "李大钊故居" },
+      { id: 8, title: "菩提岛景区" },
+      { id: 9, title: "南戴河仙螺岛" },
+      { id: 10, title: "碣石山" },
+    ]
+  },
+  {
+    title: "冀南",
+    name: "south",
+    data: [
+      { id: 0, title: "广府古城" },
+      { id: 1, title: "娲皇宫" },
+      { id: 2, title: "响堂山风景区" },
+      { id: 3, title: "京娘湖" },
+      { id: 4, title: "东太行景区" },
+      { id: 5, title: "扁鹊庙" },
+      { id: 6, title: "天河山" },
+      { id: 7, title: "西柏坡" },
+      { id: 8, title: "正定古城" },
+      { id: 9, title: "赵州桥" },
+      { id: 10, title: "正定荣国府" },
+    ]
+  },
+])
 
 </script>
 
@@ -48,13 +110,16 @@ const moreLocation = (val) => {
         </div>
       </div>
     </div>
-    <div class="hotLocation-text">
+    <div class="hotLocation-text" v-for="item in differentPartsData" :key="item.name">
       <div class="title">
-        <span class="hot_name">河北</span>
-        <span class="more" @click="moreLocation">探索</span>
+        <span class="hot_name">{{ item.title }}</span>
+        <span class="more" @click="() => router.push({ path: `/location/${item.name}` })">探索</span>
       </div>
       <div class="text-span">
-        <span v-for="(item, index) in hotLocations" :key="index" @click="router.push(`/location/detail?id=${ item.id }`)">{{ item.title }}</span>
+        <div v-for="(itemInner, index) in item.data" :key="index" @click="router.push(`/location/${item.name}/detail?id=${ itemInner.id }`)">
+          {{ itemInner.title }}
+        </div>
+        <div class="more" @click="switchParts">更多</div>
       </div>
     </div>
   </main>
@@ -99,8 +164,10 @@ main {
   }
   .hotLocation-text {
     margin-top: 50px;
+    height: auto;
+    overflow: hidden;
     .text-span {
-      span {
+      div {
         font-size: 28px;
         padding: 0 20px;
         display: inline-block;
@@ -110,6 +177,7 @@ main {
         border-radius: 10px;
         margin-right: 25px;
         margin-top: 25px;
+        position: relative;
       }
     }
   }
