@@ -84,7 +84,7 @@ const IParticipated = ref([
           </div>
         </div>
         <div v-for="item in travelNotesData" :key="item.id" class="travel-wrap">
-          <div class="title ellipsis">{{ item.title }}</div>
+          <div class="title van-ellipsis">{{ item.title }}</div>
           <div class="content">
             <van-image :src="item.src[0]['img']">
               <van-icon name="photo" color="#ffffff"/>
@@ -117,7 +117,7 @@ const IParticipated = ref([
             <van-icon name="location-o" size="18" />
             {{ item.city }}
           </div>
-          <div class="subject ellipsis">{{ item.subject }}</div>
+          <div class="subject van-ellipsis">{{ item.subject }}</div>
         </div>
         <div class="text">
           <div class="my-comment">
@@ -217,11 +217,6 @@ const IParticipated = ref([
       }
     }
   }
-}
-.ellipsis {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 .travel-wrap {
   width: 100%;
