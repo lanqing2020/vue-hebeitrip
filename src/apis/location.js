@@ -15,3 +15,11 @@ export function getLocationBannerList() {
 export function getLocationBasicInfo() {
     return request.post("/v1/pub/location/getLocationBasicInfo", {})
 }
+
+/**
+ * 获取目的地门票列表
+ * @return {Promise<axios.AxiosResponse<any>>}
+ */
+export function getLocationTicketsList() {
+    return request.post("/v1/pub/location/getLocationTicketsList", {})
+}
