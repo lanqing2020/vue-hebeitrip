@@ -30,9 +30,9 @@ const collectData = ref([
 </script>
 
 <template>
-  <van-nav-bar title="我的收藏" left-arrow @click-left="() => router.push({ path: '/user' })">
+  <van-nav-bar title="我的收藏" left-arrow @click-left="router.push({ path: '/user' })">
     <template #right>
-      <van-icon name="wap-home-o" size="20" @click="() => router.push({ path: '/' })" />
+      <van-icon name="wap-home-o" size="20" @click="router.push({ path: '/' })" />
     </template>
   </van-nav-bar>
   <main>
