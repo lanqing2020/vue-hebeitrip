@@ -1,8 +1,9 @@
 <script setup>
-import router from "@/router/index.js";
+import { useRouter } from "vue-router";
 import SearchComp from "@/components/search/Search.vue";
 import {computed, onMounted, reactive, ref} from "vue";
 
+const router = useRouter();
 const hotLocations = reactive([
   { id: 0, title: "华清宫", src: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" },
   { id: 1, title: "陕西历史博物馆", src: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" },
@@ -119,7 +120,6 @@ const differentPartsData = reactive([
         <div v-for="(itemInner, index) in item.data" :key="index" @click="router.push(`/location/${item.name}/detail?id=${ itemInner.id }`)">
           {{ itemInner.title }}
         </div>
-        <div class="more" @click="switchParts">更多</div>
       </div>
     </div>
   </main>

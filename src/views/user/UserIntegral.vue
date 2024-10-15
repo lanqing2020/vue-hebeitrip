@@ -55,9 +55,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <van-nav-bar title="我的积分" left-arrow @click-left="() => router.back()">
+  <van-nav-bar title="我的积分" left-arrow @click-left="router.back()">
     <template #right>
-      <van-icon name="wap-home-o" size="20" @click="() => router.push({ path: '/' })" />
+      <van-icon name="wap-home-o" size="20" @click="router.push({ path: '/' })" />
     </template>
   </van-nav-bar>
   <main>

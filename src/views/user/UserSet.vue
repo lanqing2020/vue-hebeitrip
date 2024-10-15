@@ -11,13 +11,10 @@ const afterRead = (file) => {
 </script>
 
 <template>
-  <van-nav-bar
-    title="编辑账户"
-    left-arrow
-    @click-left="() => router.push({ path: '/user' })"
+  <van-nav-bar title="编辑账户" left-arrow @click-left="router.push({ path: '/user' })"
   >
     <template #right>
-      <van-icon name="wap-home-o" size="20" @click="() => router.push({ path: '/' })" />
+      <van-icon name="wap-home-o" size="20" @click="router.push({ path: '/' })" />
     </template>
   </van-nav-bar>
   <main>
