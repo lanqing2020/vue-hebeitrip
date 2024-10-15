@@ -42,7 +42,7 @@ const collectData = ref([
     <div v-else class="collect-data" v-for="item in collectData" :key="item.id" @click="router.push(`/location/detail?id=${item.id}`)">
       <van-image :src="item.coverImg" radius="5" />
       <div class="content">
-        <div class="title ellipsis">
+        <div class="title van-ellipsis">
           {{ item.title }}
           <van-tag type="warning">{{ item.score }}</van-tag>
         </div>

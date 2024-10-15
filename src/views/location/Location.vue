@@ -192,6 +192,7 @@ main {
       line-height: 50px;
       display: inline-block;
       height: 50px;
+      color: #323233;
     }
     .more{
       font-size: 28px;
