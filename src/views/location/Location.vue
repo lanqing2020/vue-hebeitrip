@@ -2,6 +2,7 @@
 import { useRouter } from "vue-router";
 import SearchComp from "@/components/search/Search.vue";
 import {computed, onMounted, reactive, ref} from "vue";
+import { useLocationStore } from "@/stores";
 
 const router = useRouter();
 const hotLocations = reactive([
@@ -12,18 +13,6 @@ const hotLocations = reactive([
   { id: 4, title: "大雁塔", src: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" },
   { id: 5, title: "法门寺", src: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" },
 ])
-// 想要首次展示的数据量
-const numbersOfItems = ref(4);
-// 计算属性 缓存热门目的地数组数据
-const hotLocationsComputed = computed(() => {
-  return hotLocations.slice(0, numbersOfItems.value);
-})
-
-// 通过切换要循环的箱数控制前台的更多或折叠
-const switchLocations = () => {
-  numbersOfItems.value = numbersOfItems.value === 4 ? hotLocations.length : 4;
-}
-
 const differentPartsData = reactive([
   {
     title: "冀中",
@@ -89,6 +78,25 @@ const differentPartsData = reactive([
     ]
   },
 ])
+// 想要首次展示的数据量
+const numbersOfItems = ref(4);
+// 计算属性 缓存热门目的地数组数据
+const hotLocationsComputed = computed(() => {
+  return hotLocations.slice(0, numbersOfItems.value);
+})
+
+// 通过切换要循环的箱数控制前台的更多或折叠
+const switchLocations = () => {
+  numbersOfItems.value = numbersOfItems.value === 4 ? hotLocations.length : 4;
+}
+
+// 跳转到list页
+const routerTo = (name) => {
+  // 当想要通过router传递比较大的对象时，没有太好的办法，这里使用pinia进行发送
+  useLocationStore().updatePartsList(differentPartsData.filter(item => item.name === name));
+  router.push({ name: "location-list", params: { name } })
+}
+
 
 </script>
 
@@ -114,7 +122,7 @@ const differentPartsData = reactive([
     <div class="hotLocation-text" v-for="item in differentPartsData" :key="item.name">
       <div class="title">
         <span class="hot_name">{{ item.title }}</span>
-        <span class="more" @click="() => router.push({ path: `/location/${item.name}` })">探索</span>
+        <span class="more" @click="routerTo(item.name)">探索</span>
       </div>
       <div class="text-span">
         <div v-for="(itemInner, index) in item.data" :key="index" @click="router.push(`/location/${item.name}/detail?id=${ itemInner.id }`)">

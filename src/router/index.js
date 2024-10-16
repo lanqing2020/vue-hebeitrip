@@ -11,11 +11,36 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
+      // 允许通过路由的 params 接收参数
+      // props: true,
+      // meta: {
+      // 只允许接收name参数
+      //   acceptedQueryParams: ['name']
+      // }
     },
     {
       path: '/location',
       name: 'location',
       component: () => import('@/views/location/Location.vue')
+    },
+    {
+      // 路由中的参数分为两种：动态路由参数和查询参数
+      // 动态路由参数 通过：符号标记参数 如下最终显示为 /location/center ，center将被传递给接收组件的props中
+      // 2.查询参数：
+      // path: "/abc",
+      // name: "abc",
+      // component: Abc,
+      // props: (route) => ({
+      //   id: route.query.id
+      // })
+      // 这里使用props的函数表达式来定义查询参数，用户访问/user?id=99时，99将被传递给目标组件的props中
+      path: '/location/:name',
+      name: 'location-list',
+      component: () => import('@/views/location/LocationList.vue'),
+      meta: {
+        // 只允许接收name参数
+        acceptedQueryParams: ['name']
+      }
     },
     {
       path: '/location/detail',
@@ -147,19 +172,32 @@ router.beforeEach((to, from, next) => {
   const acceptedQueryParams = to.meta.acceptedQueryParams || [];
   const queryParams = Object.keys(to.query);
   const invalidQueryParams = queryParams.filter(param => !acceptedQueryParams.includes(param));
+
+  // 当路径正确，查询参数不合法时
   // 如果存在未指定的query参数，则拦截并跳转到一个错误页面或其他页面
   if (invalidQueryParams.length > 0) {
     showDialog({
       title: '错误',
       message: `不合法的查询参数，${invalidQueryParams.join(', ')}` ,
     }).then(() => {
+      console.log("点击了确定按钮")
       next(to.path)
     });
   }
-  if (router.getRoutes().every(item => item.path.indexOf(to.path) === -1)) {
+
+  // 当路径输入不正确时
+  if (router.getRoutes().every(item => {
+    // 目的地列表使用了动态路由参数，需要在这里放开
+    if (to.path === "/location/center" || to.path === "/location/north" || to.path === "/location/south" || to.path === "/location/east") {
+      next();
+    }
+    return item.path.indexOf(to.path) === -1
+  } )) {
     next('/error')
   }
-  next(); // 正常导航
+
+  // 正常导航
+  next();
 });
 
 export default router
