@@ -94,7 +94,7 @@ const switchLocations = () => {
 const routerTo = (name) => {
   // 当想要通过router传递比较大的对象时，没有太好的办法，这里使用pinia进行发送
   useLocationStore().updatePartsList(differentPartsData.filter(item => item.name === name));
-  router.push({ name: "location-list", params: { name } })
+  router.push({ name: "locationList", params: { name } })
 }
 
 

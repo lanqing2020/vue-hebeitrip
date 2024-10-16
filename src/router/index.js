@@ -35,16 +35,16 @@ const router = createRouter({
       // })
       // 这里使用props的函数表达式来定义查询参数，用户访问/user?id=99时，99将被传递给目标组件的props中
       path: '/location/:name',
-      name: 'location-list',
+      name: 'locationList',
       component: () => import('@/views/location/LocationList.vue'),
+      // 该字段会被路由前置首页总函数截获，以进行逻辑处理
       meta: {
-        // 只允许接收name参数
-        acceptedQueryParams: ['name']
+        requiresGuard: true
       }
     },
     {
       path: '/location/detail',
-      name: 'location-detail',
+      name: 'locationDetail',
       component: () => import('@/views/location/LocationDetail.vue'),
       meta: {
         acceptedQueryParams: ['id']
@@ -52,7 +52,7 @@ const router = createRouter({
     },
     {
       path: '/location/more',
-      name: 'location-more',
+      name: 'locationMore',
       component: () => import('@/views/location/LocationMore.vue'),
       meta: {
         acceptedQueryParams: ['id']
@@ -68,7 +68,7 @@ const router = createRouter({
     },
     {
       path: '/detail/result',
-      name: 'detail-result',
+      name: 'detailResult',
       component: () => import('@/views/detail/DetailResult.vue'),
       meta: {
         acceptedQueryParams: ['type']
@@ -86,77 +86,77 @@ const router = createRouter({
     },
     {
       path: '/user/set',
-      name: 'user-set',
+      name: 'userSet',
       component: () => import('@/views/user/UserSet.vue')
     },
     {
       path: '/user/set-account',
-      name: 'user-set-account',
+      name: 'user-SetAccount',
       component: () => import('@/views/user/SetAccount.vue')
     },
     {
       path: '/user/set-bind',
-      name: 'user-set-bind',
+      name: 'userSetBind',
       component: () => import('@/views/user/SetBind.vue')
     },
     {
       path: '/user/bind-password',
-      name: 'user-bind-password',
+      name: 'userBindPassword',
       component: () => import('@/views/user/BindPassword.vue')
     },
     {
       path: '/user/bind-phone',
-      name: 'user-bind-phone',
+      name: 'userBindPhone',
       component: () => import('@/views/user/BindPhone.vue')
     },
     {
       path: '/user/tickets',
-      name: 'user-tickets',
+      name: 'userTickets',
       component: () => import('@/views/user/UserTickets.vue')
     },
     {
       path: '/user/publish',
-      name: 'user-publish',
+      name: 'userPublish',
       component: () => import('@/views/user/UserPublish.vue')
     },
     {
       path: '/user/publish-edit',
-      name: 'user-publish-edit',
+      name: 'userPublishEdit',
       component: () => import('@/views/user/PublishEdit.vue')
     },
     {
       path: '/user/collect',
-      name: 'user-collect',
+      name: 'userCollect',
       component: () => import('@/views/user/UserCollect.vue')
     },
     {
       path: '/user/discount',
-      name: 'user-discount',
+      name: 'userDiscount',
       component: () => import('@/views/user/UserDiscount.vue')
     },
     {
       path: '/user/integral',
-      name: 'user-integral',
+      name: 'userIntegral',
       component: () => import('@/views/user/UserIntegral.vue')
     },
     {
       path: '/user/help',
-      name: 'user-help',
+      name: 'userHelp',
       component: () => import('@/views/user/UserHelp.vue')
     },
     {
       path: '/user/protocol',
-      name: 'user-protocol',
+      name: 'userProtocol',
       component: () => import('@/views/user/HelpProtocol.vue')
     },
     {
       path: '/user/privacy',
-      name: 'user-privacy',
+      name: 'userPrivacy',
       component: () => import('@/views/user/HelpPrivacy.vue')
     },
     {
       path: '/user/about',
-      name: 'user-about',
+      name: 'userAbout',
       component: () => import('@/views/user/HelpAbout.vue')
     },
     {
@@ -169,34 +169,36 @@ const router = createRouter({
 
 // 在路由守卫中检查query参数
 router.beforeEach((to, from, next) => {
+
   const acceptedQueryParams = to.meta.acceptedQueryParams || [];
   const queryParams = Object.keys(to.query);
   const invalidQueryParams = queryParams.filter(param => !acceptedQueryParams.includes(param));
 
-  // 当路径正确，查询参数不合法时
-  // 如果存在未指定的query参数，则拦截并跳转到一个错误页面或其他页面
-  if (invalidQueryParams.length > 0) {
-    showDialog({
-      title: '错误',
-      message: `不合法的查询参数，${invalidQueryParams.join(', ')}` ,
-    }).then(() => {
-      console.log("点击了确定按钮")
-      next(to.path)
-    });
-  }
-
+  // console.log("当前路径和参数===>", to.path, to.params)
+  // 当查询参数不合法，没有对应的query参数时
+  const errorQuery = invalidQueryParams.length > 0;
   // 当路径输入不正确时
-  if (router.getRoutes().every(item => {
-    // 目的地列表使用了动态路由参数，需要在这里放开
-    if (to.path === "/location/center" || to.path === "/location/north" || to.path === "/location/south" || to.path === "/location/east") {
-      next();
+  const errorPath = router.getRoutes().every(item => {
+    const path = item.path;
+    // 当输入 目的地 页的子路径时 进行判断
+    if (to.meta && to.meta.requiresGuard) {
+      const name = to.params.name;
+      const accepts = ['center', 'north', 'south', 'east'];
+      return accepts.every(item => item !== name);
+    } else {
+      return path.indexOf(to.path) === -1;
     }
-    return item.path.indexOf(to.path) === -1
-  } )) {
-    next('/error')
+  });
+  if (errorQuery || errorPath) {
+    showDialog({
+      title: "错误",
+      message: "不合法的查询参数或路径",
+    }).then(r => {
+      // 拦截并跳转到错误页面
+      next("/error");
+    });
+    return;
   }
-
-  // 正常导航
   next();
 });
 
