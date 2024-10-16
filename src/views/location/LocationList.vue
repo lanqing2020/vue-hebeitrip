@@ -44,13 +44,73 @@ onMounted(() => {
     </van-dropdown-item>
   </van-dropdown-menu>
   <main>
-<!--    <div class="item" v-for="(item, index) in useLocationStore().locationPartsList" :key="index">-->
-<!--      <van-image :src="" />-->
-<!--    </div>-->
+    <div class="item" v-for="(item, index) in partsData.data" :key="index" @click="router.push({ path: `/location/${partsData.name}/${item.id}` })">
+      <van-image :src="item.coverImg" />
+      <div class="text">
+        <div class="title van-ellipsis">
+          {{ item.title }}
+          <van-tag v-if="item.tag && item.tag === 'group'" plain type="warning">团购</van-tag>
+          <van-tag v-if="item.tag && item.tag === 'small'" plain type="primary">小众</van-tag>
+        </div>
+        <div class="desc">{{ item.desc }}</div>
+      </div>
+    </div>
   </main>
 
 </template>
 
 <style scoped lang="less">
-
+.van-dropdown-menu {
+  margin-bottom: 30px;
+}
+main {
+  padding: 30px 30px 140px;
+  .item {
+    width: 100%;
+    height: 212px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    .van-image {
+      margin-right: 30px;
+      /deep/img {
+        width: 260px;
+        height: 197px;
+        border-radius: 10px;
+      }
+    }
+    .text {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      padding: 10px 0;
+      box-sizing: border-box;
+      .title {
+        font-size: 32px;
+        color: #323233;
+        font-weight: 500;
+        width: 100%;
+        display: inline-flex;
+        align-items: center;
+        height: 40px;
+        line-height: 40px;
+        margin-bottom: 15px;
+        span {
+          margin-left: 10px;
+        }
+      }
+      .desc {
+        font-size: 28px;
+        color: #646566;
+        line-height: 46px;
+        width: 100%;
+        height: 138px;
+        overflow: hidden;
+      }
+    }
+  }
+}
 </style>
