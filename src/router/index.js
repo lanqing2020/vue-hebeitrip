@@ -1,5 +1,5 @@
-import {createRouter, createWebHistory, useRouter} from 'vue-router'
-import { showDialog } from 'vant';
+import {createRouter, createWebHistory} from 'vue-router'
+import {showDialog} from 'vant';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -43,11 +43,11 @@ const router = createRouter({
       }
     },
     {
-      path: '/location/detail',
+      path: '/location/:name/:id',
       name: 'locationDetail',
       component: () => import('@/views/location/LocationDetail.vue'),
       meta: {
-        acceptedQueryParams: ['id']
+        requiresGuard: true
       }
     },
     {
@@ -169,32 +169,38 @@ const router = createRouter({
 
 // 在路由守卫中检查query参数
 router.beforeEach((to, from, next) => {
-
   const acceptedQueryParams = to.meta.acceptedQueryParams || [];
   const queryParams = Object.keys(to.query);
   const invalidQueryParams = queryParams.filter(param => !acceptedQueryParams.includes(param));
 
-  // console.log("当前路径和参数===>", to.path, to.params)
+
   // 当查询参数不合法，没有对应的query参数时
   const errorQuery = invalidQueryParams.length > 0;
   // 当路径输入不正确时
   const errorPath = router.getRoutes().every(item => {
     const path = item.path;
-    // 当输入 目的地 页的子路径时 进行判断
+    // 当输入 目的地 判断：
+    // /location/xxx
+    // /location/xxx/1
     if (to.meta && to.meta.requiresGuard) {
-      const name = to.params.name;
-      const accepts = ['center', 'north', 'south', 'east'];
-      return accepts.every(item => item !== name);
+      let { name, id } = to.params;
+      id = parseFloat(id);
+      // to.matched 可以直接匹配到定义的路由规范
+      if (to.matched.some(record => record.path.includes(":id"))) {
+        return isNaN(id) || id < 1 || id > 200 || id % 1 !== 0;
+      }
+      return ['center', 'north', 'south', 'east'].every(item => item !== name);
     } else {
       return path.indexOf(to.path) === -1;
     }
   });
+  // 如果参数错误 或 路径错误 那么进行弹窗拦截
   if (errorQuery || errorPath) {
     showDialog({
       title: "错误",
       message: "不合法的查询参数或路径",
     }).then(r => {
-      // 拦截并跳转到错误页面
+      // 跳转到错误页面
       next("/error");
     });
     return;
