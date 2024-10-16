@@ -23,3 +23,11 @@ export function getLocationBasicInfo() {
 export function getLocationTicketsList() {
     return request.post("/v1/pub/location/getLocationTicketsList", {})
 }
+
+/**
+ * 获取目的地评论列表
+ * @return {Promise<axios.AxiosResponse<any>>}
+ */
+export function getLocationCommentList() {
+    return request.post("/v1/pub/location/getLocationCommentList", {})
+}

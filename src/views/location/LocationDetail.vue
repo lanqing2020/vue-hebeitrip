@@ -3,7 +3,7 @@ import { useRoute, useRouter } from "vue-router";
 import ImgBanner1 from "@/assets/test-banner1.jpg";
 import ImgBanner2 from "@/assets/test-banner2.jpg";
 import ImgBanner3 from "@/assets/test-banner3.jpg";
-import { onMounted, reactive, ref } from "vue";
+import {computed, onMounted, reactive, ref} from "vue";
 import {location} from '@/apis';
 
 const route = useRoute();
@@ -11,6 +11,18 @@ const router = useRouter();
 const locationBannerListData = ref([]);
 const locationBasicInfo = ref({});
 const locationTicketsList = ref([]);
+const locationCommentList = ref([]);
+
+const clickMarkBtn = () => {
+  console.log(111)
+}
+
+// v-model 用于创建数据与视图之间的双向绑定，其本质是一个语法糖
+// 如果试图在v-mode中写复杂的js语法，vue不被允许，且会破坏它的响应式系统
+// vue3中computed未定义set，只允许修改get
+const scoreString2Number = computed(() => {
+  return locationBasicInfo.value.score = +locationBasicInfo.value.score;
+})
 
 // 请求轮播图
 const getLocationBannerList = async () => {
@@ -33,7 +45,7 @@ const getLocationBasicInfo = async () => {
     operatingTime: "自9月13日起，景区营业时间为：7:00-18:00，17:30停止售票，17:40停止入园，18:00清园，请务必合理安排入园、参观时间。",
     instructions: "1、请您凭本人身份证至景区闸机口直接刷身份证入园参观。2、在津阳门香凝池足浴处凭下单身份证进行产品核销（温泉足浴一人一票，当日有效，无需预约，消费高峰可能需要排队等候。3、如需打印纸质门票，请在入园参观前在景区售票窗口出票。",
     tags: ["人文", "民国", "历史"], // 不要超过3个
-    score: "5.0",
+    score: "4.5",
     address: "华清路33号",
     phone: "400-800-9999"
   }
@@ -48,30 +60,64 @@ const getLocationTicketsList = async () => {
       title: "拼团 景区门票+讲解（含耳机）",
       originalPrice: "160",
       currentPrice: "140",
+      bookedNumber: "402",
     },
     {
       id: 1,
       title: "成人实名门票",
       originalPrice: "120",
       currentPrice: "120",
+      bookedNumber: "912",
     },
     {
       id: 2,
       title: "实名儿童票",
       originalPrice: "60",
       currentPrice: "60",
+      bookedNumber: "103",
     }
   ]
 }
 
-const clickMarkBtn = () => {
-  console.log(111)
+const getLocationCommentList = async () => {
+  const { code, data } = await location.getLocationCommentList();
+  locationCommentList.value = [
+    {
+      id: 0,
+      comment: "这个景点很不错，价格划算，值得游览！",
+      publishedDate: "2024-07-13 16:01:37",
+      publisherName: "chris",
+      publisherAvatar: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
+    },
+    {
+      id: 1,
+      comment: "周末和家人一起来这里看看风景，放松一下。",
+      publishedDate: "2024-06-24 18:30:02",
+      publisherName: "xxxLPO",
+      publisherAvatar: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
+    },
+    {
+      id: 2,
+      comment: "没想到在这么近的隔壁市还有这个神仙景点，真的推荐大家来看看~",
+      publishedDate: "2024-06-12 21:03:53",
+      publisherName: "明斯基",
+      publisherAvatar: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
+    },
+    {
+      id: 3,
+      comment: "还行，人不多",
+      publishedDate: "2024-03-28 13:30:32",
+      publisherName: "洛丽塔",
+      publisherAvatar: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
+    },
+  ]
 }
 
 const init = () => {
   getLocationBannerList();
   getLocationBasicInfo();
   getLocationTicketsList();
+  getLocationCommentList();
 }
 
 onMounted(() => {
@@ -103,7 +149,10 @@ onMounted(() => {
         <div class="tags">
           <van-tag v-for="(item, index) in locationBasicInfo.tags" :key="index" :type="index === 0 ? 'primary' : index === 1 ? 'success' : 'warning'">{{ item }}</van-tag>
         </div>
-        <div class="score">{{ `${locationBasicInfo.score} 分` }}</div>
+        <div class="score">
+          <van-rate v-model="scoreString2Number" allow-half readonly size="18" color="#ff4621" />
+          {{ `${locationBasicInfo.score} 分` }}
+        </div>
       </div>
       <div class="down flex-row">
         <div class="address van-ellipsis">{{ locationBasicInfo.address }}</div>
@@ -121,14 +170,14 @@ onMounted(() => {
         <van-button plain icon="music-o" type="default">导游讲解</van-button>
       </div>
       <div class="tickets">
-        <van-tabs v-model:active="active" shrink class="title">
+        <van-tabs shrink class="title">
           <van-tab title="门票预定">
             <div class="item" v-for="(item, index) in locationTicketsList" :key="index">
               <div class="text-title van-ellipsis">{{ item.title }}</div>
               <div class="text-flex">
                 <div class="text-l">
                   <div class="l-sub">可随时预定</div>
-                  <div class="l-people">912人已参与</div>
+                  <div class="l-people">{{ item.bookedNumber }}人已参与</div>
                 </div>
                 <div class="text-r">
                   <div class="price">
@@ -141,10 +190,18 @@ onMounted(() => {
             </div>
           </van-tab>
           <van-tab title="游客点评">
-            内容 2222
+            <div class="item item-flex" v-for="(item, index) in locationCommentList" :key="index">
+              <div class="flex-l">
+                <van-image :src="item.publisherAvatar" width="30" height="30" round />
+                <span>{{ item.publisherName }}</span>
+              </div>
+              <div class="flex-r">
+                <div>{{ item.comment }}</div>
+                <span>发布于：{{ item.publishedDate }}</span>
+              </div>
+            </div>
           </van-tab>
         </van-tabs>
-
       </div>
     </main>
   </div>
@@ -233,6 +290,8 @@ onMounted(() => {
       box-sizing: border-box;
       flex: 1;
       .tags {
+        display: inline-flex;
+        align-items: center;
         span {
           margin-right: 10px;
         }
@@ -326,6 +385,7 @@ onMounted(() => {
           .text-title {
             font-size: 30px;
             color: #646566;
+            font-weight: 500;
           }
           .text-flex {
             width: 100%;
@@ -333,7 +393,7 @@ onMounted(() => {
             align-items: center;
             justify-content: space-between;
             .text-l {
-              font-size: 26px;
+              font-size: 24px;
               .l-sub {
                 color: #00beae;
                 margin-bottom: 10px;
@@ -374,6 +434,38 @@ onMounted(() => {
                 width: 100px;
                 font-size: 26px;
               }
+            }
+          }
+        }
+        .item-flex {
+          display: flex;
+          justify-content: space-between;
+          .flex-l {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 13%;
+            .van-image {
+              margin-bottom: 8px;
+            }
+            span {
+              font-size: 24px;
+              color: #646566;
+            }
+          }
+          .flex-r {
+            margin-left: 2%;
+            width: 85%;
+            display: flex;
+            flex-direction: column;
+            div {
+              font-size: 28px;
+              color: #646566;
+            }
+            span {
+              margin-top: 15px;
+              font-size: 24px;
+              color: #999;
             }
           }
         }
