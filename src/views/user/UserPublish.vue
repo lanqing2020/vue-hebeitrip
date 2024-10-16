@@ -113,7 +113,7 @@ const IParticipated = ref([
       </div>
       <div v-else v-for="item in IParticipated" :key="item.id" class="comment-wrap">
         <div class="title">
-          <div class="location" @click="router.push(`/location/detail?id=${item.id}`)">
+          <div class="location" @click="router.push(`/location/center/${item.id}`)">
             <van-icon name="location-o" size="18" />
             {{ item.city }}
           </div>
@@ -238,8 +238,8 @@ const IParticipated = ref([
     .van-image {
       //flex: 1;
       margin-right: 15px;
-      width: 300px;
-      height: 227px;
+      width: 280px;
+      height: 212px;
       position: relative;
       /deep/img {
         border-radius: 15px;

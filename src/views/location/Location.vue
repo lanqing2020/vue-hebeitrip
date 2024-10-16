@@ -18,13 +18,13 @@ const differentPartsData = reactive([
     title: "冀中",
     name: "center",
     data: [
-      { id: 1, title: "河间府署" },
-      { id: 2, title: "直隶总督府" },
-      { id: 3, title: "天下第一城" },
-      { id: 4, title: "白石山地质公园" },
-      { id: 5, title: "野三坡" },
-      { id: 6, title: "狼牙山" },
-      { id: 7, title: "胜芳古镇" }
+      { id: 1, title: "河间府署", src: "https://q6.itc.cn/images01/20241012/4d4255aeb3c6424494c7e3bc6a594d17.png" },
+      { id: 2, title: "直隶总督府", src: "https://p2.itc.cn/images01/20230304/cd8938262a85419a93a07333dab374e2.jpeg" },
+      { id: 3, title: "天下第一城", src: "https://q5.itc.cn/q_70/images03/20241013/6f8607a156ef44368922bded8ce99495.jpeg" },
+      { id: 4, title: "白石山地质公园", src: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" },
+      { id: 5, title: "野三坡", src: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" },
+      { id: 6, title: "狼牙山", src: "https://q5.itc.cn/q_70/images03/20241013/6f8607a156ef44368922bded8ce99495.jpeg" },
+      { id: 7, title: "胜芳古镇", src: "https://p2.itc.cn/images01/20230304/cd8938262a85419a93a07333dab374e2.jpeg" }
     ]
   },
   {
@@ -91,10 +91,10 @@ const switchLocations = () => {
 }
 
 // 跳转到list页
-const routerTo = (name) => {
+const routerTo = (name, title) => {
   // 当想要通过router传递比较大的对象时，没有太好的办法，这里使用pinia进行发送
-  useLocationStore().updatePartsList(differentPartsData.filter(item => item.name === name));
-  router.push({ name: "locationList", params: { name } })
+  useLocationStore().updatePartsList(differentPartsData.filter(item => item.name === name)[0]);
+  router.push({ name: "locationList", params: { name, title } })
 }
 
 
@@ -122,7 +122,7 @@ const routerTo = (name) => {
     <div class="hotLocation-text" v-for="item in differentPartsData" :key="item.name">
       <div class="title">
         <span class="hot_name">{{ item.title }}</span>
-        <span class="more" @click="routerTo(item.name)">探索</span>
+        <span class="more" @click="routerTo(item.name, item.title)">探索</span>
       </div>
       <div class="text-span">
         <div v-for="(itemInner, index) in item.data" :key="index" @click="router.push(`/location/${item.name}/${ itemInner.id }`)">

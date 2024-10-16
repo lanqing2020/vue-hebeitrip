@@ -11,11 +11,7 @@ const onClickBindBtn = () => {
 </script>
 
 <template>
-  <van-nav-bar
-    title="修改密码"
-    left-arrow
-    @click-left="() => router.push({ path: '/user/set-bind' })"
-  >
+  <van-nav-bar title="修改密码" left-arrow @click-left="router.push({ path: '/user/set-bind' })">
     <template #right>
       <van-icon name="wap-home-o" size="20" @click="router.push({ path: '/' })" />
     </template>

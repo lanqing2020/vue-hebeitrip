@@ -17,4 +17,6 @@ export default defineStore('location', {
             this.locationPartsList = data;
         },
     },
+	// 整个状态都进行持久化
+	persist: true, 
 })

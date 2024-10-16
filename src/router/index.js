@@ -173,7 +173,6 @@ router.beforeEach((to, from, next) => {
   const queryParams = Object.keys(to.query);
   const invalidQueryParams = queryParams.filter(param => !acceptedQueryParams.includes(param));
 
-
   // 当查询参数不合法，没有对应的query参数时
   const errorQuery = invalidQueryParams.length > 0;
   // 当路径输入不正确时
