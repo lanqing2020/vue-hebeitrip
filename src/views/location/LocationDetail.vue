@@ -325,7 +325,7 @@ onMounted(() => {
     }
   }
   main{
-    padding: 30px 30px 140px;
+    padding: 30px 30px 180px;
     .entry {
       width: 100%;
       box-sizing: border-box;

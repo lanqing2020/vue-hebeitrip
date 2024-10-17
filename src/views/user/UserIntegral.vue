@@ -99,7 +99,7 @@ onMounted(() => {
 
 <style scoped lang="less">
 main {
-  padding: 0 30px 140px;
+  padding: 0 30px 180px;
   .content {
     margin-top: 40px;
     h2 {

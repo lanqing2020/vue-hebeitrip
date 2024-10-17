@@ -64,7 +64,7 @@ onMounted(() => {
   margin-bottom: 30px;
 }
 main {
-  padding: 30px 30px 140px;
+  padding: 30px 30px 180px;
   .item {
     width: 100%;
     height: 212px;

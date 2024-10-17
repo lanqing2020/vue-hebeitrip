@@ -54,7 +54,7 @@ const collectData = ref([
 
 <style scoped lang="less">
 main {
-  padding: 30px 30px 140px 30px;
+  padding: 30px 30px 180px 30px;
   .collect-data {
     margin-bottom: 30px;
     display: flex;

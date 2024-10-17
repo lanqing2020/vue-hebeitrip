@@ -67,39 +67,39 @@ const getHotTagsList = async () => {
         {
           sortId: 0,
           title: "暑假来西安不看演出可不行，9大人气演出出行指南来啦！",
-          coverImg: "",
-          tip: "",
-          publisher: "",
-          publisherAvatar: "",
+          coverImg: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
+          tip: "非遗 战国",
+          publisher: "三國戰記",
+          publisherAvatar: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
           views: "329",
           includeVideo: false
         },
         {
           sortId: 1,
           title: "藏在华清宫内的庆山寺珍宝馆，你确定不去看看？",
-          coverImg: "",
-          tip: "",
-          publisher: "",
-          publisherAvatar: "",
+          coverImg: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
+          tip: "长城 金山岭",
+          publisher: "金駿眉",
+          publisherAvatar: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
           views: "124",
           includeVideo: false
         },
         {
           sortId: 2,
           title: "人少又出片的宝藏村落—黄良村！体验慢时光",
-          coverImg: "",
-          tip: "",
-          publisher: "",
-          publisherAvatar: "",
+          coverImg: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
+          tip: "避坑 性价比低",
+          publisher: "青衫",
+          publisherAvatar: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
           views: "432",
           includeVideo: true
         },
         {
           sortId: 3,
           title: "天桥湖的多8安岛，不出西安就能体验三亚度假的快",
-          coverImg: "",
+          coverImg: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
           tip: "",
-          publisher: "",
+          publisher: "火星",
           publisherAvatar: "",
           views: "432",
           includeVideo: false
@@ -113,9 +113,9 @@ const getHotTagsList = async () => {
         {
           sortId: 0,
           title: "暑假来西安不看演出可不行，9大人气演出出行指南来啦！",
-          coverImg: "",
-          tip: "",
-          publisher: "",
+          coverImg: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
+          tip: "非遗 传统技艺",
+          publisher: "月亮",
           publisherAvatar: "",
           views: "329",
           includeVideo: false
@@ -129,9 +129,9 @@ const getHotTagsList = async () => {
         {
           sortId: 0,
           title: "暑假来西安不看演出可不行，9大人气演出出行指南来啦！",
-          coverImg: "",
-          tip: "",
-          publisher: "",
+          coverImg: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
+          tip: "打卡 周末露营",
+          publisher: "太陽",
           publisherAvatar: "",
           views: "329",
           includeVideo: false
@@ -145,9 +145,9 @@ const getHotTagsList = async () => {
         {
           sortId: 0,
           title: "暑假来西安不看演出可不行，9大人气演出出行指南来啦！",
-          coverImg: "",
+          coverImg: "ttps://q6.itc.cn/images01/20241012/4d4255aeb3c6424494c7e3bc6a594d17.png",
           tip: "",
-          publisher: "",
+          publisher: "飛機",
           publisherAvatar: "",
           views: "329",
           includeVideo: false
@@ -161,8 +161,8 @@ const getHotTagsList = async () => {
         {
           sortId: 0,
           title: "暑假来西安不看演出可不行，9大人气演出出行指南来啦！",
-          coverImg: "",
-          tip: "",
+          coverImg: "https://p2.itc.cn/images01/20230304/cd8938262a85419a93a07333dab374e2.jpeg",
+          tip: "打卡 一睹大唐盛世",
           publisher: "",
           publisherAvatar: "",
           views: "329",
@@ -177,8 +177,8 @@ const getHotTagsList = async () => {
         {
           sortId: 0,
           title: "暑假来西安不看演出可不行，9大人气演出出行指南来啦！",
-          coverImg: "",
-          tip: "",
+          coverImg: "https://q5.itc.cn/q_70/images03/20241013/6f8607a156ef44368922bded8ce99495.jpeg",
+          tip: "打卡 有点像厦门",
           publisher: "",
           publisherAvatar: "",
           views: "329",
@@ -193,9 +193,9 @@ const getHotTagsList = async () => {
         {
           sortId: 0,
           title: "暑假来西安不看演出可不行，9大人气演出出行指南来啦！",
-          coverImg: "",
-          tip: "",
-          publisher: "",
+          coverImg: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
+          tip: "攻略 河间攻略",
+          publisher: "chris",
           publisherAvatar: "",
           views: "329",
           includeVideo: false
@@ -209,8 +209,8 @@ const getHotTagsList = async () => {
         {
           sortId: 0,
           title: "暑假来西安不看演出可不行，9大人气演出出行指南来啦！",
-          coverImg: "",
-          tip: "",
+          coverImg: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
+          tip: "免门票 找美食",
           publisher: "",
           publisherAvatar: "",
           views: "326",
@@ -291,20 +291,23 @@ onMounted(() => {
       <div class="title">您下一站去哪儿？</div>
       <van-tabs v-model:active="active">
         <van-tab v-for="(item, index) in hotTagsList" :key="index" :title="item.title">
-          <div v-for="itemInner in item.data" :key="item.id">
-<!--            :price="+item.price / 100 + '.00'"-->
-<!--            :desc="item.description" :title="item.title" :thumb="item.cover_img" :lazy-load="true"-->
-<!--            <van-tag type="warning">{{ item.point }} 分</van-tag>-->
+          <div v-for="itemInner in item.data" :key="item.id" class="item-inner">
+            <div class="img-wrap">
+              <van-image :src="itemInner.coverImg" />
+              <span v-if="itemInner.tip">{{ itemInner.tip }}</span>
+              <van-icon v-if="itemInner.includeVideo" name="play-circle-o" size="22" />
+            </div>
+            <div class="text-intro">{{ itemInner.title }}</div>
+            <div class="user-intro">
+              <div class="avatar">
+                <van-image :src="itemInner.publisherAvatar" round />
+                <span>{{ itemInner.publisher }}</span>
+              </div>
+              <div class="views"><van-icon name="eye-o" size="16" color="#9da6b5" />{{ itemInner.views }}</div>
+            </div>
           </div>
         </van-tab>
       </van-tabs>
-
-
-<!--      <van-card v-for="item in productList" :key="item.title" :price="+item.price / 100 + '.00'" :desc="item.description" :title="item.title" :thumb="item.cover_img" :lazy-load="true" @click="() => router.push('/detail?productId=' + item.id)">-->
-<!--        <template #num>-->
-<!--          <van-tag type="warning">{{ item.point }} 分</van-tag>-->
-<!--        </template>-->
-<!--      </van-card>-->
     </div>
   </main>
 </template>
@@ -404,7 +407,7 @@ header {
 }
 main {
   margin-top: 30px;
-  padding: 0 30px 140px;
+  padding: 0 30px 180px;
   .van-swipe {
     border-radius: 15px;
     .van-swipe-item {
@@ -455,6 +458,7 @@ main {
     /deep/.van-tabs {
       margin-top: 10px;
       .van-tabs__wrap {
+        margin-bottom: 20px;
         .van-tab {
           span {
             color: #455873;
@@ -463,23 +467,92 @@ main {
         }
       }
       .van-tabs__content {
+        .van-tab__panel {
+          display: flex;
+          flex-wrap: wrap;
+        }
+        .item-inner {
+          width: 48%;
+          height: auto;
+          margin-bottom: 50px;
+          .img-wrap {
+            position: relative;
+            height: 320px;
+            width: 100%;
+            .van-image {
+              width: 100%;
+              height: 320px;
+              img {
+                border-radius: 15px 15px 0 0;
+              }
+            }
+            span {
+              position: absolute;
+              bottom: 20px;
+              right: 20px;
+              left: auto;
+              padding: 0 20px;
+              height: 42px;
+              line-height: 42px;
+              color: #e3e3ea;
+              background: rgba(0,0,0,0.35);
+              font-size: 24px;
+              border-radius: 20px;
+            }
+            i {
+              position: absolute;
+              right: 20px;
+              top: 20px;
 
+            }
+          }
+          .text-intro {
+            margin-top: 10px;
+            width: 100%;
+            height: 80px;
+            font-size: 28px;
+            color: #0f294d;
+            font-weight: 500;
+            overflow: hidden;
+            line-height: 40px;
+          }
+          .user-intro {
+            margin-top: 10px;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            .avatar {
+              display: flex;
+              align-items: center;
+              .van-image {
+                width: 40px;
+                height: 40px;
+                margin-right: 10px;
+              }
+              span {
+                font-size: 24px;
+                color: #9da6b5;
+                line-height: 1;
+              }
+            }
+            .views {
+              display: flex;
+              align-items: center;
+              font-size: 24px;
+              color: #455873;
+              i {
+                margin-right: 10px;
+              }
+            }
+          }
+          &:nth-child(2n) {
+            margin-left: 4%;
+          }
+        }
       }
     }
-    ///deep/.van-card {
-    //  background: #fff;
-    //  padding-left: 0;
-    //  padding-right: 0;
-    //  border-bottom: 1px solid #eee;
-    //  .van-card__content {
-    //    .van-card__title {
-    //      font-size: 30px;
-    //    }
-    //    .van-card__desc {
-    //      font-size: 28px;
-    //    }
-    //  }
-    //}
   }
 }
 </style>

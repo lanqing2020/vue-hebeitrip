@@ -75,7 +75,7 @@ const getCall = () => {
 }
 .logo {
   margin-top: 40px;
-  padding: 0 30px 140px 30px;
+  padding: 0 30px 180px 30px;
   display: flex;
   flex-direction: column;
   align-items: center;

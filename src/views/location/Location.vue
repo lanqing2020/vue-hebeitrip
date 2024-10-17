@@ -136,7 +136,7 @@ const routerTo = (name) => {
 <style scoped lang="less">
 main {
   width: 100%;
-  padding: 0 30px 140px 30px;
+  padding: 0 30px 180px 30px;
   box-sizing: border-box;
   border-top: 1px solid #ebedf0;
   .hotLocation{

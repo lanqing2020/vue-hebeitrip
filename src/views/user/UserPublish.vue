@@ -133,7 +133,7 @@ const IParticipated = ref([
 
 <style scoped lang="less">
 /deep/.van-tabs__content{
-  padding: 30px 30px 140px 30px;
+  padding: 30px 30px 180px 30px;
 }
 .not-published {
   button {

@@ -71,7 +71,7 @@ onMounted(() => {
 
 <style scoped lang="less">
 main {
-  padding: 30px 30px 140px 30px;
+  padding: 30px 30px 180px 30px;
   .forward {
     margin-top: 30px;
     h2 {
