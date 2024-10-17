@@ -26,8 +26,8 @@ const router = useRouter();
  * @param method
  * @returns {Promise<void>}
  */
-const getListOrder = async (token, method) => {
-  const { code, data } = await order.getListOrder(token, method);
+const getOrdersList = async (token, method) => {
+  const { code, data } = await order.getOrdersList(token, method);
   if (code === 0 && data) {
     ordersData.map((item) => {
       if (item.type === method) {
@@ -40,14 +40,14 @@ const getListOrder = async (token, method) => {
 
 const init = () => {
   if (useUserStore().getLogged()) {
-    getListOrder(useUserStore().getToken(), "all");
+    getOrdersList(useUserStore().getToken(), "all");
     hasLogged.value = true;
   }
 }
 
 const onClickTab = ({ title, name }) => {
   console.log(title, name)
-  getListOrder(useUserStore().getToken(), name);
+  getOrdersList(useUserStore().getToken(), name);
 }
 
 // position 为关闭时点击的位置

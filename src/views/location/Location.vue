@@ -13,7 +13,7 @@ const hotLocations = reactive([
   { id: 5, title: "大雁塔", coverImg: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg", partsName: "north" },
   { id: 6, title: "法门寺", coverImg: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg", partsName: "center" },
 ])
-const differentPartsData = reactive([
+const differentLocations = reactive([
   {
     title: "冀中",
     name: "center",
@@ -93,7 +93,7 @@ const switchLocations = () => {
 // 跳转到list页
 const routerTo = (name) => {
   // 当想要通过router传递比较大的对象时，没有太好的办法，这里使用pinia进行发送
-  useLocationStore().updatePartsList(differentPartsData.filter(item => item.name === name)[0]);
+  useLocationStore().updatePartsList(differentLocations.filter(item => item.name === name)[0]);
   router.push({ name: "locationList", params: { name } })
 }
 
@@ -119,7 +119,7 @@ const routerTo = (name) => {
         </div>
       </div>
     </div>
-    <div class="hotLocation-text" v-for="item in differentPartsData" :key="item.name">
+    <div class="hotLocation-text" v-for="item in differentLocations" :key="item.name">
       <div class="title">
         <span class="hot_name">{{ item.title }}</span>
         <span class="more" @click="routerTo(item.name)">探索</span>
@@ -152,6 +152,11 @@ main {
         margin-top: 25px;
         position: relative;
         height: 250px;
+        /deep/.van-image {
+          img {
+            border-radius: 15px;
+          }
+        }
         .item_name{
           background: rgba(0, 0, 0, 0.08);
           position: absolute;

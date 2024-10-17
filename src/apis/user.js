@@ -85,6 +85,12 @@ export function getIntegralIncomeRecord(token, data) {
     })
 }
 
+/**
+ * 获取积分兑换支出记录
+ * @param token
+ * @param data
+ * @return {Promise<axios.AxiosResponse<any>>}
+ */
 export function getIntegralConsumeRecord(token, data) {
     return request.post("/v1/pri/user/getIntegralConsumeRecord", data, {
         headers: {

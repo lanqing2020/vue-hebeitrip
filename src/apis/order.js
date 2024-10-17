@@ -6,7 +6,7 @@ import request from '@/request'
  * @param method
  * @return {Promise<axios.AxiosResponse<any>>}
  */
-export function getListOrder(token, method) {
+export function getOrdersList(token, method) {
     return request.get("/v1/pri/order/list_order", {
         params: { method, token }
     })
