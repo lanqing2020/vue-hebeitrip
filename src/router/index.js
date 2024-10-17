@@ -51,14 +51,6 @@ const router = createRouter({
       }
     },
     {
-      path: '/location/more',
-      name: 'locationMore',
-      component: () => import('@/views/location/LocationMore.vue'),
-      meta: {
-        acceptedQueryParams: ['id']
-      }
-    },
-    {
       path: '/detail',
       name: 'detail',
       component: () => import('@/views/detail/Detail.vue'),

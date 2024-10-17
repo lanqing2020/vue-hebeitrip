@@ -33,10 +33,10 @@ onMounted(() => {
   <van-dropdown-menu ref="menuRef">
     <van-dropdown-item title="默认排序">
       <van-cell center title="支持团购">
-        <template #right-icon><van-switch v-model="switchGroup" /></template>
+        <template #right-icon><van-switch size="24px" v-model="switchGroup" /></template>
       </van-cell>
       <van-cell center title="小众旅游">
-        <template #right-icon><van-switch v-model="switchSmall" /></template>
+        <template #right-icon><van-switch size="24px" v-model="switchSmall" /></template>
       </van-cell>
       <div style="padding: 15px 30px;">
         <van-button type="primary" block round @click="onConfirm">确认</van-button>
