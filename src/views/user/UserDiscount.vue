@@ -53,17 +53,17 @@ onMounted(() => {
       <div class="title">获得奖励的说明</div>
       <span>通过微信分享您的链接给其他用户，该积分可以用来直接购物。</span>
       <div class="item">
-        <van-icon name="after-sale" size="20" color="#646566"/>
+        <van-icon name="after-sale" size="20" color="#455873"/>
         <div class="text">当其他用户通过此链接成功注册后，对方将获得10积分奖励！</div>
       </div>
       <div class="item">
-        <van-icon name="contact-o" size="20" color="#646566"/>
+        <van-icon name="contact-o" size="20" color="#455873"/>
         <div class="text">当对方用户完成首次活动后，您也将获得20积分奖励！</div>
       </div>
     </div>
     <van-button type="default" round size="small" class="integral-detail" @click="() => router.push({ path: '/user/integral' })">
       积分明细
-      <van-icon name="arrow" color="#646566" />
+      <van-icon name="arrow" color="#455873" />
     </van-button>
   </main>
   <van-share-sheet v-model:show="showShare" :options="options" @select="onSelect" />
@@ -79,7 +79,7 @@ main {
       font-weight: 700;
       margin: 0;
       text-align: center;
-      color: #323233;
+      color: #0f294d;
     }
     /deep/.van-cell-group {
       border: 1px solid #ebedf0;
@@ -109,7 +109,7 @@ main {
     }
     span {
       font-size: 28px;
-      color: #999;
+      color: #9da6b5;
       line-height: 42px;
       display: inline-block;
       margin-top: 20px;
@@ -125,7 +125,7 @@ main {
       .text {
         font-size: 30px;
         margin-left: 15px;
-        color: #646566;
+        color: #455873;
         line-height: 44px;
       }
     }
@@ -134,7 +134,7 @@ main {
     width: 180px;
     display: block;
     margin: 30px auto !important;
-    color: #646566;
+    color: #455873;
   }
 }
 </style>

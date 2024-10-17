@@ -44,7 +44,7 @@ const collectData = ref([
       <div class="content">
         <div class="title van-ellipsis">
           {{ item.title }}
-          <van-tag type="warning">{{ item.score }}</van-tag>
+          <van-tag type="warning" color="#ffb400">{{ item.score }}</van-tag>
         </div>
         <div class="desc">{{ item.description }}</div>
       </div>
@@ -75,7 +75,7 @@ main {
       .title {
         font-size: 30px;
         font-weight: 600;
-        color: #323233;
+        color: #0f294d;
         margin-bottom: 10px;
         display: flex;
         align-items: center;
@@ -87,7 +87,7 @@ main {
         font-size: 26px;
         line-height: 42px;
         text-align: justify;
-        color: #646566;
+        color: #455873;
         max-height: 84px;
         overflow: hidden;
       }

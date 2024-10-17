@@ -131,8 +131,8 @@ onMounted(() => {
     top: 50%;
     margin-top: -350px;
     .not-login-img {
-      width: 283px;
-      height: 328px;
+      width: 240px;
+      height: 278px;
       margin: 0 auto;
       img {
         width: 100%;
@@ -149,11 +149,12 @@ onMounted(() => {
         font-size: 48px;
         font-weight: bold;
         margin: 0;
+        color: #0f294d;
       }
       div {
         margin-top: 20px;
         font-size: 26px;
-        color: #999;
+        color: #9da6b5;
       }
       .login-button {
         width: 260px;

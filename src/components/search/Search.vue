@@ -10,7 +10,7 @@ const doSearch = (val) => {
 </script>
 
 <template>
-  <van-search v-model="searchVal" placeholder="请输入搜索关键词" background="transparent" shape="round" clearable @search="doSearch"/>
+  <van-search v-model="searchVal" placeholder="搜索关键词" background="transparent" shape="round" clearable @search="doSearch"/>
 </template>
 
 <style scoped lang="less">

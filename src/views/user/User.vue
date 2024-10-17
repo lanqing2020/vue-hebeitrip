@@ -105,13 +105,13 @@ onMounted(() => {
   <div class="container">
     <header>
       <div class="content">
-        <van-image round width="70px" height="70px" :src="initialVariable.headImg" />
+        <van-image round width="60px" height="60px" :src="initialVariable.headImg" />
         <div class="info">
-          <div class="title">{{ !hasLogged ? "注册登录" : "Hello," + initialVariable.name }}</div>
+          <div class="title">{{ !hasLogged ? "登录注册" : "Hello," + initialVariable.name }}</div>
         </div>
       </div>
       <div class="login-out" @click="goToSetPage">
-        <van-icon name="setting-o" size="24" />
+        <van-icon name="setting-o" size="20" />
         <span>设置</span>
       </div>
     </header>
@@ -156,10 +156,9 @@ onMounted(() => {
   z-index: 1;
   box-sizing: border-box;
   header {
-    background: url("../../assets/user.jpg") no-repeat;
-    background-size: cover;
+    background: linear-gradient(-180deg, #fff 100px, #f0f2f5 150px);
     padding: 0 30px;
-    height: 350px;
+    height: 140px;
     position: relative;
     display: flex;
     align-items: center;
@@ -176,26 +175,28 @@ onMounted(() => {
         justify-content: space-around;
         padding: 10px 0;
         .title {
-          font-size: 32px;
+          font-size: 30px;
+          color: #0f294d;
         }
       }
     }
     .login-out {
       display: flex;
       align-items: center;
-      min-width: 110px;
+      min-width: 100px;
       justify-content: space-between;
       span {
-        font-size: 28px;
+        font-size: 26px;
+        color: #455873;
       }
     }
   }
   main {
+    padding-top: 26px;
+    background-color: #f0f2f5;
     .hot-wrap {
       width: 100%;
-      height: 165px;
       padding: 0 30px;
-      background: #fff;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -238,6 +239,8 @@ onMounted(() => {
       background: rgba(255, 255, 255, 0.35);
     }
     .list {
+      background-color: white;
+      border-radius: 15px 15px 0;
       margin-top: 40px;
       .van-cell {
         /deep/i {
@@ -253,6 +256,9 @@ onMounted(() => {
             border-radius: 8px;
             top: -2px;
           }
+        }
+        &:first-child {
+          background: none;
         }
       }
     }

@@ -90,7 +90,7 @@ main {
       box-sizing: border-box;
       .title {
         font-size: 32px;
-        color: #323233;
+        color: #0f294d;
         font-weight: 500;
         width: 100%;
         display: inline-flex;
@@ -104,7 +104,7 @@ main {
       }
       .desc {
         font-size: 28px;
-        color: #646566;
+        color: #455873;
         line-height: 46px;
         width: 100%;
         height: 138px;

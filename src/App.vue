@@ -33,8 +33,8 @@ watch(() => router.currentRoute.value.path, (path, oldPath) => {
 <!--  <van-nav-bar safe-area-inset-top />-->
   <RouterView />
   <footer>
-    <van-tabbar route v-model="active" @change="change" active-color="#ffa43f">
-        <van-tabbar-item icon="wap-home-o" to="/">探索</van-tabbar-item>
+    <van-tabbar route v-model="active" @change="change" active-color="#ffb400">
+        <van-tabbar-item icon="wap-home-o" to="/">主页</van-tabbar-item>
         <van-tabbar-item icon="location-o" to="/location">目的地</van-tabbar-item>
         <van-tabbar-item icon="coupon-o" to="/order">订单</van-tabbar-item>
         <van-tabbar-item icon="friends-o" to="/user">我的</van-tabbar-item>
@@ -46,12 +46,11 @@ watch(() => router.currentRoute.value.path, (path, oldPath) => {
 
 <style scoped lang="less">
 footer {
-  .van-tabbar {
+  /deep/.van-tabbar {
     .van-tabbar-item--active {
       .van-tabbar-item__text {
-        a {
-          color: #ffa43f;
-        }
+        font-weight: 600;
+        color: #ffb400;
       }
     }
   }

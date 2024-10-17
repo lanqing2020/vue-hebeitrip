@@ -86,12 +86,12 @@ const getCall = () => {
     font-size: 34px;
     margin-top: 10px;
     margin-bottom: 15px;
-    color: #1989fa;
+    color: #2446ff;
     font-weight: 700;
   }
   span {
     font-size: 26px;
-    color: #999;
+    color: #9da6b5;
   }
 }
 </style>

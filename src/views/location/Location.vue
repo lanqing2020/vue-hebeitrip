@@ -186,6 +186,7 @@ main {
         margin-right: 25px;
         margin-top: 25px;
         position: relative;
+        color: #455873;
       }
     }
   }
@@ -200,14 +201,14 @@ main {
       line-height: 50px;
       display: inline-block;
       height: 50px;
-      color: #323233;
+      color: #0f294d;
     }
     .more{
       font-size: 28px;
       line-height: 50px;
       display: inline-block;
       height: 50px;
-      color: #029db8;
+      color: #2446ff;
     }
   }
 }

@@ -104,7 +104,7 @@ const tickets = ref([
     }
     .foot {
       font-size: 26px;
-      color: #999999;
+      color: #9da6b5;
       margin-top: 20px;
       width: 100%;
       .date {

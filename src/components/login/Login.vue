@@ -262,8 +262,8 @@ onUnmounted(() => {
         align-items: center;
         justify-content: center;
         img {
-          width: 400px;
-          height: 400px;
+          width: 580px;
+          height: 128px;
         }
       }
       .button-wrap {

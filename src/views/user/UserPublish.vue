@@ -71,12 +71,12 @@ const IParticipated = ref([
             <div class="right-title">开启创作之旅</div>
             <div class="right-list">
               <div class="list-item">
-                <van-icon name="point-gift" size="18" color="#828587" />
+                <van-icon name="point-gift" size="18" color="#9da6b5" />
                 <span>每篇奖励</span>
                 <em>100积分</em>
               </div>
               <div class="list-item">
-                <van-icon name="point-gift" size="18" color="#828587" />
+                <van-icon name="point-gift" size="18" color="#9da6b5" />
                 <span>流量曝光</span>
                 <em>+100</em>
               </div>
@@ -205,7 +205,7 @@ const IParticipated = ref([
           left: -3px;
         }
         span {
-          color: #828587;
+          color: #9da6b5;
           margin-left: 10px;
         }
         em {
@@ -226,7 +226,7 @@ const IParticipated = ref([
     font-size: 30px;
     font-weight: 600;
     margin-bottom: 15px;
-    color: #323233;
+    color: #0f294d;
     padding: 0 5px;
   }
   .content {
@@ -284,7 +284,7 @@ const IParticipated = ref([
         text-indent: 2em;
         line-height: 46px;
         text-align: justify;
-        color: #646566;
+        color: #455873;
       }
       .icon-wrap {
         flex: 0.65;
@@ -324,7 +324,7 @@ const IParticipated = ref([
     font-size: 30px;
     font-weight: 600;
     margin-bottom: 15px;
-    color: #323233;
+    color: #0f294d;
     display: flex;
     height: 50px;
     line-height: 50px;
@@ -338,7 +338,7 @@ const IParticipated = ref([
       padding: 0 10px;
       border-radius: 10px;
       font-size: 26px;
-      color: #646566;
+      color: #455873;
       margin-right: 20px;
       i {
         top: -1px;
@@ -354,7 +354,7 @@ const IParticipated = ref([
     font-size: 30px;
     margin-top: 15px;
     .my-comment {
-      color: #646566;
+      color: #455873;
       line-height: 50px;
       width: 100%;
       max-height: 200px;
@@ -367,7 +367,7 @@ const IParticipated = ref([
     .comment-date {
       margin-top: 15px;
       font-size: 24px;
-      color: #999;
+      color: #9da6b5;
     }
   }
 }

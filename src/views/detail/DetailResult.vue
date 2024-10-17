@@ -66,6 +66,6 @@ console.log("type===>", type, typeof type)
   }
   .info {
     font-size: 28px;
-    color: #999999;
+    color: #9da6b5;
   }
 </style>

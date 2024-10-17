@@ -106,10 +106,10 @@ main {
       margin: 0 0 30px;
       font-size: 30px;
       font-weight: 700;
-      color: #323233;
+      color: #0f294d;
       em {
         font-style: normal;
-        color: #1989fa;
+        color: #2446ff;
       }
       span {
         color: #ff976a;
@@ -127,12 +127,12 @@ main {
         flex: 1;
         .title {
           font-size: 28px;
-          color: #646566;
+          color: #455873;
           margin-bottom: 5px;
         }
         span {
           font-size: 24px;
-          color: #999;
+          color: #9da6b5;
         }
       }
       .item-right {
@@ -140,7 +140,7 @@ main {
         display: flex;
         justify-content: flex-end;
         font-size: 32px;
-        color: #1989fa;
+        color: #2446ff;
         font-weight: 700;
       }
     }

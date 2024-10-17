@@ -148,7 +148,7 @@ onBeforeMount(() => {
     </div>
     <van-submit-bar :price="initialProduct.productPrice" button-text="提交订单" @submit="handleSubmit" />
     <div v-if="initialState.loading" class="loading">
-      <van-loading type="spinner" color="#1989fa" />
+      <van-loading type="spinner" color="#2446ff" />
     </div>
     <van-dialog v-model:show="initialState.showDialog" title="确认订单" show-cancel-button @confirm="submitConfirm" :confirmButtonDisabled="initialUser.validPhoneNumber">
       <div class="order-wrap">
@@ -204,7 +204,7 @@ onBeforeMount(() => {
     }
     .create-time {
       font-size: 24px;
-      color: #999;
+      color: #9da6b5;
       margin-top: 10px;
       margin-bottom: 30px;
       text-align: center;
@@ -302,7 +302,7 @@ onBeforeMount(() => {
               }
               .order-time {
                 font-size: 24px;
-                color: #999999;
+                color: #9da6b5;
               }
             }
           }
