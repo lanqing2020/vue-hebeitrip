@@ -20,9 +20,32 @@ const finished = ref(false);
 // 轮播图
 const getBannerList = async () => {
   const { code, data } = await home.getBannerList();
-  if (code === 0 && data) {
-    bannerList.value = data;
-  }
+  // if (code === 0 && data) {
+  //   bannerList.value = data;
+  // }
+  bannerList.value = [
+    {
+      "id": 1,
+      "url": "http://www.baidu.com",
+      "img": "http://demo.etayun.com/hebeitrip-static/carousel/banner-1.jpg",
+      "weight": 0,
+      "createTime": "2024-10-18 10:08:42"
+    },
+    {
+      "id": 2,
+      "url": "http://www.taobao.com",
+      "img": "http://demo.etayun.com/hebeitrip-static/carousel/banner-1.jpg",
+      "weight": 0,
+      "createTime": "2024-10-18 10:08:42"
+    },
+    {
+      "id": 3,
+      "url": "http://www.google.com",
+      "img": "http://demo.etayun.com/hebeitrip-static/carousel/banner-1.jpg",
+      "weight": 0,
+      "createTime": "2024-10-18 10:08:42"
+    }
+  ]
 }
 
 // 产品列表

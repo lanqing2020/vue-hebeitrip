@@ -5,7 +5,7 @@ import request from '@/request'
  * @returns {Promise<axios.AxiosResponse<any>>}
  */
 export function getBannerList() {
-    return request.get("/v1/pub/video/list_banner", {})
+    return request.get("/pub/carousel/getCarouselList", {})
 }
 
 /**
