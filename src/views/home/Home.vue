@@ -25,14 +25,6 @@ const getBannerList = async () => {
   }
 }
 
-// 产品列表
-const getProductList = async () => {
-  const { code, data } = await home.getProductList();
-  if (code === 0 && data) {
-    productList.value = data;
-  }
-}
-
 // 异步更新数据，需要后端配合，分步返回数据
 const listOnLoad = () => {
   // setTimeout 仅做示例，一般为 ajax 请求
@@ -58,7 +50,10 @@ const listOnLoad = () => {
 
 // 热门标签
 const getHotTagsList = async () => {
-  const { code, data } = await home.getHotTagsList();
+  const params = {
+    tagId: 1
+  }
+  const { code, data } = await home.getHotTagsList(params);
   hotTagsList.value = [
     {
       id: 1,
@@ -223,7 +218,6 @@ const getHotTagsList = async () => {
 
 const init = () => {
   getBannerList();
-  getProductList();
   getHotTagsList();
 }
 

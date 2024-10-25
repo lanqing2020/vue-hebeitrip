@@ -45,7 +45,7 @@ export function findInfoByToken(token) {
  * @param pwd
  */
 export function doLogin(data) {
-    return request.post("/v1/pri/user/login", data)
+    return request.post("/pri/user/login", data)
 }
 
 /**
