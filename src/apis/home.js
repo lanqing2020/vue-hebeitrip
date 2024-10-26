@@ -13,7 +13,5 @@ export function getBannerList() {
  * @return {Promise<axios.AxiosResponse<any>>}
  */
 export function getHotTagsList(data) {
-    return request.post("/pub/travelDiary/queryDiaryList", data, {
-        header: ""
-    })
+    return request.post("/pub/travelDiary/queryDiaryList", data)
 }

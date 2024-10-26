@@ -7,6 +7,10 @@ import { showToast } from 'vant';
  */
 export function reqInterceptor(config) {
     // config.headers['Authorization'] = localStorage.getItem('token');
+    config.headers["Content-type"] = "application/json";
+    if (config.method === 'POST') {
+        config.data = JSON.stringify(config.data);
+    }
     return config;
 }
 
@@ -85,6 +89,5 @@ export function errInterceptor(error) {
     // } catch (error) {
     //     // empty
     // }
-
     return Promise.reject(error)
 }
