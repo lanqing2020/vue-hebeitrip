@@ -1,6 +1,6 @@
 <script setup>
 import { home } from '@/apis';
-import { onBeforeMount, onMounted, ref } from "vue";
+import { onBeforeMount, onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import SearchComp from "@/components/search/Search.vue";
 import picList1 from "@/assets/pic-list-1.jpg";
@@ -13,9 +13,20 @@ import icon4 from "@/assets/icon-4.png";
 const router = useRouter();
 const bannerList = ref([]);
 const productList = ref([]);
-const hotTagsList = ref([]);
+const hotTagsList = reactive([
+  { id: 0, title: "打卡", data: [] },
+  { id: 1, title: "古城", data: [] },
+  { id: 2, title: "非遗", data: [] },
+  { id: 3, title: "攻略", data: [] },
+  { id: 4, title: "美食", data: [] },
+  { id: 5, title: "避坑", data: [] },
+  { id: 6, title: "人气", data: [] },
+  { id: 7, title: "溜娃", data: [] },
+  { id: 8, title: "博物馆", data: [] }
+]);
 const loading = ref(false);
 const finished = ref(false);
+const tabsActive = ref(0);
 
 // 轮播图
 const getBannerList = async () => {
@@ -49,176 +60,29 @@ const listOnLoad = () => {
 }
 
 // 热门标签
-const getHotTagsList = async () => {
+const getHotTagsList = async (number) => {
   const params = {
-    tagId: 1
+    tagId: number
   }
   const { code, data } = await home.getHotTagsList(params);
-  hotTagsList.value = [
-    {
-      id: 1,
-      title: "北戴河",
-      data: [
-        {
-          sortId: 0,
-          title: "暑假来西安不看演出可不行，9大人气演出出行指南来啦！",
-          coverImg: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
-          tip: "非遗 战国",
-          publisher: "三國戰記",
-          publisherAvatar: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
-          views: "329",
-          includeVideo: false
-        },
-        {
-          sortId: 1,
-          title: "藏在华清宫内的庆山寺珍宝馆，你确定不去看看？",
-          coverImg: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
-          tip: "长城 金山岭",
-          publisher: "金駿眉",
-          publisherAvatar: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
-          views: "124",
-          includeVideo: false
-        },
-        {
-          sortId: 2,
-          title: "人少又出片的宝藏村落—黄良村！体验慢时光",
-          coverImg: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
-          tip: "避坑 性价比低",
-          publisher: "青衫",
-          publisherAvatar: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
-          views: "432",
-          includeVideo: true
-        },
-        {
-          sortId: 3,
-          title: "天桥湖的多8安岛，不出西安就能体验三亚度假的快",
-          coverImg: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
-          tip: "",
-          publisher: "火星",
-          publisherAvatar: "",
-          views: "432",
-          includeVideo: false
-        },
-      ]
-    },
-    {
-      id: 2,
-      title: "打卡",
-      data: [
-        {
-          sortId: 0,
-          title: "暑假来西安不看演出可不行，9大人气演出出行指南来啦！",
-          coverImg: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
-          tip: "非遗 传统技艺",
-          publisher: "月亮",
-          publisherAvatar: "",
-          views: "329",
-          includeVideo: false
-        },
-      ]
-    },
-    {
-      id: 3,
-      title: "非遗",
-      data: [
-        {
-          sortId: 0,
-          title: "暑假来西安不看演出可不行，9大人气演出出行指南来啦！",
-          coverImg: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
-          tip: "打卡 周末露营",
-          publisher: "太陽",
-          publisherAvatar: "",
-          views: "329",
-          includeVideo: false
-        },
-      ]
-    },
-    {
-      id: 4,
-      title: "攻略",
-      data: [
-        {
-          sortId: 0,
-          title: "暑假来西安不看演出可不行，9大人气演出出行指南来啦！",
-          coverImg: "ttps://q6.itc.cn/images01/20241012/4d4255aeb3c6424494c7e3bc6a594d17.png",
-          tip: "",
-          publisher: "飛機",
-          publisherAvatar: "",
-          views: "329",
-          includeVideo: false
-        },
-      ]
-    },
-    {
-      id: 5,
-      title: "美食",
-      data: [
-        {
-          sortId: 0,
-          title: "暑假来西安不看演出可不行，9大人气演出出行指南来啦！",
-          coverImg: "https://p2.itc.cn/images01/20230304/cd8938262a85419a93a07333dab374e2.jpeg",
-          tip: "打卡 一睹大唐盛世",
-          publisher: "",
-          publisherAvatar: "",
-          views: "329",
-          includeVideo: false
-        },
-      ]
-    },
-    {
-      id: 6,
-      title: "避坑",
-      data: [
-        {
-          sortId: 0,
-          title: "暑假来西安不看演出可不行，9大人气演出出行指南来啦！",
-          coverImg: "https://q5.itc.cn/q_70/images03/20241013/6f8607a156ef44368922bded8ce99495.jpeg",
-          tip: "打卡 有点像厦门",
-          publisher: "",
-          publisherAvatar: "",
-          views: "329",
-          includeVideo: false
-        },
-      ]
-    },
-    {
-      id: 7,
-      title: "长城",
-      data: [
-        {
-          sortId: 0,
-          title: "暑假来西安不看演出可不行，9大人气演出出行指南来啦！",
-          coverImg: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
-          tip: "攻略 河间攻略",
-          publisher: "chris",
-          publisherAvatar: "",
-          views: "329",
-          includeVideo: false
-        },
-      ]
-    },
-    {
-      id: 8,
-      title: "博物馆",
-      data: [
-        {
-          sortId: 0,
-          title: "暑假来西安不看演出可不行，9大人气演出出行指南来啦！",
-          coverImg: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg",
-          tip: "免门票 找美食",
-          publisher: "",
-          publisherAvatar: "",
-          views: "326",
-          includeVideo: true
-        },
-      ]
-    },
-  ]
+  // 动态构建对象
+  if (code === 0) {
+    hotTagsList.map((item, index) => {
+      if (item.id === number) {
+        item.data = data;
+      }
+    })
+  }
+}
+
+const onTabChange = (number) => {
+  getHotTagsList(number);
+  return true;
 }
 
 const init = () => {
   getBannerList();
-  getHotTagsList();
+  getHotTagsList(0);
 }
 
 onMounted(() => {
@@ -283,7 +147,7 @@ onMounted(() => {
     </div>
     <div class="list">
       <div class="title">您下一站去哪儿？</div>
-      <van-tabs v-model:active="active">
+      <van-tabs v-model:active="tabsActive" :before-change="onTabChange">
         <van-tab v-for="(item, index) in hotTagsList" :key="index" :title="item.title">
           <div v-for="itemInner in item.data" :key="item.id" class="item-inner">
             <div class="img-wrap">
@@ -294,10 +158,10 @@ onMounted(() => {
             <div class="text-intro">{{ itemInner.title }}</div>
             <div class="user-intro">
               <div class="avatar">
-                <van-image :src="itemInner.publisherAvatar" round />
-                <span>{{ itemInner.publisher }}</span>
+                <van-image :src="itemInner.userAvatar" round />
+                <span>{{ itemInner.userName }}</span>
               </div>
-              <div class="views"><van-icon name="eye-o" size="16" color="#9da6b5" />{{ itemInner.views }}</div>
+              <div class="views"><van-icon name="eye-o" size="16" color="#9da6b5" />{{ itemInner.viewedNumber }}</div>
             </div>
           </div>
         </van-tab>
